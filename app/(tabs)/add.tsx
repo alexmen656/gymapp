@@ -5,13 +5,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { addExercise } from "@/storage/workoutStorage";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import {
-    Modal,
-    StyleSheet,
-    Text,
-    TextInput,
-    View
-} from "react-native";
+import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function AddScreen() {
   const [showAddModal, setShowAddModal] = useState(false);

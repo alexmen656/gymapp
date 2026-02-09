@@ -1,3 +1,4 @@
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import {
@@ -44,13 +45,15 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-      <RootLayoutNav />
+      <LanguageProvider>
+        <RootLayoutNav />
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
 
 function RootLayoutNav() {
-  const { theme, isDark } = useTheme();
+  const { isDark } = useTheme();
 
   return (
     <NavThemeProvider value={isDark ? DarkTheme : DefaultTheme}>

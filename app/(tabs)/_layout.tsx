@@ -21,7 +21,11 @@ export default function TabLayout() {
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="add" role="search">
         <Label>Add</Label>
-        <Icon sf="plus.circle.fill" />
+        <Icon sf="plus" />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="settings">
+        <Label>Settings</Label>
+        <Icon sf="gear" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
     </NativeTabs>
   );
