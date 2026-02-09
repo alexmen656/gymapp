@@ -13,14 +13,22 @@ export function GlassCard({
   variant = "regular",
   ...props
 }: GlassCardProps) {
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const colors = Colors[theme];
 
   if (Platform.OS === "ios") {
     return (
       <GlassView
         glassEffectStyle={variant}
-        style={[styles.container, style]}
+        style={[
+          styles.container,
+          {
+            backgroundColor: isDark
+              ? "rgba(255,255,255,0.06)"
+              : "rgba(255,255,255,0.45)",
+          },
+          style,
+        ]}
         {...props}
       >
         <View style={styles.content}>{children}</View>
@@ -28,7 +36,6 @@ export function GlassCard({
     );
   }
 
-  // Android fallback
   return (
     <View
       style={[

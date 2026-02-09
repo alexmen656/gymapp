@@ -175,7 +175,7 @@ export default function ExerciseDetailScreen() {
 
   const headerComponent = (
     <>
-      <GlassCard style={styles.addForm} variant="clear">
+      <GlassCard style={styles.addForm} variant="regular">
         <Text style={[styles.addTitle, { color: colors.text }]}>
           Neuer Eintrag
         </Text>
@@ -184,14 +184,18 @@ export default function ExerciseDetailScreen() {
             <Text
               style={[styles.inputLabel, { color: colors.textSecondary }]}
             >
-              kg
+              Gewicht (kg)
             </Text>
             <TextInput
               style={[
                 styles.input,
                 {
-                  backgroundColor: colors.inputBackground,
-                  borderColor: colors.inputBorder,
+                  backgroundColor: isDark
+                    ? "rgba(255,255,255,0.08)"
+                    : "rgba(0,0,0,0.04)",
+                  borderColor: isDark
+                    ? "rgba(255,255,255,0.12)"
+                    : "rgba(0,0,0,0.1)",
                   color: colors.text,
                 },
               ]}
@@ -206,14 +210,18 @@ export default function ExerciseDetailScreen() {
             <Text
               style={[styles.inputLabel, { color: colors.textSecondary }]}
             >
-              Wdh
+              Wiederholungen
             </Text>
             <TextInput
               style={[
                 styles.input,
                 {
-                  backgroundColor: colors.inputBackground,
-                  borderColor: colors.inputBorder,
+                  backgroundColor: isDark
+                    ? "rgba(255,255,255,0.08)"
+                    : "rgba(0,0,0,0.04)",
+                  borderColor: isDark
+                    ? "rgba(255,255,255,0.12)"
+                    : "rgba(0,0,0,0.1)",
                   color: colors.text,
                 },
               ]}
@@ -265,11 +273,9 @@ export default function ExerciseDetailScreen() {
           </View>
         )}
 
-        <GlassButton
-          label="Speichern"
-          onPress={handleAdd}
-          prominent
-        />
+        <View style={styles.saveWrapper}>
+          <GlassButton label="Speichern" onPress={handleAdd} prominent />
+        </View>
       </GlassCard>
 
       {entries.length > 0 && (
@@ -365,6 +371,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 16,
+    paddingTop: 100,
     paddingBottom: 32,
   },
   addForm: {
@@ -385,12 +392,12 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 12,
     fontWeight: "600",
-    marginBottom: 4,
+    marginBottom: 6,
   },
   input: {
     borderRadius: 12,
-    padding: 12,
-    fontSize: 18,
+    padding: 14,
+    fontSize: 20,
     fontWeight: "600",
     textAlign: "center",
     borderWidth: StyleSheet.hairlineWidth,
@@ -398,7 +405,7 @@ const styles = StyleSheet.create({
   dateRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 12,
+    marginTop: 14,
     gap: 8,
   },
   datePickerText: {
@@ -413,8 +420,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-  glassButtonWrapper: {
-    marginTop: 14,
+  saveWrapper: {
+    marginTop: 16,
   },
   summaryCard: {
     marginBottom: 16,

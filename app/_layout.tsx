@@ -57,7 +57,15 @@ function RootLayoutNav() {
       <StatusBar style={isDark ? "light" : "dark"} />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="exercise/[name]" options={{ headerShown: true }} />
+        <Stack.Screen
+          name="exercise/[name]"
+          options={{
+            headerTransparent: true,
+            headerBlurEffect: isDark ? "dark" : "light",
+            headerTintColor: isDark ? "#fff" : "#000",
+            headerStyle: { backgroundColor: "transparent" },
+          }}
+        />
       </Stack>
     </NavThemeProvider>
   );

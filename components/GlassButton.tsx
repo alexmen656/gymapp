@@ -1,48 +1,73 @@
-import { Button, Host } from "@expo/ui/swift-ui";
-import { buttonStyle } from "@expo/ui/swift-ui/modifiers";
+import Colors from "@/constants/Colors";
+import { useTheme } from "@/contexts/ThemeContext";
+import { GlassView } from "expo-glass-effect";
 import { Platform, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 interface GlassButtonProps {
   label: string;
   onPress: () => void;
   prominent?: boolean;
-  size?: "small" | "regular" | "large" | "extraLarge";
 }
 
 export function GlassButton({
   label,
   onPress,
   prominent = false,
-  size = "large",
 }: GlassButtonProps) {
+  const { theme, isDark } = useTheme();
+  const colors = Colors[theme];
+
   if (Platform.OS === "ios") {
     return (
-      <Host matchContents style={styles.host}>
-        <Button
-          onPress={onPress}
-          variant={prominent ? "glassProminent" : "glass"}
-          controlSize={size}
-          modifiers={[
-            buttonStyle(prominent ? "glassProminent" : "glass"),
+      <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
+        <GlassView
+          glassEffectStyle={prominent ? "regular" : "clear"}
+          isInteractive
+          style={[
+            styles.glassBtn,
+            {
+              backgroundColor: prominent
+                ? isDark
+                  ? "rgba(10,132,255,0.5)"
+                  : "rgba(0,122,255,0.4)"
+                : isDark
+                  ? "rgba(255,255,255,0.08)"
+                  : "rgba(255,255,255,0.5)",
+            },
           ]}
         >
-          {label}
-        </Button>
-      </Host>
+          <Text
+            style={[
+              styles.glassBtnText,
+              { color: prominent ? "#fff" : colors.accent },
+            ]}
+          >
+            {label}
+          </Text>
+        </GlassView>
+      </TouchableOpacity>
     );
   }
 
-  // Android fallback
   return (
     <TouchableOpacity
-      style={[styles.fallback, prominent && styles.fallbackProminent]}
+      style={[
+        styles.fallback,
+        {
+          backgroundColor: prominent
+            ? colors.accent
+            : isDark
+              ? "rgba(255,255,255,0.1)"
+              : "rgba(0,0,0,0.06)",
+        },
+      ]}
       onPress={onPress}
       activeOpacity={0.8}
     >
       <Text
         style={[
           styles.fallbackText,
-          prominent && styles.fallbackTextProminent,
+          { color: prominent ? "#fff" : colors.accent },
         ]}
       >
         {label}
@@ -52,24 +77,25 @@ export function GlassButton({
 }
 
 const styles = StyleSheet.create({
-  host: {
-    alignSelf: "stretch",
+  glassBtn: {
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  glassBtnText: {
+    fontSize: 16,
+    fontWeight: "600",
   },
   fallback: {
     borderRadius: 12,
-    padding: 14,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
     alignItems: "center",
-    backgroundColor: "rgba(120, 120, 128, 0.16)",
-  },
-  fallbackProminent: {
-    backgroundColor: "#007AFF",
   },
   fallbackText: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#007AFF",
-  },
-  fallbackTextProminent: {
-    color: "#fff",
   },
 });

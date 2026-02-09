@@ -1,9 +1,7 @@
-import { GlassButton } from "@/components/GlassButton";
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
-  addExercise,
   deleteExercise,
   getAllEntries,
   getExercises,
@@ -11,18 +9,14 @@ import {
 } from "@/storage/workoutStorage";
 import { ExerciseGroup } from "@/types/workout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { GlassView } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect, useRouter } from "expo-router";
 import { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
-  Modal,
-  Platform,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -34,8 +28,6 @@ interface ExerciseItem {
 
 export default function HomeScreen() {
   const [items, setItems] = useState<ExerciseItem[]>([]);
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [newName, setNewName] = useState("");
   const { theme, isDark } = useTheme();
   const colors = Colors[theme];
   const router = useRouter();
@@ -79,18 +71,31 @@ export default function HomeScreen() {
     loadData();
   }
 
+  async function handleAddExercise() {
+    const trimmed = newName.trim();
+    if (!trimmed) return;
+    await addExercise(trimmed);
+    setNewName("");
+    setShowAddModal(false);
+    loadData();
+  }
+
   function handleLongPress(name: string) {
-    Alert.alert("Gerät löschen?", `\u201E${name}\u201C und alle Einträge löschen?`, [
-      { text: "Abbrechen", style: "cancel" },
-      {
-        text: "Löschen",
-        style: "destructive",
-        onPress: async () => {
-          await deleteExercise(name);
-          loadData();
+    Alert.alert(
+      "Gerät löschen?",
+      `\u201E${name}\u201C und alle Einträge löschen?`,
+      [
+        { text: "Abbrechen", style: "cancel" },
+        {
+          text: "Löschen",
+          style: "destructive",
+          onPress: async () => {
+            await deleteExercise(name);
+            loadData();
+          },
         },
-      },
-    ]);
+      ],
+    );
   }
 
   function renderItem({ item }: { item: ExerciseItem }) {
@@ -126,10 +131,7 @@ export default function HomeScreen() {
                     {g.lastWeight}
                   </Text>
                   <Text
-                    style={[
-                      styles.statLabel,
-                      { color: colors.textSecondary },
-                    ]}
+                    style={[styles.statLabel, { color: colors.textSecondary }]}
                   >
                     kg
                   </Text>
@@ -139,10 +141,7 @@ export default function HomeScreen() {
                     {g.lastReps}
                   </Text>
                   <Text
-                    style={[
-                      styles.statLabel,
-                      { color: colors.textSecondary },
-                    ]}
+                    style={[styles.statLabel, { color: colors.textSecondary }]}
                   >
                     Wdh
                   </Text>
@@ -152,25 +151,18 @@ export default function HomeScreen() {
                     {g.entries.length}
                   </Text>
                   <Text
-                    style={[
-                      styles.statLabel,
-                      { color: colors.textSecondary },
-                    ]}
+                    style={[styles.statLabel, { color: colors.textSecondary }]}
                   >
                     Einträge
                   </Text>
                 </View>
               </View>
-              <Text
-                style={[styles.lastDate, { color: colors.textSecondary }]}
-              >
+              <Text style={[styles.lastDate, { color: colors.textSecondary }]}>
                 Zuletzt: {formatDate(g.lastDate)}
               </Text>
             </>
           ) : (
-            <Text
-              style={[styles.noEntries, { color: colors.textSecondary }]}
-            >
+            <Text style={[styles.noEntries, { color: colors.textSecondary }]}>
               Noch keine Einträge – tippe zum Hinzufügen
             </Text>
           )}
@@ -178,11 +170,6 @@ export default function HomeScreen() {
       </TouchableOpacity>
     );
   }
-
-  // FAB: GlassView on iOS, colored button on Android
-  const fabContent = (
-    <FontAwesome name="plus" size={24} color={isDark ? "#fff" : "#007AFF"} />
-  );
 
   return (
     <LinearGradient
@@ -207,77 +194,15 @@ export default function HomeScreen() {
           renderItem={renderItem}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            <Text style={[styles.screenTitle, { color: colors.text }]}>
+              Geräte
+            </Text>
+          }
         />
       )}
 
-      {/* FAB with glass effect on iOS */}
-      <TouchableOpacity
-        onPress={() => setShowAddModal(true)}
-        activeOpacity={0.8}
-        style={styles.fabWrapper}
-      >
-        {Platform.OS === "ios" ? (
-          <GlassView glassEffectStyle="regular" style={styles.fabGlass}>
-            {fabContent}
-          </GlassView>
-        ) : (
-          <View style={[styles.fabFallback, { backgroundColor: colors.accent }]}>
-            {fabContent}
-          </View>
-        )}
-      </TouchableOpacity>
-
-      {/* Add Exercise Modal */}
-      <Modal
-        visible={showAddModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowAddModal(false)}
-      >
-        <View
-          style={[
-            styles.modalOverlay,
-            { backgroundColor: colors.modalOverlay },
-          ]}
-        >
-          <GlassCard style={styles.modalCard} variant="regular">
-            <Text style={[styles.modalTitle, { color: colors.text }]}>
-              Neues Gerät
-            </Text>
-            <TextInput
-              style={[
-                styles.modalInput,
-                {
-                  backgroundColor: colors.inputBackground,
-                  borderColor: colors.inputBorder,
-                  color: colors.text,
-                },
-              ]}
-              placeholder="z.B. Bankdrücken, Beinpresse..."
-              placeholderTextColor={colors.textSecondary}
-              value={newName}
-              onChangeText={setNewName}
-              autoCapitalize="words"
-              autoFocus
-              onSubmitEditing={handleAddExercise}
-            />
-            <View style={styles.modalButtons}>
-              <GlassButton
-                label="Abbrechen"
-                onPress={() => {
-                  setNewName("");
-                  setShowAddModal(false);
-                }}
-              />
-              <GlassButton
-                label="Hinzufügen"
-                onPress={handleAddExercise}
-                prominent
-              />
-            </View>
-          </GlassCard>
-        </View>
-      </Modal>
+      {/* Closing tag for main return */}
     </LinearGradient>
   );
 }
@@ -286,10 +211,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  screenTitle: {
+    fontSize: 34,
+    fontWeight: "800",
+    marginBottom: 16,
+  },
   list: {
     padding: 16,
-    paddingTop: 100,
-    paddingBottom: 100,
+    paddingTop: 60,
+    paddingBottom: 120,
   },
   card: {
     marginBottom: 12,
@@ -341,56 +271,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center",
     lineHeight: 24,
-  },
-  fabWrapper: {
-    position: "absolute",
-    bottom: 100,
-    right: 24,
-  },
-  fabGlass: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  fabFallback: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#007AFF",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 32,
-  },
-  modalCard: {
-    width: "100%",
-    maxWidth: 360,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    marginBottom: 16,
-  },
-  modalInput: {
-    borderRadius: 12,
-    padding: 14,
-    fontSize: 16,
-    borderWidth: StyleSheet.hairlineWidth,
-  },
-  modalButtons: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 20,
-    gap: 12,
   },
 });
