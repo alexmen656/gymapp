@@ -1,6 +1,7 @@
 import Colors from "@/constants/Colors";
 import { useTheme } from "@/contexts/ThemeContext";
 import { GlassView } from "expo-glass-effect";
+import { memo } from "react";
 import { Platform, StyleSheet, Text, TouchableOpacity } from "react-native";
 
 interface GlassButtonProps {
@@ -9,7 +10,7 @@ interface GlassButtonProps {
   prominent?: boolean;
 }
 
-export function GlassButton({
+export const GlassButton = memo(function GlassButton({
   label,
   onPress,
   prominent = false,
@@ -74,7 +75,7 @@ export function GlassButton({
       </Text>
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   glassBtn: {

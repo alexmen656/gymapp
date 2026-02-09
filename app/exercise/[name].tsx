@@ -19,6 +19,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -129,9 +130,7 @@ export default function ExerciseDetailScreen() {
               <Text style={[styles.weightText, { color: colors.text }]}>
                 {item.weight} kg
               </Text>
-              <Text
-                style={[styles.repsText, { color: colors.textSecondary }]}
-              >
+              <Text style={[styles.repsText, { color: colors.textSecondary }]}>
                 × {item.reps} Wdh
               </Text>
               {isBest && (
@@ -156,9 +155,7 @@ export default function ExerciseDetailScreen() {
                 </View>
               )}
             </View>
-            <Text
-              style={[styles.dateLabel, { color: colors.textSecondary }]}
-            >
+            <Text style={[styles.dateLabel, { color: colors.textSecondary }]}>
               {formatDate(item.date)}
             </Text>
           </View>
@@ -181,9 +178,7 @@ export default function ExerciseDetailScreen() {
         </Text>
         <View style={styles.inputRow}>
           <View style={styles.inputGroup}>
-            <Text
-              style={[styles.inputLabel, { color: colors.textSecondary }]}
-            >
+            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
               Gewicht (kg)
             </Text>
             <TextInput
@@ -207,9 +202,7 @@ export default function ExerciseDetailScreen() {
             />
           </View>
           <View style={styles.inputGroup}>
-            <Text
-              style={[styles.inputLabel, { color: colors.textSecondary }]}
-            >
+            <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
               Wiederholungen
             </Text>
             <TextInput
@@ -238,11 +231,7 @@ export default function ExerciseDetailScreen() {
           style={styles.dateRow}
           onPress={() => setShowDatePicker(true)}
         >
-          <FontAwesome
-            name="calendar"
-            size={14}
-            color={colors.textSecondary}
-          />
+          <FontAwesome name="calendar" size={14} color={colors.textSecondary} />
           <Text
             style={[styles.datePickerText, { color: colors.textSecondary }]}
           >
@@ -286,10 +275,7 @@ export default function ExerciseDetailScreen() {
                 {entries.length}
               </Text>
               <Text
-                style={[
-                  styles.summaryLabel,
-                  { color: colors.textSecondary },
-                ]}
+                style={[styles.summaryLabel, { color: colors.textSecondary }]}
               >
                 Einträge
               </Text>
@@ -299,10 +285,7 @@ export default function ExerciseDetailScreen() {
                 {maxWeight} kg
               </Text>
               <Text
-                style={[
-                  styles.summaryLabel,
-                  { color: colors.textSecondary },
-                ]}
+                style={[styles.summaryLabel, { color: colors.textSecondary }]}
               >
                 Max Gewicht
               </Text>
@@ -312,10 +295,7 @@ export default function ExerciseDetailScreen() {
                 {Math.max(...entries.map((e) => e.reps))}
               </Text>
               <Text
-                style={[
-                  styles.summaryLabel,
-                  { color: colors.textSecondary },
-                ]}
+                style={[styles.summaryLabel, { color: colors.textSecondary }]}
               >
                 Max Wdh
               </Text>
@@ -338,29 +318,31 @@ export default function ExerciseDetailScreen() {
       style={styles.container}
     >
       <Stack.Screen options={{ title: name || "Übung" }} />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <FlatList
-          data={entries}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.list}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          ListHeaderComponent={headerComponent}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <Text
-                style={[styles.emptyText, { color: colors.textSecondary }]}
-              >
-                Füge deinen ersten Eintrag oben hinzu!
-              </Text>
-            </View>
-          }
-        />
-      </KeyboardAvoidingView>
+      <SafeAreaView style={styles.container} edges={["bottom"]}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
+        >
+          <FlatList
+            data={entries}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.list}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            ListHeaderComponent={headerComponent}
+            ListEmptyComponent={
+              <View style={styles.emptyContainer}>
+                <Text
+                  style={[styles.emptyText, { color: colors.textSecondary }]}
+                >
+                  Füge deinen ersten Eintrag oben hinzu!
+                </Text>
+              </View>
+            }
+          />
+        </KeyboardAvoidingView>
+      </SafeAreaView>
     </LinearGradient>
   );
 }
@@ -371,7 +353,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 16,
-    paddingTop: 100,
+    paddingTop: 16,
     paddingBottom: 32,
   },
   addForm: {

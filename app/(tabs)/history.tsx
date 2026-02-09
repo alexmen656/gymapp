@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   list: {
     padding: 16,
-    paddingTop: 60,
+    paddingTop: 40,
     paddingBottom: 32,
   },
   card: {

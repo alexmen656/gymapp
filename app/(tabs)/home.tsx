@@ -163,16 +163,20 @@ export default function HomeScreen() {
             backgroundGradientFrom: isDark ? "#1a1a1a" : "#f0f0f0",
             backgroundGradientTo: isDark ? "#2a2a2a" : "#ffffff",
             decimalPlaces: 1,
-            color: (opacity = 1) =>
-              colors.tint +
-              Math.round(opacity * 255)
+            color: (opacity = 1) => {
+              const hex = colors.tint.replace("#", "");
+              const alpha = Math.round(opacity * 255)
                 .toString(16)
-                .padStart(2, "0"),
-            labelColor: (opacity = 1) =>
-              colors.textSecondary +
-              Math.round(opacity * 255)
+                .padStart(2, "0");
+              return `#${hex}${alpha}`;
+            },
+            labelColor: (opacity = 1) => {
+              const hex = colors.textSecondary.replace("#", "");
+              const alpha = Math.round(opacity * 255)
                 .toString(16)
-                .padStart(2, "0"),
+                .padStart(2, "0");
+              return `#${hex}${alpha}`;
+            },
             style: { borderRadius: 16 },
             propsForDots: {
               r: "4",
@@ -236,7 +240,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-    paddingTop: 60,
+    paddingTop: 40,
     paddingBottom: 32,
   },
   alertCard: {
@@ -268,16 +272,18 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     alignItems: "center",
-    padding: 16,
-    gap: 8,
+    padding: 12,
+    minWidth: 0,
   },
   statValue: {
     fontSize: 24,
     fontWeight: "800",
+    marginTop: 8,
   },
   statLabel: {
     fontSize: 12,
     textAlign: "center",
+    marginTop: 4,
   },
   section: {
     marginBottom: 16,
