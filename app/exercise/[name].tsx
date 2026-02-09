@@ -1,25 +1,29 @@
+import { GlassButton } from "@/components/GlassButton";
+import { GlassCard } from "@/components/GlassCard";
+import Colors from "@/constants/Colors";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
-    createEntry,
-    deleteEntry,
-    getAllEntries,
-    saveEntry,
+  createEntry,
+  deleteEntry,
+  getAllEntries,
+  saveEntry,
 } from "@/storage/workoutStorage";
 import { WorkoutEntry } from "@/types/workout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { LinearGradient } from "expo-linear-gradient";
 import { Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
 import {
-    Alert,
-    FlatList,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    useColorScheme,
-    View,
+  Alert,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function ExerciseDetailScreen() {
@@ -29,8 +33,8 @@ export default function ExerciseDetailScreen() {
   const [reps, setReps] = useState("");
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { theme, isDark } = useTheme();
+  const colors = Colors[theme];
 
   useFocusEffect(
     useCallback(() => {
@@ -112,30 +116,49 @@ export default function ExerciseDetailScreen() {
     );
   }
 
-  // Find personal best (max weight)
   const maxWeight =
     entries.length > 0 ? Math.max(...entries.map((e) => e.weight)) : 0;
 
   function renderItem({ item }: { item: WorkoutEntry }) {
     const isBest = item.weight === maxWeight;
     return (
-      <View style={[styles.card, isDark && styles.cardDark]}>
+      <GlassCard style={styles.card}>
         <View style={styles.row}>
           <View style={{ flex: 1 }}>
             <View style={styles.weightRow}>
-              <Text style={[styles.weightText, isDark && styles.textDark]}>
+              <Text style={[styles.weightText, { color: colors.text }]}>
                 {item.weight} kg
               </Text>
-              <Text style={[styles.repsText, isDark && styles.subTextDark]}>
+              <Text
+                style={[styles.repsText, { color: colors.textSecondary }]}
+              >
                 × {item.reps} Wdh
               </Text>
               {isBest && (
-                <View style={styles.bestBadge}>
-                  <Text style={styles.bestText}>🏆 PR</Text>
+                <View
+                  style={[
+                    styles.bestBadge,
+                    {
+                      backgroundColor: isDark
+                        ? "rgba(251, 191, 36, 0.2)"
+                        : "#fef3c7",
+                    },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.bestText,
+                      { color: isDark ? "#fbbf24" : "#92400e" },
+                    ]}
+                  >
+                    PR
+                  </Text>
                 </View>
               )}
             </View>
-            <Text style={[styles.dateLabel, isDark && styles.subTextDark]}>
+            <Text
+              style={[styles.dateLabel, { color: colors.textSecondary }]}
+            >
               {formatDate(item.date)}
             </Text>
           </View>
@@ -143,42 +166,59 @@ export default function ExerciseDetailScreen() {
             onPress={() => handleDelete(item)}
             style={styles.deleteBtn}
           >
-            <FontAwesome name="trash-o" size={18} color="#e74c3c" />
+            <FontAwesome name="trash-o" size={18} color={colors.destructive} />
           </TouchableOpacity>
         </View>
-      </View>
+      </GlassCard>
     );
   }
 
   const headerComponent = (
     <>
-      {/* Inline Add Form */}
-      <View style={[styles.addForm, isDark && styles.addFormDark]}>
-        <Text style={[styles.addTitle, isDark && styles.textDark]}>
+      <GlassCard style={styles.addForm} variant="clear">
+        <Text style={[styles.addTitle, { color: colors.text }]}>
           Neuer Eintrag
         </Text>
         <View style={styles.inputRow}>
           <View style={styles.inputGroup}>
-            <Text style={[styles.inputLabel, isDark && styles.subTextDark]}>
+            <Text
+              style={[styles.inputLabel, { color: colors.textSecondary }]}
+            >
               kg
             </Text>
             <TextInput
-              style={[styles.input, isDark && styles.inputDark]}
+              style={[
+                styles.input,
+                {
+                  backgroundColor: colors.inputBackground,
+                  borderColor: colors.inputBorder,
+                  color: colors.text,
+                },
+              ]}
               placeholder="0"
-              placeholderTextColor={isDark ? "#666" : "#aaa"}
+              placeholderTextColor={colors.textSecondary}
               value={weight}
               onChangeText={setWeight}
               keyboardType="numeric"
             />
           </View>
           <View style={styles.inputGroup}>
-            <Text style={[styles.inputLabel, isDark && styles.subTextDark]}>
+            <Text
+              style={[styles.inputLabel, { color: colors.textSecondary }]}
+            >
               Wdh
             </Text>
             <TextInput
-              style={[styles.input, isDark && styles.inputDark]}
+              style={[
+                styles.input,
+                {
+                  backgroundColor: colors.inputBackground,
+                  borderColor: colors.inputBorder,
+                  color: colors.text,
+                },
+              ]}
               placeholder="0"
-              placeholderTextColor={isDark ? "#666" : "#aaa"}
+              placeholderTextColor={colors.textSecondary}
               value={reps}
               onChangeText={setReps}
               keyboardType="numeric"
@@ -193,9 +233,11 @@ export default function ExerciseDetailScreen() {
           <FontAwesome
             name="calendar"
             size={14}
-            color={isDark ? "#888" : "#666"}
+            color={colors.textSecondary}
           />
-          <Text style={[styles.datePickerText, isDark && styles.subTextDark]}>
+          <Text
+            style={[styles.datePickerText, { color: colors.textSecondary }]}
+          >
             {formatShortDate(date)}
           </Text>
         </TouchableOpacity>
@@ -215,53 +257,69 @@ export default function ExerciseDetailScreen() {
                 style={styles.doneButton}
                 onPress={() => setShowDatePicker(false)}
               >
-                <Text style={styles.doneText}>Fertig</Text>
+                <Text style={[styles.doneText, { color: colors.accent }]}>
+                  Fertig
+                </Text>
               </TouchableOpacity>
             )}
           </View>
         )}
 
-        <TouchableOpacity
-          style={styles.saveButton}
+        <GlassButton
+          label="Speichern"
           onPress={handleAdd}
-          activeOpacity={0.8}
-        >
-          <Text style={styles.saveButtonText}>💪 Speichern</Text>
-        </TouchableOpacity>
-      </View>
+          prominent
+        />
+      </GlassCard>
 
-      {/* Summary */}
       {entries.length > 0 && (
-        <View style={[styles.summary, isDark && styles.summaryDark]}>
-          <View style={styles.summaryItem}>
-            <Text style={[styles.summaryValue, isDark && styles.textDark]}>
-              {entries.length}
-            </Text>
-            <Text style={[styles.summaryLabel, isDark && styles.subTextDark]}>
-              Einträge
-            </Text>
+        <GlassCard style={styles.summaryCard}>
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryItem}>
+              <Text style={[styles.summaryValue, { color: colors.text }]}>
+                {entries.length}
+              </Text>
+              <Text
+                style={[
+                  styles.summaryLabel,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                Einträge
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={[styles.summaryValue, { color: colors.text }]}>
+                {maxWeight} kg
+              </Text>
+              <Text
+                style={[
+                  styles.summaryLabel,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                Max Gewicht
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={[styles.summaryValue, { color: colors.text }]}>
+                {Math.max(...entries.map((e) => e.reps))}
+              </Text>
+              <Text
+                style={[
+                  styles.summaryLabel,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                Max Wdh
+              </Text>
+            </View>
           </View>
-          <View style={styles.summaryItem}>
-            <Text style={[styles.summaryValue, isDark && styles.textDark]}>
-              {maxWeight} kg
-            </Text>
-            <Text style={[styles.summaryLabel, isDark && styles.subTextDark]}>
-              Max Gewicht
-            </Text>
-          </View>
-          <View style={styles.summaryItem}>
-            <Text style={[styles.summaryValue, isDark && styles.textDark]}>
-              {Math.max(...entries.map((e) => e.reps))}
-            </Text>
-            <Text style={[styles.summaryLabel, isDark && styles.subTextDark]}>
-              Max Wdh
-            </Text>
-          </View>
-        </View>
+        </GlassCard>
       )}
 
       {entries.length > 0 && (
-        <Text style={[styles.historyTitle, isDark && styles.textDark]}>
+        <Text style={[styles.historyTitle, { color: colors.text }]}>
           Verlauf
         </Text>
       )}
@@ -269,62 +327,52 @@ export default function ExerciseDetailScreen() {
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={[styles.container, isDark && styles.containerDark]}
+    <LinearGradient
+      colors={[colors.gradientStart, colors.gradientEnd]}
+      style={styles.container}
     >
       <Stack.Screen options={{ title: name || "Übung" }} />
-
-      <FlatList
-        data={entries}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.list}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        ListHeaderComponent={headerComponent}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={[styles.emptyText, isDark && styles.subTextDark]}>
-              Füge deinen ersten Eintrag oben hinzu!
-            </Text>
-          </View>
-        }
-      />
-    </KeyboardAvoidingView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <FlatList
+          data={entries}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          ListHeaderComponent={headerComponent}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text
+                style={[styles.emptyText, { color: colors.textSecondary }]}
+              >
+                Füge deinen ersten Eintrag oben hinzu!
+              </Text>
+            </View>
+          }
+        />
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  containerDark: {
-    backgroundColor: "#111",
   },
   list: {
     padding: 16,
     paddingBottom: 32,
   },
   addForm: {
-    backgroundColor: "#fff",
-    borderRadius: 14,
-    padding: 18,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  addFormDark: {
-    backgroundColor: "#1e1e1e",
   },
   addTitle: {
     fontSize: 17,
     fontWeight: "700",
-    color: "#1a1a1a",
     marginBottom: 14,
   },
   inputRow: {
@@ -337,24 +385,15 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#888",
     marginBottom: 4,
   },
   input: {
-    backgroundColor: "#f5f5f5",
-    borderRadius: 10,
+    borderRadius: 12,
     padding: 12,
     fontSize: 18,
     fontWeight: "600",
     textAlign: "center",
-    borderWidth: 1,
-    borderColor: "#e0e0e0",
-    color: "#1a1a1a",
-  },
-  inputDark: {
-    backgroundColor: "#2a2a2a",
-    borderColor: "#444",
-    color: "#f0f0f0",
+    borderWidth: StyleSheet.hairlineWidth,
   },
   dateRow: {
     flexDirection: "row",
@@ -364,7 +403,6 @@ const styles = StyleSheet.create({
   },
   datePickerText: {
     fontSize: 14,
-    color: "#666",
   },
   doneButton: {
     alignSelf: "flex-end",
@@ -372,37 +410,18 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   doneText: {
-    color: "#2f95dc",
     fontSize: 16,
     fontWeight: "600",
   },
-  saveButton: {
-    backgroundColor: "#2f95dc",
-    borderRadius: 10,
-    padding: 14,
-    alignItems: "center",
+  glassButtonWrapper: {
     marginTop: 14,
   },
-  saveButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "700",
+  summaryCard: {
+    marginBottom: 16,
   },
-  summary: {
+  summaryRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: "#fff",
-    paddingVertical: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  summaryDark: {
-    backgroundColor: "#1e1e1e",
   },
   summaryItem: {
     alignItems: "center",
@@ -410,32 +429,18 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#1a1a1a",
   },
   summaryLabel: {
     fontSize: 12,
-    color: "#888",
     marginTop: 4,
   },
   historyTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#1a1a1a",
     marginBottom: 10,
   },
   card: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 14,
     marginBottom: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 1,
-  },
-  cardDark: {
-    backgroundColor: "#1e1e1e",
   },
   row: {
     flexDirection: "row",
@@ -449,15 +454,12 @@ const styles = StyleSheet.create({
   weightText: {
     fontSize: 17,
     fontWeight: "700",
-    color: "#1a1a1a",
   },
   repsText: {
     fontSize: 15,
-    color: "#555",
     marginLeft: 4,
   },
   bestBadge: {
-    backgroundColor: "#fef3c7",
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -466,20 +468,12 @@ const styles = StyleSheet.create({
   bestText: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#92400e",
   },
   dateLabel: {
     fontSize: 12,
-    color: "#999",
   },
   deleteBtn: {
     padding: 8,
-  },
-  textDark: {
-    color: "#f0f0f0",
-  },
-  subTextDark: {
-    color: "#888",
   },
   emptyContainer: {
     paddingVertical: 40,
@@ -487,6 +481,5 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontSize: 15,
-    color: "#999",
   },
 });

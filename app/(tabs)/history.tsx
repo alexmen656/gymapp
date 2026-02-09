@@ -1,22 +1,25 @@
+import { GlassCard } from "@/components/GlassCard";
+import Colors from "@/constants/Colors";
+import { useTheme } from "@/contexts/ThemeContext";
 import { deleteEntry, getAllEntries } from "@/storage/workoutStorage";
 import { WorkoutEntry } from "@/types/workout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
-    Alert,
-    FlatList,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    useColorScheme,
-    View,
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function HistoryScreen() {
   const [entries, setEntries] = useState<WorkoutEntry[]>([]);
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { theme, isDark } = useTheme();
+  const colors = Colors[theme];
 
   useFocusEffect(
     useCallback(() => {
@@ -26,8 +29,9 @@ export default function HistoryScreen() {
 
   async function loadData() {
     const all = await getAllEntries();
-    // Sort by date descending
-    all.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    all.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
     setEntries(all);
   }
 
@@ -61,16 +65,18 @@ export default function HistoryScreen() {
 
   function renderItem({ item }: { item: WorkoutEntry }) {
     return (
-      <View style={[styles.card, isDark && styles.cardDark]}>
+      <GlassCard style={styles.card}>
         <View style={styles.row}>
           <View style={{ flex: 1 }}>
-            <Text style={[styles.exerciseName, isDark && styles.textDark]}>
+            <Text style={[styles.exerciseName, { color: colors.text }]}>
               {item.exercise}
             </Text>
-            <Text style={[styles.details, isDark && styles.subTextDark]}>
+            <Text
+              style={[styles.details, { color: colors.textSecondary }]}
+            >
               {item.weight} kg × {item.reps} Wdh
             </Text>
-            <Text style={[styles.date, isDark && styles.subTextDark]}>
+            <Text style={[styles.date, { color: colors.textSecondary }]}>
               {formatDate(item.date)}
             </Text>
           </View>
@@ -78,15 +84,18 @@ export default function HistoryScreen() {
             onPress={() => handleDelete(item)}
             style={styles.deleteBtn}
           >
-            <FontAwesome name="trash-o" size={20} color="#e74c3c" />
+            <FontAwesome name="trash-o" size={20} color={colors.destructive} />
           </TouchableOpacity>
         </View>
-      </View>
+      </GlassCard>
     );
   }
 
   return (
-    <View style={[styles.container, isDark && styles.containerDark]}>
+    <LinearGradient
+      colors={[colors.gradientStart, colors.gradientEnd]}
+      style={styles.container}
+    >
       {entries.length === 0 ? (
         <View style={styles.emptyContainer}>
           <FontAwesome
@@ -94,7 +103,9 @@ export default function HistoryScreen() {
             size={64}
             color={isDark ? "#555" : "#ccc"}
           />
-          <Text style={[styles.emptyText, isDark && styles.subTextDark]}>
+          <Text
+            style={[styles.emptyText, { color: colors.textSecondary }]}
+          >
             Noch keine Trainingseinträge.
           </Text>
         </View>
@@ -107,35 +118,21 @@ export default function HistoryScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  containerDark: {
-    backgroundColor: "#111",
   },
   list: {
     padding: 16,
+    paddingTop: 100,
     paddingBottom: 32,
   },
   card: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 14,
     marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  cardDark: {
-    backgroundColor: "#1e1e1e",
   },
   row: {
     flexDirection: "row",
@@ -144,26 +141,17 @@ const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#1a1a1a",
     marginBottom: 4,
   },
   details: {
     fontSize: 15,
-    color: "#555",
     marginBottom: 2,
   },
   date: {
     fontSize: 12,
-    color: "#999",
   },
   deleteBtn: {
     padding: 8,
-  },
-  textDark: {
-    color: "#f0f0f0",
-  },
-  subTextDark: {
-    color: "#888",
   },
   emptyContainer: {
     flex: 1,
@@ -174,7 +162,6 @@ const styles = StyleSheet.create({
   emptyText: {
     marginTop: 16,
     fontSize: 16,
-    color: "#999",
     textAlign: "center",
   },
 });
