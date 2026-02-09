@@ -1,0 +1,14 @@
+- [x] Verify that the copilot-instructions.md file in the .github directory is created.
+- [x] Clarify Project Requirements
+  - React Native Expo app (Gym Logbook)
+  - Log workouts: exercise/machine, weight (kg), repetitions
+  - Automatic date with option to backdate
+  - Home screen shows all exercises
+  - Expo Router, AsyncStorage, TypeScript
+- [x] Scaffold the Project
+- [x] Customize the Project
+- [x] Install Required Extensions
+- [x] Compile the Project
+- [x] Create and Run Task
+- [x] Launch the Project
+- [x] Ensure Documentation is Complete
