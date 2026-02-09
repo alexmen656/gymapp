@@ -9,7 +9,7 @@ export default function TabLayout() {
         <Icon sf="house" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="index">
-        <Label>Exercises</Label>
+        <Label>Machines</Label>
         <Icon sf="dumbbell" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="history">

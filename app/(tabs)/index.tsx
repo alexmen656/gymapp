@@ -62,24 +62,6 @@ export default function HomeScreen() {
     });
   }
 
-  async function handleAddExercise() {
-    const trimmed = newName.trim();
-    if (!trimmed) return;
-    await addExercise(trimmed);
-    setNewName("");
-    setShowAddModal(false);
-    loadData();
-  }
-
-  async function handleAddExercise() {
-    const trimmed = newName.trim();
-    if (!trimmed) return;
-    await addExercise(trimmed);
-    setNewName("");
-    setShowAddModal(false);
-    loadData();
-  }
-
   function handleLongPress(name: string) {
     Alert.alert(
       "Gerät löschen?",
