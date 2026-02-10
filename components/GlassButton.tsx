@@ -8,12 +8,14 @@ interface GlassButtonProps {
   label: string;
   onPress: () => void;
   prominent?: boolean;
+  opacity?: number;
 }
 
 export const GlassButton = memo(function GlassButton({
   label,
   onPress,
   prominent = false,
+  opacity = 1,
 }: GlassButtonProps) {
   const { theme, isDark } = useTheme();
   const colors = Colors[theme];
@@ -34,6 +36,7 @@ export const GlassButton = memo(function GlassButton({
                 : isDark
                   ? "rgba(255,255,255,0.08)"
                   : "rgba(255,255,255,0.5)",
+              opacity,
             },
           ]}
         >
@@ -60,6 +63,7 @@ export const GlassButton = memo(function GlassButton({
             : isDark
               ? "rgba(255,255,255,0.1)"
               : "rgba(0,0,0,0.06)",
+          opacity,
         },
       ]}
       onPress={onPress}

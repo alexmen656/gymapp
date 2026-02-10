@@ -1,4 +1,3 @@
-import { GlassButton } from "@/components/GlassButton";
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -13,7 +12,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { LinearGradient } from "expo-linear-gradient";
 import { Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -36,6 +35,11 @@ export default function ExerciseDetailScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { theme, isDark } = useTheme();
   const colors = Colors[theme];
+
+  const isFilled = useMemo(
+    () => !!(weight.trim() && reps.trim()),
+    [weight, reps],
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -172,6 +176,7 @@ export default function ExerciseDetailScreen() {
 
   const headerComponent = (
     <>
+      <Text style={[styles.screenTitle, { color: colors.text }]}>{name}</Text>
       <GlassCard style={styles.addForm} variant="regular">
         <Text style={[styles.addTitle, { color: colors.text }]}>
           Neuer Eintrag
@@ -263,7 +268,19 @@ export default function ExerciseDetailScreen() {
         )}
 
         <View style={styles.saveWrapper}>
-          <GlassButton label="Speichern" onPress={handleAdd} prominent />
+          <TouchableOpacity
+            style={[
+              styles.saveButton,
+              {
+                backgroundColor: colors.accent,
+                opacity: isFilled ? 1 : 0.5,
+              },
+            ]}
+            onPress={handleAdd}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.saveButtonText}>Speichern</Text>
+          </TouchableOpacity>
         </View>
       </GlassCard>
 
@@ -351,6 +368,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  screenTitle: {
+    fontSize: 34,
+    fontWeight: "800",
+    marginTop: -16,
+    marginBottom: 24,
+  },
   list: {
     padding: 16,
     paddingTop: 16,
@@ -404,6 +427,18 @@ const styles = StyleSheet.create({
   },
   saveWrapper: {
     marginTop: 16,
+  },
+  saveButton: {
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  saveButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "600",
   },
   summaryCard: {
     marginBottom: 16,
