@@ -1,12 +1,20 @@
 import Colors from "@/constants/Colors";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import {
+  cancelAllNotifications,
+  scheduleWorkoutReminder,
+} from "@/utils/notifications";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import * as WebBrowser from "expo-web-browser";
+import React, { useState } from "react";
 import {
+  Alert,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TouchableOpacity,
   View,
@@ -16,6 +24,32 @@ export default function SettingsScreen() {
   const { theme, isDark, mode, setMode } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const colors = Colors[theme];
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+  React.useEffect(() => {
+    async function loadNotificationStatus() {
+      const enabled = await AsyncStorage.getItem("reminderScheduled");
+      setNotificationsEnabled(enabled === "true");
+    }
+    loadNotificationStatus();
+  }, []);
+
+  async function toggleNotifications(value: boolean) {
+    setNotificationsEnabled(value);
+    if (value) {
+      await scheduleWorkoutReminder();
+      Alert.alert(
+        "Benachrichtigungen aktiviert",
+        "Du erhältst täglich um 18:00 Uhr eine Erinnerung für dein Workout!",
+      );
+    } else {
+      await cancelAllNotifications();
+      Alert.alert(
+        "Benachrichtigungen deaktiviert",
+        "Alle Erinnerungen wurden entfernt.",
+      );
+    }
+  }
 
   const themeOptions = [
     { label: t("systemMode"), value: "system" as const },
@@ -119,6 +153,46 @@ export default function SettingsScreen() {
     );
   }
 
+  function renderToggleSetting(
+    icon: string,
+    label: string,
+    description: string,
+    value: boolean,
+    onToggle: (value: boolean) => void,
+  ) {
+    return (
+      <View
+        style={[
+          styles.toggleSetting,
+          { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
+        ]}
+      >
+        <View style={styles.toggleSettingLeft}>
+          <FontAwesome name={icon as any} size={20} color={colors.tint} />
+          <View style={styles.toggleSettingText}>
+            <Text style={[styles.toggleSettingLabel, { color: colors.text }]}>
+              {label}
+            </Text>
+            <Text
+              style={[
+                styles.toggleSettingDescription,
+                { color: colors.textSecondary },
+              ]}
+            >
+              {description}
+            </Text>
+          </View>
+        </View>
+        <Switch
+          value={value}
+          onValueChange={onToggle}
+          trackColor={{ false: "#767577", true: colors.tint + "80" }}
+          thumbColor={value ? colors.tint : "#f4f3f4"}
+        />
+      </View>
+    );
+  }
+
   return (
     <LinearGradient
       colors={[colors.gradientStart, colors.gradientEnd]}
@@ -145,6 +219,18 @@ export default function SettingsScreen() {
           t("language"),
           renderDropdown(t("language"), languageOptions, language, (value) =>
             setLanguage(value as any),
+          ),
+        )}
+
+        {/* Notifications */}
+        {renderSettingSection(
+          "Benachrichtigungen",
+          renderToggleSetting(
+            "bell",
+            "Tägliche Erinnerung",
+            "Erhalte täglich um 18:00 Uhr eine Erinnerung",
+            notificationsEnabled,
+            toggleNotifications,
           ),
         )}
 
@@ -258,6 +344,31 @@ const styles = StyleSheet.create({
   linkButtonText: {
     fontSize: 15,
     fontWeight: "500",
+  },
+  toggleSetting: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 12,
+  },
+  toggleSettingLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    flex: 1,
+  },
+  toggleSettingText: {
+    flex: 1,
+  },
+  toggleSettingLabel: {
+    fontSize: 15,
+    fontWeight: "600",
+    marginBottom: 2,
+  },
+  toggleSettingDescription: {
+    fontSize: 12,
+    lineHeight: 16,
   },
   aboutCard: {
     borderRadius: 12,

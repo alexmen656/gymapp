@@ -9,12 +9,20 @@ import {
   getTopExercisesByVolume,
   getWorkoutStats,
 } from "@/utils/analytics";
+import {
+  requestNotificationPermissions,
+  scheduleWorkoutReminder,
+  sendCelebrationNotification,
+} from "@/utils/notifications";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GlassView } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import * as StoreReview from "expo-store-review";
+import { useCallback, useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   Platform,
   ScrollView,
@@ -37,10 +45,69 @@ export default function HomeScreen() {
     }, []),
   );
 
+  useEffect(() => {
+    const setupNotifications = async () => {
+      const hasAsked = await AsyncStorage.getItem(
+        "notificationPermissionAsked",
+      );
+      if (!hasAsked) {
+        const granted = await requestNotificationPermissions();
+        if (granted) {
+          await scheduleWorkoutReminder();
+        }
+        await AsyncStorage.setItem("notificationPermissionAsked", "true");
+      }
+    };
+    setupNotifications();
+  }, []);
+
   async function loadData() {
     const all = await getAllEntries();
     all.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     setEntries(all);
+
+    const totalEntries = all.length;
+
+    // Feiere Meilensteine mit Notifications
+    if ([10, 25, 50, 100, 200].includes(totalEntries)) {
+      const celebrationSent = await AsyncStorage.getItem(
+        `celebration_${totalEntries}`,
+      );
+      if (!celebrationSent) {
+        await sendCelebrationNotification(totalEntries);
+        await AsyncStorage.setItem(`celebration_${totalEntries}`, "true");
+      }
+    }
+
+    // Check for rating prompt bei 20 Einträgen
+    const hasShownPrompt = await AsyncStorage.getItem("ratingPromptShown");
+    if (totalEntries >= 20 && !hasShownPrompt) {
+      showRatingPrompt();
+    }
+  }
+
+  async function showRatingPrompt() {
+    // Verwende den nativen iOS Review Prompt
+    if (await StoreReview.hasAction()) {
+      await AsyncStorage.setItem("ratingPromptShown", "true");
+      // Auf iOS zeigt dies den nativen Apple Review Dialog
+      await StoreReview.requestReview();
+    } else {
+      // Fallback für andere Plattformen oder Simulator
+      Alert.alert(
+        "Bewerte die App",
+        "Du hast schon 20 Einträge gemacht! Hilf uns, indem du die App bewertest.",
+        [
+          { text: "Später", style: "cancel" },
+          {
+            text: "Bewerten",
+            onPress: async () => {
+              await AsyncStorage.setItem("ratingPromptShown", "true");
+            },
+          },
+        ],
+      );
+    }
   }
 
   const stats = getWorkoutStats(entries);
