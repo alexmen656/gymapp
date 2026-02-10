@@ -4,11 +4,11 @@ import React from "react";
 export default function TabLayout() {
   return (
     <NativeTabs>
-      <NativeTabs.Trigger name="home">
+      <NativeTabs.Trigger name="index">
         <Label>Home</Label>
         <Icon sf="house" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="index">
+      <NativeTabs.Trigger name="machines">
         <Label>Machines</Label>
         <Icon sf="dumbbell" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
@@ -23,10 +23,11 @@ export default function TabLayout() {
         <Label>Add</Label>
         <Icon sf="plus" />
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="settings">
-        <Label>Settings</Label>
-        <Icon sf="gear" drawable="custom_android_drawable" />
-      </NativeTabs.Trigger>
     </NativeTabs>
   );
 }
+
+/*    <NativeTabs.Trigger name="settings">
+        <Label>Settings</Label>
+        <Icon sf="gear" drawable="custom_android_drawable" />
+      </NativeTabs.Trigger>*/

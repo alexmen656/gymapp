@@ -13,9 +13,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-export {
-  ErrorBoundary,
-} from "expo-router";
+export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
   initialRouteName: "(tabs)",
@@ -59,15 +57,9 @@ function RootLayoutNav() {
     <NavThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
       <StatusBar style={isDark ? "light" : "dark"} />
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
-          name="exercise/[name]"
-          options={{
-            headerTransparent: true,
-            headerBlurEffect: isDark ? "dark" : "light",
-            headerTintColor: isDark ? "#fff" : "#000",
-            headerStyle: { backgroundColor: "transparent" },
-          }}
+          name="(tabs)"
+          options={{ headerShown: false, title: "Home" }}
         />
       </Stack>
     </NavThemeProvider>

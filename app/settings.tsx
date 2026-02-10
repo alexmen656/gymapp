@@ -4,7 +4,13 @@ import { useTheme } from "@/contexts/ThemeContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { LinearGradient } from "expo-linear-gradient";
 import * as WebBrowser from "expo-web-browser";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function SettingsScreen() {
   const { theme, isDark, mode, setMode } = useTheme();
@@ -58,9 +64,11 @@ export default function SettingsScreen() {
                   backgroundColor:
                     selectedValue === option.value
                       ? colors.tint + "40"
-                      : colors.backgroundColor,
+                      : colors.background,
                   borderColor:
-                    selectedValue === option.value ? colors.tint : "transparent",
+                    selectedValue === option.value
+                      ? colors.tint
+                      : "transparent",
                   borderWidth: selectedValue === option.value ? 2 : 0,
                 },
               ]}
@@ -74,8 +82,7 @@ export default function SettingsScreen() {
                       selectedValue === option.value
                         ? colors.tint
                         : colors.text,
-                    fontWeight:
-                      selectedValue === option.value ? "700" : "500",
+                    fontWeight: selectedValue === option.value ? "700" : "500",
                   },
                 ]}
               >
@@ -88,11 +95,7 @@ export default function SettingsScreen() {
     );
   }
 
-  function renderLinkButton(
-    icon: string,
-    label: string,
-    onPress: () => void,
-  ) {
+  function renderLinkButton(icon: string, label: string, onPress: () => void) {
     return (
       <TouchableOpacity
         style={[
@@ -107,7 +110,11 @@ export default function SettingsScreen() {
             {label}
           </Text>
         </View>
-        <FontAwesome name="chevron-right" size={14} color={colors.textSecondary} />
+        <FontAwesome
+          name="chevron-right"
+          size={14}
+          color={colors.textSecondary}
+        />
       </TouchableOpacity>
     );
   }
@@ -126,23 +133,24 @@ export default function SettingsScreen() {
         </Text>
 
         {/* Theme Selection */}
-        {renderSettingSection(t("theme"), renderDropdown(
+        {renderSettingSection(
           t("theme"),
-          themeOptions,
-          mode,
-          (value) => setMode(value as any),
-        ))}
+          renderDropdown(t("theme"), themeOptions, mode, (value) =>
+            setMode(value as any),
+          ),
+        )}
 
         {/* Language Selection */}
-        {renderSettingSection(t("language"), renderDropdown(
+        {renderSettingSection(
           t("language"),
-          languageOptions,
-          language,
-          (value) => setLanguage(value as any),
-        ))}
+          renderDropdown(t("language"), languageOptions, language, (value) =>
+            setLanguage(value as any),
+          ),
+        )}
 
         {/* Links Section */}
-        {renderSettingSection("Links", (
+        {renderSettingSection(
+          "Links",
           <View style={styles.linksContainer}>
             {renderLinkButton("lock", t("privacyPolicy"), () =>
               openURL("https://github.com"),
@@ -150,15 +158,18 @@ export default function SettingsScreen() {
             {renderLinkButton("file-text", t("termsOfUse"), () =>
               openURL("https://github.com"),
             )}
-          </View>
-        ))}
+          </View>,
+        )}
 
         {/* About Section */}
-        {renderSettingSection(t("aboutTitle"), (
-          <View style={[
-            styles.aboutCard,
-            { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
-          ]}>
+        {renderSettingSection(
+          t("aboutTitle"),
+          <View
+            style={[
+              styles.aboutCard,
+              { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
+            ]}
+          >
             <View style={styles.aboutHeader}>
               <FontAwesome name="github" size={32} color={colors.tint} />
               <Text style={[styles.aboutText, { color: colors.text }]}>
@@ -172,8 +183,8 @@ export default function SettingsScreen() {
               <FontAwesome name="github" size={18} color="#fff" />
               <Text style={styles.githubButtonText}>{t("viewOnGithub")}</Text>
             </TouchableOpacity>
-          </View>
-        ))}
+          </View>,
+        )}
       </ScrollView>
     </LinearGradient>
   );

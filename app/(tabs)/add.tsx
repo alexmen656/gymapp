@@ -26,13 +26,13 @@ export default function AddScreen() {
     setNewName("");
     setShowAddModal(false);
     // Navigate back to home after adding
-    router.replace("/(tabs)/");
+    router.replace("/");
   }
 
   function handleModalClose() {
     setShowAddModal(false);
     // Navigate back to home when modal is closed
-    router.replace("/(tabs)/");
+    router.replace("/");
   }
 
   return (
