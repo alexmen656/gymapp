@@ -61,6 +61,24 @@ function RootLayoutNav() {
           name="(tabs)"
           options={{ headerShown: false, title: "Home" }}
         />
+        <Stack.Screen
+          name="customize-home"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerTransparent: true,
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="settings"
+          options={{
+            headerShown: true,
+            headerTitle: "",
+            headerTransparent: true,
+            headerShadowVisible: false,
+          }}
+        />
       </Stack>
     </NavThemeProvider>
   );

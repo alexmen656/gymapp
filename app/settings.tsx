@@ -19,6 +19,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SettingsScreen() {
   const { theme, isDark, mode, setMode } = useTheme();
@@ -83,11 +84,11 @@ export default function SettingsScreen() {
     selectedValue: string,
     onSelect: (value: string) => void,
   ) {
+    /*      <Text style={[styles.settingLabel, { color: colors.text }]}>
+          {label}
+        </Text>*/
     return (
       <View style={styles.settingRow}>
-        <Text style={[styles.settingLabel, { color: colors.text }]}>
-          {label}
-        </Text>
         <View style={styles.dropdownContainer}>
           {options.map((option) => (
             <TouchableOpacity
@@ -198,80 +199,84 @@ export default function SettingsScreen() {
       colors={[colors.gradientStart, colors.gradientEnd]}
       style={styles.container}
     >
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={[styles.screenTitle, { color: colors.text }]}>
-          {t("settings")}
-        </Text>
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+            <Text style={[styles.screenTitle, { color: colors.text }]}>
+              {t("settings")}
+            </Text>
+          </View>
 
-        {/* Theme Selection */}
-        {renderSettingSection(
-          t("theme"),
-          renderDropdown(t("theme"), themeOptions, mode, (value) =>
-            setMode(value as any),
-          ),
-        )}
+          {/* Theme Selection */}
+          {renderSettingSection(
+            t("theme"),
+            renderDropdown(t("theme"), themeOptions, mode, (value) =>
+              setMode(value as any),
+            ),
+          )}
 
-        {/* Language Selection */}
-        {renderSettingSection(
-          t("language"),
-          renderDropdown(t("language"), languageOptions, language, (value) =>
-            setLanguage(value as any),
-          ),
-        )}
+          {/* Language Selection */}
+          {renderSettingSection(
+            t("language"),
+            renderDropdown(t("language"), languageOptions, language, (value) =>
+              setLanguage(value as any),
+            ),
+          )}
 
-        {/* Notifications */}
-        {renderSettingSection(
-          "Benachrichtigungen",
-          renderToggleSetting(
-            "bell",
-            "Tägliche Erinnerung",
-            "Erhalte täglich um 18:00 Uhr eine Erinnerung",
-            notificationsEnabled,
-            toggleNotifications,
-          ),
-        )}
+          {/* Notifications */}
+          {renderSettingSection(
+            "Benachrichtigungen",
+            renderToggleSetting(
+              "bell",
+              "Tägliche Erinnerung",
+              "Erhalte täglich um 18:00 Uhr eine Erinnerung",
+              notificationsEnabled,
+              toggleNotifications,
+            ),
+          )}
 
-        {/* Links Section */}
-        {renderSettingSection(
-          "Links",
-          <View style={styles.linksContainer}>
-            {renderLinkButton("lock", t("privacyPolicy"), () =>
-              openURL("https://github.com"),
-            )}
-            {renderLinkButton("file-text", t("termsOfUse"), () =>
-              openURL("https://github.com"),
-            )}
-          </View>,
-        )}
+          {/* Links Section */}
+          {renderSettingSection(
+            "Links",
+            <View style={styles.linksContainer}>
+              {renderLinkButton("lock", t("privacyPolicy"), () =>
+                openURL("https://github.com"),
+              )}
+              {renderLinkButton("file-text", t("termsOfUse"), () =>
+                openURL("https://github.com"),
+              )}
+            </View>,
+          )}
 
-        {/* About Section */}
-        {renderSettingSection(
-          t("aboutTitle"),
-          <View
-            style={[
-              styles.aboutCard,
-              { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
-            ]}
-          >
-            <View style={styles.aboutHeader}>
-              <FontAwesome name="github" size={32} color={colors.tint} />
-              <Text style={[styles.aboutText, { color: colors.text }]}>
-                {t("openSource")}
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={[styles.githubButton, { backgroundColor: colors.tint }]}
-              onPress={() => openURL("https://github.com")}
+          {/* About Section */}
+          {renderSettingSection(
+            t("aboutTitle"),
+            <View
+              style={[
+                styles.aboutCard,
+                { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
+              ]}
             >
-              <FontAwesome name="github" size={18} color="#fff" />
-              <Text style={styles.githubButtonText}>{t("viewOnGithub")}</Text>
-            </TouchableOpacity>
-          </View>,
-        )}
-      </ScrollView>
+              <View style={styles.aboutHeader}>
+                <FontAwesome name="github" size={32} color={colors.tint} />
+                <Text style={[styles.aboutText, { color: colors.text }]}>
+                  {t("openSource")}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={[styles.githubButton, { backgroundColor: colors.tint }]}
+                onPress={() => openURL("https://github.com")}
+              >
+                <FontAwesome name="github" size={18} color="#fff" />
+                <Text style={styles.githubButtonText}>{t("viewOnGithub")}</Text>
+              </TouchableOpacity>
+            </View>,
+          )}
+        </ScrollView>
+      </SafeAreaView>
     </LinearGradient>
   );
 }
@@ -280,14 +285,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    marginBottom: 24,
+  },
   screenTitle: {
     fontSize: 34,
     fontWeight: "800",
-    marginBottom: 24,
   },
   scrollContent: {
     padding: 16,
-    paddingTop: 40,
+    paddingTop: 60,
     paddingBottom: 32,
   },
   section: {

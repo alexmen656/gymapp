@@ -20,7 +20,7 @@ import { GlassView } from "expo-glass-effect";
 import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect, useRouter } from "expo-router";
 import * as StoreReview from "expo-store-review";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -33,8 +33,21 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 
+interface HomeViewSettings {
+  showProgressionAlert: boolean;
+  showStats: boolean;
+  showChart: boolean;
+  showTopExercises: boolean;
+}
+
 export default function HomeScreen() {
   const [entries, setEntries] = useState<WorkoutEntry[]>([]);
+  const [homeSettings, setHomeSettings] = useState<HomeViewSettings>({
+    showProgressionAlert: true,
+    showStats: true,
+    showChart: true,
+    showTopExercises: true,
+  });
   const { theme, isDark } = useTheme();
   const router = useRouter();
   const colors = Colors[theme];
@@ -45,21 +58,23 @@ export default function HomeScreen() {
     }, []),
   );
 
-  useEffect(() => {
-    const setupNotifications = async () => {
-      const hasAsked = await AsyncStorage.getItem(
-        "notificationPermissionAsked",
-      );
-      if (!hasAsked) {
-        const granted = await requestNotificationPermissions();
-        if (granted) {
-          await scheduleWorkoutReminder();
-        }
-        await AsyncStorage.setItem("notificationPermissionAsked", "true");
+  // Lade Home View Settings
+  useFocusEffect(
+    useCallback(() => {
+      loadHomeSettings();
+    }, []),
+  );
+
+  async function loadHomeSettings() {
+    try {
+      const saved = await AsyncStorage.getItem("homeViewSettings");
+      if (saved) {
+        setHomeSettings(JSON.parse(saved));
       }
-    };
-    setupNotifications();
-  }, []);
+    } catch (error) {
+      console.error("Error loading home view settings:", error);
+    }
+  }
 
   async function loadData() {
     const all = await getAllEntries();
@@ -76,6 +91,22 @@ export default function HomeScreen() {
       if (!celebrationSent) {
         await sendCelebrationNotification(totalEntries);
         await AsyncStorage.setItem(`celebration_${totalEntries}`, "true");
+      }
+    }
+
+    // Frage nach Notifications erst nach 5 Workouts (nicht zu früh)
+    if (totalEntries === 5) {
+      const hasAsked = await AsyncStorage.getItem(
+        "notificationPermissionAsked",
+      );
+      if (!hasAsked) {
+        setTimeout(async () => {
+          const granted = await requestNotificationPermissions();
+          if (granted) {
+            await scheduleWorkoutReminder();
+          }
+          await AsyncStorage.setItem("notificationPermissionAsked", "true");
+        }, 2000); // 2 Sekunden Verzögerung
       }
     }
 
@@ -329,10 +360,29 @@ export default function HomeScreen() {
               </TouchableOpacity>
             )}
           </View>
-          {renderProgressionAlert()}
-          {renderStats()}
-          {renderChart()}
-          {renderTopExercises()}
+          {homeSettings.showProgressionAlert && renderProgressionAlert()}
+          {homeSettings.showStats && renderStats()}
+          {homeSettings.showChart && renderChart()}
+          {homeSettings.showTopExercises && renderTopExercises()}
+
+          <GlassCard>
+            <TouchableOpacity
+              style={[styles.customizeButton]}
+              onPress={() => router.push("/customize-home")}
+            >
+              <FontAwesome name="sliders" size={18} color={colors.tint} />
+              <Text
+                style={[styles.customizeButtonText, { color: colors.text }]}
+              >
+                Home anpassen
+              </Text>
+              <FontAwesome
+                name="chevron-right"
+                size={14}
+                color={colors.textSecondary}
+              />
+            </TouchableOpacity>
+          </GlassCard>
         </ScrollView>
       )}
     </LinearGradient>
@@ -461,5 +511,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 14,
     textAlign: "center",
+  },
+  customizeButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+  },
+  customizeButtonText: {
+    fontSize: 15,
+    fontWeight: "600",
+    flex: 1,
   },
 });
