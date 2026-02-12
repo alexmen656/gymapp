@@ -32,6 +32,7 @@ import {
   View,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface HomeViewSettings {
   showProgressionAlert: boolean;
@@ -296,87 +297,91 @@ export default function HomeScreen() {
       colors={[colors.gradientStart, colors.gradientEnd]}
       style={styles.container}
     >
-      {entries.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <FontAwesome
-            name="line-chart"
-            size={64}
-            color={isDark ? "#555" : "#ccc"}
-          />
-          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-            Starte dein erstes Workout!
-          </Text>
-          <Text style={[styles.emptySubtext, { color: colors.textSecondary }]}>
-            Deine Analytics werden hier angezeigt
-          </Text>
-        </View>
-      ) : (
-        <ScrollView
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={styles.header}>
-            <Text style={[styles.screenTitle, { color: colors.text }]}>
-              Hello, Alex! 👋
+      <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+        {entries.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <FontAwesome
+              name="line-chart"
+              size={64}
+              color={isDark ? "#555" : "#ccc"}
+            />
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              Starte dein erstes Workout!
             </Text>
-            {Platform.OS === "ios" ? (
-              <TouchableOpacity
-                onPress={() => router.push("/settings")}
-                activeOpacity={0.7}
-              >
-                <GlassView
-                  isInteractive
+            <Text
+              style={[styles.emptySubtext, { color: colors.textSecondary }]}
+            >
+              Deine Analytics werden hier angezeigt
+            </Text>
+          </View>
+        ) : (
+          <ScrollView
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.header}>
+              <Text style={[styles.screenTitle, { color: colors.text }]}>
+                Hello, Alex! 👋
+              </Text>
+              {Platform.OS === "ios" ? (
+                <TouchableOpacity
+                  onPress={() => router.push("/settings")}
+                  activeOpacity={0.7}
+                >
+                  <GlassView
+                    isInteractive
+                    style={[
+                      styles.settingsButton,
+                      {
+                        backgroundColor: "rgba(255,255,255,0.02)",
+                      },
+                    ]}
+                  >
+                    <FontAwesome name="cog" size={24} color={colors.text} />
+                  </GlassView>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => router.push("/settings")}
                   style={[
                     styles.settingsButton,
                     {
-                      backgroundColor: "rgba(255,255,255,0.02)",
+                      backgroundColor: isDark
+                        ? "rgba(255,255,255,0.1)"
+                        : "rgba(0,0,0,0.06)",
                     },
                   ]}
                 >
-                  <FontAwesome name="cog" size={24} color={colors.text} />
-                </GlassView>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={() => router.push("/settings")}
-                style={[
-                  styles.settingsButton,
-                  {
-                    backgroundColor: isDark
-                      ? "rgba(255,255,255,0.1)"
-                      : "rgba(0,0,0,0.06)",
-                  },
-                ]}
-              >
-                <FontAwesome name="cog" size={24} color={colors.accent} />
-              </TouchableOpacity>
-            )}
-          </View>
-          {homeSettings.showProgressionAlert && renderProgressionAlert()}
-          {homeSettings.showStats && renderStats()}
-          {homeSettings.showChart && renderChart()}
-          {homeSettings.showTopExercises && renderTopExercises()}
+                  <FontAwesome name="cog" size={24} color={colors.accent} />
+                </TouchableOpacity>
+              )}
+            </View>
+            {homeSettings.showProgressionAlert && renderProgressionAlert()}
+            {homeSettings.showStats && renderStats()}
+            {homeSettings.showChart && renderChart()}
+            {homeSettings.showTopExercises && renderTopExercises()}
 
-          <GlassCard>
-            <TouchableOpacity
-              style={[styles.customizeButton]}
-              onPress={() => router.push("/customize-home")}
-            >
-              <FontAwesome name="sliders" size={18} color={colors.tint} />
-              <Text
-                style={[styles.customizeButtonText, { color: colors.text }]}
+            <GlassCard>
+              <TouchableOpacity
+                style={[styles.customizeButton]}
+                onPress={() => router.push("/customize-home")}
               >
-                Home anpassen
-              </Text>
-              <FontAwesome
-                name="chevron-right"
-                size={14}
-                color={colors.textSecondary}
-              />
-            </TouchableOpacity>
-          </GlassCard>
-        </ScrollView>
-      )}
+                <FontAwesome name="sliders" size={18} color={colors.tint} />
+                <Text
+                  style={[styles.customizeButtonText, { color: colors.text }]}
+                >
+                  Home anpassen
+                </Text>
+                <FontAwesome
+                  name="chevron-right"
+                  size={14}
+                  color={colors.textSecondary}
+                />
+              </TouchableOpacity>
+            </GlassCard>
+          </ScrollView>
+        )}
+      </SafeAreaView>
     </LinearGradient>
   );
 }

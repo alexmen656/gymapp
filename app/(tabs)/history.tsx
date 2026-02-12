@@ -15,6 +15,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HistoryScreen() {
   const [entries, setEntries] = useState<WorkoutEntry[]>([]);
@@ -92,31 +93,33 @@ export default function HistoryScreen() {
       colors={[colors.gradientStart, colors.gradientEnd]}
       style={styles.container}
     >
-      {entries.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <FontAwesome
-            name="calendar-o"
-            size={64}
-            color={isDark ? "#555" : "#ccc"}
-          />
-          <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-            Noch keine Trainingseinträge.
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={entries}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-          contentContainerStyle={styles.list}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Text style={[styles.screenTitle, { color: colors.text }]}>
-              Verlauf
+      <SafeAreaView style={styles.container} edges={["top", "bottom"]}>
+        {entries.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <FontAwesome
+              name="calendar-o"
+              size={64}
+              color={isDark ? "#555" : "#ccc"}
+            />
+            <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+              Noch keine Trainingseinträge.
             </Text>
-          }
-        />
-      )}
+          </View>
+        ) : (
+          <FlatList
+            data={entries}
+            keyExtractor={(item) => item.id}
+            renderItem={renderItem}
+            contentContainerStyle={styles.list}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              <Text style={[styles.screenTitle, { color: colors.text }]}>
+                Verlauf
+              </Text>
+            }
+          />
+        )}
+      </SafeAreaView>
     </LinearGradient>
   );
 }
