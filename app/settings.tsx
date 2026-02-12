@@ -279,10 +279,12 @@ export default function SettingsScreen() {
             "Links",
             <View style={styles.linksContainer}>
               {renderLinkButton("lock", t("privacyPolicy"), () =>
-                openURL("https://github.com"),
+                openURL("https://gymnio.fringelo.com/privacy-policy/"),
               )}
               {renderLinkButton("file-text", t("termsOfUse"), () =>
-                openURL("https://github.com"),
+                openURL(
+                  "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/",
+                ),
               )}
             </View>,
           )}

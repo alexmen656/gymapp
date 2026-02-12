@@ -92,7 +92,7 @@ export default function HomeScreen() {
             />
             */
       <TouchableOpacity
-        onPress={() => router.push(`/(tabs)/machines/exercise/${item.name}`)}
+        onPress={() => router.push(`/(tabs)/exercises/exercise/${item.name}`)}
         onLongPress={() => handleLongPress(item.name)}
         activeOpacity={0.7}
       >

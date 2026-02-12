@@ -1,11 +1,11 @@
 import { Stack } from "expo-router";
 
-export default function MachinesLayout() {
+export default function ExercisesLayout() {
   return (
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ headerShown: false, title: "Machines" }}
+        options={{ headerShown: false, title: "Exercises" }}
       />
       <Stack.Screen
         name="exercise/[name]"
