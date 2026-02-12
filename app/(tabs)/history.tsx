@@ -1,5 +1,6 @@
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { deleteEntry, getAllEntries } from "@/storage/workoutStorage";
 import { WorkoutEntry } from "@/types/workout";
@@ -8,18 +9,19 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import {
-  Alert,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Alert,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HistoryScreen() {
   const [entries, setEntries] = useState<WorkoutEntry[]>([]);
   const { theme, isDark } = useTheme();
+  const { t, language } = useLanguage();
   const colors = Colors[theme];
 
   useFocusEffect(
@@ -36,7 +38,7 @@ export default function HistoryScreen() {
 
   function formatDate(iso: string) {
     const d = new Date(iso);
-    return d.toLocaleDateString("de-DE", {
+    return d.toLocaleDateString(language === "de" ? "de-DE" : "en-US", {
       weekday: "short",
       day: "2-digit",
       month: "2-digit",
@@ -46,12 +48,12 @@ export default function HistoryScreen() {
 
   function handleDelete(entry: WorkoutEntry) {
     Alert.alert(
-      "Eintrag löschen?",
-      `${entry.exercise}: ${entry.weight}kg × ${entry.reps} Wdh`,
+      t("deleteEntry"),
+      `${entry.exercise}: ${entry.weight}${t("kg")} × ${entry.reps} ${t("reps")}`,
       [
-        { text: "Abbrechen", style: "cancel" },
+        { text: t("cancel"), style: "cancel" },
         {
-          text: "Löschen",
+          text: t("delete"),
           style: "destructive",
           onPress: async () => {
             await deleteEntry(entry.id);
@@ -71,7 +73,7 @@ export default function HistoryScreen() {
               {item.exercise}
             </Text>
             <Text style={[styles.details, { color: colors.textSecondary }]}>
-              {item.weight} kg × {item.reps} Wdh
+              {item.weight} {t("kg")} × {item.reps} {t("reps")}
             </Text>
             <Text style={[styles.date, { color: colors.textSecondary }]}>
               {formatDate(item.date)}
@@ -102,7 +104,7 @@ export default function HistoryScreen() {
               color={theme === "dark" ? "#555" : "#ccc"}
             />
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Noch keine Trainingseinträge.
+              {t("noHistoryEntries")}
             </Text>
           </View>
         ) : (
@@ -114,7 +116,7 @@ export default function HistoryScreen() {
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={
               <Text style={[styles.screenTitle, { color: colors.text }]}>
-                Verlauf
+                {t("historyTitle")}
               </Text>
             }
           />

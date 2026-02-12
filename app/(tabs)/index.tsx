@@ -1,18 +1,19 @@
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { getAllEntries } from "@/storage/workoutStorage";
 import { WorkoutEntry } from "@/types/workout";
 import {
-  analyzeWeightProgression,
-  getExerciseChartData,
-  getTopExercisesByVolume,
-  getWorkoutStats,
+    analyzeWeightProgression,
+    getExerciseChartData,
+    getTopExercisesByVolume,
+    getWorkoutStats,
 } from "@/utils/analytics";
 import {
-  requestNotificationPermissions,
-  scheduleWorkoutReminder,
-  sendCelebrationNotification,
+    requestNotificationPermissions,
+    scheduleWorkoutReminder,
+    sendCelebrationNotification,
 } from "@/utils/notifications";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -22,14 +23,14 @@ import { useFocusEffect, useRouter } from "expo-router";
 import * as StoreReview from "expo-store-review";
 import { useCallback, useState } from "react";
 import {
-  Alert,
-  Dimensions,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Alert,
+    Dimensions,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -51,6 +52,7 @@ export default function HomeScreen() {
   });
   const [activeChartIndex, setActiveChartIndex] = useState(0);
   const { theme, isDark } = useTheme();
+  const { t, language } = useLanguage();
   const router = useRouter();
   const colors = Colors[theme];
 
@@ -154,14 +156,15 @@ export default function HomeScreen() {
         <View style={styles.alertHeader}>
           <FontAwesome name="arrow-circle-up" size={24} color={colors.tint} />
           <Text style={[styles.alertTitle, { color: colors.text }]}>
-            Bereit für mehr?
+            {t("readyForMore")}
           </Text>
         </View>
         {progressionSuggestions.slice(0, 2).map((suggestion, index) => (
           <View key={index} style={styles.suggestion}>
             <Text style={[styles.suggestionText, { color: colors.text }]}>
               <Text style={{ fontWeight: "700" }}>{suggestion.exercise}</Text>:
-              5× bei {suggestion.currentWeight}kg → Versuche{" "}
+              5× {language === "de" ? "bei" : "at"} {suggestion.currentWeight}kg
+              → {language === "de" ? "Versuche" : "Try"}{" "}
               {suggestion.suggestedWeight}kg! 💪
             </Text>
           </View>
@@ -211,7 +214,7 @@ export default function HomeScreen() {
             {stats.totalWorkouts}
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-            Workouts
+            {t("workouts")}
           </Text>
         </GlassCard>
 
@@ -220,7 +223,7 @@ export default function HomeScreen() {
             {Math.round(stats.totalVolume / 1000)}k
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-            Total kg
+            {t("totalKg")}
           </Text>
         </GlassCard>
 
@@ -229,7 +232,7 @@ export default function HomeScreen() {
             {stats.uniqueExercises}
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
-            Übungen
+            {t("exercisesCount")}
           </Text>
         </GlassCard>
       </View>
@@ -242,7 +245,7 @@ export default function HomeScreen() {
     return (
       <GlassCard style={styles.section}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Top Übungen (Volumen)
+          {t("topExercisesByVolume")}
         </Text>
         {topExercises.map((item, index) => (
           <View key={index} style={styles.topExerciseRow}>
@@ -270,7 +273,7 @@ export default function HomeScreen() {
     );
   }
 
-  function renderChart(title: string, exerciseName: string) {
+  function renderChart(exerciseName: string) {
     const chartData = getExerciseChartData(entries, exerciseName, 10);
     if (chartData.data.length < 2) return null;
 
@@ -278,7 +281,7 @@ export default function HomeScreen() {
       <View style={{ width: screenWidth - 32 }}>
         <GlassCard style={styles.chartCard}>
           <Text style={[styles.chartTitle, { color: colors.text }]}>
-            {title}
+            {t("trend")}: {exerciseName}
           </Text>
           <View style={{ marginLeft: -40, marginRight: -16 }}>
             <LineChart
@@ -330,7 +333,7 @@ export default function HomeScreen() {
             />
           </View>
           <Text style={[styles.chartUnit, { color: colors.textSecondary }]}>
-            Kilogramm
+            {t("kilogram")}
           </Text>
         </GlassCard>
       </View>
@@ -351,12 +354,12 @@ export default function HomeScreen() {
               color={theme === "dark" ? "#555" : "#ccc"}
             />
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-              Starte dein erstes Workout!
+              {t("startFirstWorkout")}
             </Text>
             <Text
               style={[styles.emptySubtext, { color: colors.textSecondary }]}
             >
-              Deine Analytics werden hier angezeigt
+              {t("analyticsWillAppear")}
             </Text>
           </View>
         ) : (
@@ -366,7 +369,7 @@ export default function HomeScreen() {
           >
             <View style={styles.header}>
               <Text style={[styles.screenTitle, { color: colors.text }]}>
-                Hello! 👋 {/*, Alex*/}
+                {t("helloGreeting")} {/*, Alex*/}
               </Text>
               {Platform.OS === "ios" ? (
                 <TouchableOpacity
@@ -424,9 +427,7 @@ export default function HomeScreen() {
                     contentContainerStyle={styles.chartsContainer}
                   >
                     {topExercises.slice(0, 3).map((item, idx) => (
-                      <View key={idx}>
-                        {renderChart(`Trend: ${item.exercise}`, item.exercise)}
-                      </View>
+                      <View key={idx}>{renderChart(item.exercise)}</View>
                     ))}
                   </ScrollView>
                   <View style={styles.paginationDots}>
@@ -460,7 +461,7 @@ export default function HomeScreen() {
                 <Text
                   style={[styles.customizeButtonText, { color: colors.text }]}
                 >
-                  Home anpassen
+                  {t("customizeHome")}
                 </Text>
                 <FontAwesome
                   name="chevron-right"

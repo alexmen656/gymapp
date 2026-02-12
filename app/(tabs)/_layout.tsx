@@ -1,15 +1,18 @@
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import React from "react";
 
 export default function TabLayout() {
+  const { t } = useLanguage();
+
   return (
     <NativeTabs>
       <NativeTabs.Trigger name="index">
-        <Label>Home</Label>
+        <Label>{t("home")}</Label>
         <Icon sf="house" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="exercises">
-        <Label>Exercises</Label>
+        <Label>{t("exercises")}</Label>
         <Icon sf="dumbbell" drawable="custom_android_drawable" />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="history">
@@ -17,10 +20,10 @@ export default function TabLayout() {
           sf="clock.arrow.trianglehead.counterclockwise.rotate.90"
           drawable="custom_settings_drawable"
         />
-        <Label>History</Label>
+        <Label>{t("history")}</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="add" role="search">
-        <Label>Add</Label>
+        <Label>{t("add")}</Label>
         <Icon sf="plus" />
       </NativeTabs.Trigger>
     </NativeTabs>

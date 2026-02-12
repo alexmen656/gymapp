@@ -1,5 +1,6 @@
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,6 +19,7 @@ interface HomeViewSettings {
 
 export default function CustomizeHomeScreen() {
   const { theme, isDark } = useTheme();
+  const { t } = useLanguage();
   const colors = Colors[theme];
   const router = useRouter();
 
@@ -107,7 +109,7 @@ export default function CustomizeHomeScreen() {
         >
           <View style={styles.header}>
             <Text style={[styles.screenTitle, { color: colors.text }]}>
-              Home anpassen
+              {t("customizeHomeTitle")}
             </Text>
             <View style={{ width: 40 }} />
           </View>
@@ -115,42 +117,41 @@ export default function CustomizeHomeScreen() {
           <GlassCard style={styles.infoCard}>
             <FontAwesome name="info-circle" size={20} color={colors.tint} />
             <Text style={[styles.infoText, { color: colors.textSecondary }]}>
-              Wähle aus, welche Bereiche auf deinem Home Screen angezeigt werden
-              sollen.
+              {t("customizeHomeInfo")}
             </Text>
           </GlassCard>
 
           <View style={styles.section}>
             <Text style={[styles.sectionTitle, { color: colors.text }]}>
-              Ansicht anpassen
+              {t("customizeViewTitle")}
             </Text>
 
             <View style={styles.settingsContainer}>
               {renderToggleSetting(
                 "arrow-circle-up",
-                "Progression Alert",
-                "Zeigt Vorschläge für Gewichtssteigerungen",
+                t("progressionAlert"),
+                t("progressionAlertDesc"),
                 "showProgressionAlert",
               )}
 
               {renderToggleSetting(
                 "bar-chart",
-                "Statistiken",
-                "Zeigt Workout-Count, Volumen und Übungen",
+                t("statistics"),
+                t("statisticsDesc"),
                 "showStats",
               )}
 
               {renderToggleSetting(
                 "line-chart",
-                "Trend-Diagramm",
-                "Zeigt den Gewichtsverlauf deiner Top-Übung",
+                t("trendChart"),
+                t("trendChartDesc"),
                 "showChart",
               )}
 
               {renderToggleSetting(
                 "trophy",
-                "Top Übungen",
-                "Zeigt deine meisttrainierten Übungen",
+                t("topExercises"),
+                t("topExercisesDesc"),
                 "showTopExercises",
               )}
             </View>
@@ -159,8 +160,8 @@ export default function CustomizeHomeScreen() {
           <GlassCard style={styles.tipCard}>
             <FontAwesome name="lightbulb-o" size={18} color="#FFD700" />
             <Text style={[styles.tipText, { color: colors.textSecondary }]}>
-              <Text style={{ fontWeight: "700" }}>Tipp:</Text> Du kannst diese
-              Einstellungen jederzeit ändern.
+              <Text style={{ fontWeight: "700" }}>{t("tip")}:</Text>{" "}
+              {t("customizeTip")}
             </Text>
           </GlassCard>
         </ScrollView>

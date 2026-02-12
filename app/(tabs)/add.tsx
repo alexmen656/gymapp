@@ -1,6 +1,7 @@
 import { GlassButton } from "@/components/GlassButton";
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { addExercise } from "@/storage/workoutStorage";
 import { useRouter } from "expo-router";
@@ -11,6 +12,7 @@ export default function AddScreen() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newName, setNewName] = useState("");
   const { theme, isDark } = useTheme();
+  const { t } = useLanguage();
   const colors = Colors[theme];
   const router = useRouter();
 
@@ -48,7 +50,7 @@ export default function AddScreen() {
         >
           <GlassCard style={styles.modalCard} variant="regular">
             <Text style={[styles.modalTitle, { color: colors.text }]}>
-              Neues Gerät
+              {t("newExercise")}
             </Text>
             <TextInput
               style={[
@@ -59,7 +61,7 @@ export default function AddScreen() {
                   color: colors.text,
                 },
               ]}
-              placeholder="z.B. Bankdrücken, Beinpresse..."
+              placeholder={t("exercisePlaceholder")}
               placeholderTextColor={colors.textSecondary}
               value={newName}
               onChangeText={setNewName}
@@ -68,9 +70,9 @@ export default function AddScreen() {
               onSubmitEditing={handleAddExercise}
             />
             <View style={styles.modalButtons}>
-              <GlassButton label="Abbrechen" onPress={handleModalClose} />
+              <GlassButton label={t("cancel")} onPress={handleModalClose} />
               <GlassButton
-                label="Hinzufügen"
+                label={t("addButton")}
                 onPress={handleAddExercise}
                 prominent
               />

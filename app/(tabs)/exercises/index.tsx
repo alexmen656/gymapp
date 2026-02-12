@@ -1,5 +1,6 @@
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
   deleteExercise,
@@ -29,6 +30,7 @@ interface ExerciseItem {
 export default function HomeScreen() {
   const [items, setItems] = useState<ExerciseItem[]>([]);
   const { theme, isDark } = useTheme();
+  const { t, language } = useLanguage();
   const colors = Colors[theme];
   const router = useRouter();
 
@@ -55,7 +57,7 @@ export default function HomeScreen() {
 
   function formatDate(iso: string) {
     const d = new Date(iso);
-    return d.toLocaleDateString("de-DE", {
+    return d.toLocaleDateString(language === "de" ? "de-DE" : "en-US", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -64,12 +66,12 @@ export default function HomeScreen() {
 
   function handleLongPress(name: string) {
     Alert.alert(
-      "Gerät löschen?",
-      `\u201E${name}\u201C und alle Einträge löschen?`,
+      t("deleteExercise"),
+      `\u201E${name}\u201C ${t("deleteExerciseConfirm")}`,
       [
-        { text: "Abbrechen", style: "cancel" },
+        { text: t("cancel"), style: "cancel" },
         {
-          text: "Löschen",
+          text: t("delete"),
           style: "destructive",
           onPress: async () => {
             await deleteExercise(name);
@@ -112,7 +114,7 @@ export default function HomeScreen() {
                   <Text
                     style={[styles.statLabel, { color: colors.textSecondary }]}
                   >
-                    kg
+                    {t("kg")}
                   </Text>
                 </View>
                 <View style={styles.stat}>
@@ -122,7 +124,7 @@ export default function HomeScreen() {
                   <Text
                     style={[styles.statLabel, { color: colors.textSecondary }]}
                   >
-                    Wdh
+                    {t("reps")}
                   </Text>
                 </View>
                 <View style={styles.stat}>
@@ -132,17 +134,17 @@ export default function HomeScreen() {
                   <Text
                     style={[styles.statLabel, { color: colors.textSecondary }]}
                   >
-                    Einträge
+                    {t("entries")}
                   </Text>
                 </View>
               </View>
               <Text style={[styles.lastDate, { color: colors.textSecondary }]}>
-                Zuletzt: {formatDate(g.lastDate)}
+                {t("lastPerformed")}: {formatDate(g.lastDate)}
               </Text>
             </>
           ) : (
             <Text style={[styles.noEntries, { color: colors.textSecondary }]}>
-              Noch keine Einträge – tippe zum Hinzufügen
+              {t("noEntriesTapToAdd")}
             </Text>
           )}
         </GlassCard>
@@ -163,7 +165,7 @@ export default function HomeScreen() {
             color={theme === "dark" ? "#555" : "#ccc"}
           />
           <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-            Noch keine Geräte.{"\n"}Tippe + um ein Gerät hinzuzufügen!
+            {t("noExercises")}
           </Text>
         </View>
       ) : (
@@ -175,7 +177,7 @@ export default function HomeScreen() {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <Text style={[styles.screenTitle, { color: colors.text }]}>
-              Geräte
+              {t("exercisesTitle")}
             </Text>
           }
         />

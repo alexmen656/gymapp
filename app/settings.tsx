@@ -256,27 +256,24 @@ export default function SettingsScreen() {
 
           {renderSettingSection(
             language === "de" ? "App-Icon" : "App Icon",
-            renderDropdown(
-              language === "de" ? "App-Icon" : "App Icon",
-              iconOptions,
-              selectedIcon,
-              (value) => changeAppIcon(value as any),
+            renderDropdown(t("appIcon"), iconOptions, selectedIcon, (value) =>
+              changeAppIcon(value as any),
             ),
           )}
 
           {renderSettingSection(
-            "Benachrichtigungen",
+            t("notifications"),
             renderToggleSetting(
               "bell",
-              "Tägliche Erinnerung",
-              "Erhalte täglich um 18:00 Uhr eine Erinnerung",
+              t("dailyReminder"),
+              t("dailyReminderDesc"),
               notificationsEnabled,
               toggleNotifications,
             ),
           )}
 
           {renderSettingSection(
-            "Links",
+            t("links"),
             <View style={styles.linksContainer}>
               {renderLinkButton("lock", t("privacyPolicy"), () =>
                 openURL("https://gymnio.fringelo.com/privacy-policy/"),

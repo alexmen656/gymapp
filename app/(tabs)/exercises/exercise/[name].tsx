@@ -1,11 +1,12 @@
 import { GlassCard } from "@/components/GlassCard";
 import Colors from "@/constants/Colors";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
-  createEntry,
-  deleteEntry,
-  getAllEntries,
-  saveEntry,
+    createEntry,
+    deleteEntry,
+    getAllEntries,
+    saveEntry,
 } from "@/storage/workoutStorage";
 import { WorkoutEntry } from "@/types/workout";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -14,17 +15,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
-  Alert,
-  Dimensions,
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    Dimensions,
+    FlatList,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -38,6 +39,7 @@ export default function ExerciseDetailScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [activeChartIndex, setActiveChartIndex] = useState(0);
   const { theme, isDark } = useTheme();
+  const { t, language } = useLanguage();
   const colors = Colors[theme];
 
   const isFilled = useMemo(
@@ -64,7 +66,7 @@ export default function ExerciseDetailScreen() {
 
   function formatDate(iso: string) {
     const d = new Date(iso);
-    return d.toLocaleDateString("de-DE", {
+    return d.toLocaleDateString(language === "de" ? "de-DE" : "en-US", {
       weekday: "short",
       day: "2-digit",
       month: "2-digit",
@@ -73,7 +75,7 @@ export default function ExerciseDetailScreen() {
   }
 
   function formatShortDate(d: Date) {
-    return d.toLocaleDateString("de-DE", {
+    return d.toLocaleDateString(language === "de" ? "de-DE" : "en-US", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -82,11 +84,11 @@ export default function ExerciseDetailScreen() {
 
   async function handleAdd() {
     if (!weight || isNaN(Number(weight)) || Number(weight) <= 0) {
-      Alert.alert("Fehler", "Bitte gültiges Gewicht eingeben.");
+      Alert.alert(t("error"), t("invalidWeight"));
       return;
     }
     if (!reps || isNaN(Number(reps)) || Number(reps) <= 0) {
-      Alert.alert("Fehler", "Bitte gültige Wiederholungen eingeben.");
+      Alert.alert(t("error"), t("invalidReps"));
       return;
     }
 
@@ -109,12 +111,12 @@ export default function ExerciseDetailScreen() {
 
   function handleDelete(entry: WorkoutEntry) {
     Alert.alert(
-      "Eintrag löschen?",
-      `${entry.weight}kg × ${entry.reps} Wdh am ${formatDate(entry.date)}`,
+      t("deleteEntry"),
+      `${entry.weight}${t("kg")} × ${entry.reps} ${t("reps")} ${language === "de" ? "am" : "on"} ${formatDate(entry.date)}`,
       [
-        { text: "Abbrechen", style: "cancel" },
+        { text: t("cancel"), style: "cancel" },
         {
-          text: "Löschen",
+          text: t("delete"),
           style: "destructive",
           onPress: async () => {
             await deleteEntry(entry.id);
@@ -279,12 +281,12 @@ export default function ExerciseDetailScreen() {
       <Text style={[styles.screenTitle, { color: colors.text }]}>{name}</Text>
       <GlassCard style={styles.addForm} variant="regular">
         <Text style={[styles.addTitle, { color: colors.text }]}>
-          Neuer Eintrag
+          {t("newEntry")}
         </Text>
         <View style={styles.inputRow}>
           <View style={styles.inputGroup}>
             <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
-              Gewicht (kg)
+              {t("weight")} ({t("kg")})
             </Text>
             <TextInput
               style={[
@@ -310,7 +312,7 @@ export default function ExerciseDetailScreen() {
           </View>
           <View style={styles.inputGroup}>
             <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
-              Wiederholungen
+              {t("repetitions")}
             </Text>
             <TextInput
               style={[
@@ -356,7 +358,7 @@ export default function ExerciseDetailScreen() {
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={onDateChange}
               maximumDate={new Date()}
-              locale="de"
+              locale={language === "de" ? "de" : "en"}
             />
             {Platform.OS === "ios" && (
               <TouchableOpacity
@@ -364,7 +366,7 @@ export default function ExerciseDetailScreen() {
                 onPress={() => setShowDatePicker(false)}
               >
                 <Text style={[styles.doneText, { color: colors.accent }]}>
-                  Fertig
+                  {language === "de" ? "Fertig" : "Done"}
                 </Text>
               </TouchableOpacity>
             )}
@@ -383,7 +385,7 @@ export default function ExerciseDetailScreen() {
             onPress={handleAdd}
             activeOpacity={0.8}
           >
-            <Text style={styles.saveButtonText}>Speichern</Text>
+            <Text style={styles.saveButtonText}>{t("addEntry")}</Text>
           </TouchableOpacity>
         </View>
       </GlassCard>
@@ -398,17 +400,17 @@ export default function ExerciseDetailScreen() {
               <Text
                 style={[styles.summaryLabel, { color: colors.textSecondary }]}
               >
-                Einträge
+                {t("entries")}
               </Text>
             </View>
             <View style={styles.summaryItem}>
               <Text style={[styles.summaryValue, { color: colors.text }]}>
-                {maxWeight} kg
+                {maxWeight} {t("kg")}
               </Text>
               <Text
                 style={[styles.summaryLabel, { color: colors.textSecondary }]}
               >
-                Max Gewicht
+                {language === "de" ? "Max Gewicht" : "Max Weight"}
               </Text>
             </View>
             <View style={styles.summaryItem}>
@@ -418,7 +420,7 @@ export default function ExerciseDetailScreen() {
               <Text
                 style={[styles.summaryLabel, { color: colors.textSecondary }]}
               >
-                Max Wdh
+                {language === "de" ? "Max Wdh" : "Max Reps"}
               </Text>
             </View>
           </View>
@@ -439,9 +441,17 @@ export default function ExerciseDetailScreen() {
             scrollEventThrottle={16}
             contentContainerStyle={styles.chartsContainer}
           >
-            {renderChart("Gewicht Progression", "weight", "Kilogramm")}
-            {renderChart("Wiederholungen", "reps", "Anzahl")}
-            {renderChart("Volumen", "volume", "kg × Wdh")}
+            {renderChart(t("weightTrend"), "weight", t("kilogram"))}
+            {renderChart(
+              t("repsTrend"),
+              "reps",
+              language === "de" ? "Anzahl" : "Count",
+            )}
+            {renderChart(
+              t("volumeTrend"),
+              "volume",
+              `${t("kg")} × ${t("reps")}`,
+            )}
           </ScrollView>
           <View style={styles.paginationDots}>
             {[0, 1, 2].map((index) => (
@@ -466,7 +476,7 @@ export default function ExerciseDetailScreen() {
 
       {entries.length > 0 && (
         <Text style={[styles.historyTitle, { color: colors.text }]}>
-          Verlauf
+          {t("historyTitle")}
         </Text>
       )}
     </>
@@ -477,7 +487,7 @@ export default function ExerciseDetailScreen() {
       colors={[colors.gradientStart, colors.gradientEnd]}
       style={styles.container}
     >
-      <Stack.Screen options={{ title: name || "Übung" }} />
+      <Stack.Screen options={{ title: name || t("exercisesTitle") }} />
       <SafeAreaView style={styles.container} edges={["bottom"]}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -496,7 +506,7 @@ export default function ExerciseDetailScreen() {
                 <Text
                   style={[styles.emptyText, { color: colors.textSecondary }]}
                 >
-                  Füge deinen ersten Eintrag oben hinzu!
+                  {t("noEntriesDesc")}
                 </Text>
               </View>
             }
