@@ -19,6 +19,7 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -35,6 +36,7 @@ export default function ExerciseDetailScreen() {
   const [reps, setReps] = useState("");
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [activeChartIndex, setActiveChartIndex] = useState(0);
   const { theme, isDark } = useTheme();
   const colors = Colors[theme];
 
@@ -159,58 +161,64 @@ export default function ExerciseDetailScreen() {
     if (chartData.data.length < 2) return null;
 
     return (
-      <GlassCard style={styles.chartCard}>
-        <Text style={[styles.chartTitle, { color: colors.text }]}>{title}</Text>
-        <View style={{ marginLeft: -40, marginRight: -16 }}>
-          <LineChart
-            data={{
-              labels: chartData.labels,
-              datasets: [{ data: chartData.data }],
-            }}
-            width={screenWidth - 8}
-            height={220}
-            chartConfig={{
-              backgroundColor: "rgba(0,0,0,0)",
-              backgroundGradientFrom: "rgba(0,0,0,0)",
-              backgroundGradientTo: "rgba(0,0,0,0)",
-              backgroundGradientFromOpacity: 0,
-              backgroundGradientToOpacity: 0,
-              decimalPlaces: type === "volume" ? 0 : 1,
-              color: (opacity = 1) => {
-                const hex = colors.tint.replace("#", "");
-                const alpha = Math.round(opacity * 255)
-                  .toString(16)
-                  .padStart(2, "0");
-                return `#${hex}${alpha}`;
-              },
-              labelColor: (opacity = 1) => {
-                const hex = colors.textSecondary.replace("#", "");
-                const alpha = Math.round(opacity * 255)
-                  .toString(16)
-                  .padStart(2, "0");
-                return `#${hex}${alpha}`;
-              },
-              strokeWidth: 5,
-              propsForBackgroundLines: {
-                strokeDasharray: "",
-                stroke: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
-              },
-              propsForDots: {
-                r: "0",
-              },
-              paddingRight: 0,
-            }}
-            bezier
-            style={styles.chart}
-            withDots={false}
-            withHorizontalLabels={false}
-            transparent
-          />
-        </View>
-        <Text style={[styles.chartUnit, { color: colors.textSecondary }]}>
-          {unit}
-        </Text>
-      </GlassCard>
+      <View style={{ width: screenWidth - 32 }}>
+        <GlassCard style={styles.chartCard}>
+          <Text style={[styles.chartTitle, { color: colors.text }]}>
+            {title}
+          </Text>
+          <View style={{ marginLeft: -40, marginRight: -16 }}>
+            <LineChart
+              data={{
+                labels: chartData.labels,
+                datasets: [{ data: chartData.data }],
+              }}
+              width={screenWidth - 8}
+              height={220}
+              chartConfig={{
+                backgroundColor: "rgba(0,0,0,0)",
+                backgroundGradientFrom: "rgba(0,0,0,0)",
+                backgroundGradientTo: "rgba(0,0,0,0)",
+                backgroundGradientFromOpacity: 0,
+                backgroundGradientToOpacity: 0,
+                decimalPlaces: type === "volume" ? 0 : 1,
+                color: (opacity = 1) => {
+                  const hex = colors.tint.replace("#", "");
+                  const alpha = Math.round(opacity * 255)
+                    .toString(16)
+                    .padStart(2, "0");
+                  return `#${hex}${alpha}`;
+                },
+                labelColor: (opacity = 1) => {
+                  const hex = colors.textSecondary.replace("#", "");
+                  const alpha = Math.round(opacity * 255)
+                    .toString(16)
+                    .padStart(2, "0");
+                  return `#${hex}${alpha}`;
+                },
+                strokeWidth: 5,
+                propsForBackgroundLines: {
+                  strokeDasharray: "",
+                  stroke: isDark
+                    ? "rgba(255,255,255,0.05)"
+                    : "rgba(0,0,0,0.05)",
+                },
+                propsForDots: {
+                  r: "0",
+                },
+                paddingRight: 0,
+              }}
+              bezier
+              style={styles.chart}
+              withDots={false}
+              withHorizontalLabels={false}
+              transparent
+            />
+          </View>
+          <Text style={[styles.chartUnit, { color: colors.textSecondary }]}>
+            {unit}
+          </Text>
+        </GlassCard>
+      </View>
     );
   }
 
@@ -413,9 +421,40 @@ export default function ExerciseDetailScreen() {
 
       {entries.length >= 5 && (
         <>
-          {renderChart("Gewicht Progression", "weight", "Kilogramm")}
-          {renderChart("Wiederholungen", "reps", "Anzahl")}
-          {renderChart("Volumen", "volume", "kg × Wdh")}
+          <ScrollView
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onScroll={(event) => {
+              const offsetX = event.nativeEvent.contentOffset.x;
+              const index = Math.round(offsetX / (screenWidth - 32));
+              setActiveChartIndex(index);
+            }}
+            scrollEventThrottle={16}
+            contentContainerStyle={styles.chartsContainer}
+          >
+            {renderChart("Gewicht Progression", "weight", "Kilogramm")}
+            {renderChart("Wiederholungen", "reps", "Anzahl")}
+            {renderChart("Volumen", "volume", "kg × Wdh")}
+          </ScrollView>
+          <View style={styles.paginationDots}>
+            {[0, 1, 2].map((index) => (
+              <View
+                key={index}
+                style={[
+                  styles.dot,
+                  {
+                    backgroundColor:
+                      activeChartIndex === index
+                        ? colors.tint
+                        : isDark
+                          ? "rgba(255,255,255,0.2)"
+                          : "rgba(0,0,0,0.2)",
+                  },
+                ]}
+              />
+            ))}
+          </View>
         </>
       )}
 
@@ -561,24 +600,41 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 10,
   },
-  chartCard: {
+  chartsContainer: {
+    /*paddingHorizontal: 16,*/
+    gap: 0,
+  },
+  paginationDots: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 12,
     marginBottom: 16,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  chartCard: {
+    marginBottom: 2,
     overflow: "hidden",
   },
   chartTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "700",
     marginBottom: 12,
   },
   chart: {
-    marginVertical: 8,
+    marginTop: 8,
     borderRadius: 16,
     marginLeft: -16,
   },
   chartUnit: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: "center",
-    marginTop: 4,
+    /*marginTop: 4,*/
   },
   card: {
     marginBottom: 8,
