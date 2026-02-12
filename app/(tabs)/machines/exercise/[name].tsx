@@ -15,6 +15,7 @@ import { Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import {
   Alert,
+  Dimensions,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -24,6 +25,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { LineChart } from "react-native-chart-kit";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ExerciseDetailScreen() {
@@ -123,6 +125,91 @@ export default function ExerciseDetailScreen() {
 
   const maxWeight =
     entries.length > 0 ? Math.max(...entries.map((e) => e.weight)) : 0;
+
+  const screenWidth = Dimensions.get("window").width;
+
+  function getChartData(type: "weight" | "reps" | "volume") {
+    const sortedEntries = [...entries].sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
+    const recentEntries = sortedEntries.slice(-10);
+
+    const data = recentEntries.map((e) => {
+      if (type === "weight") return e.weight;
+      if (type === "reps") return e.reps;
+      return e.weight * e.reps;
+    });
+
+    const labels = recentEntries.map((e) => {
+      const d = new Date(e.date);
+      return `${d.getDate()}.${d.getMonth() + 1}`;
+    });
+
+    return { data, labels };
+  }
+
+  function renderChart(
+    title: string,
+    type: "weight" | "reps" | "volume",
+    unit: string,
+  ) {
+    if (entries.length < 5) return null;
+
+    const chartData = getChartData(type);
+    if (chartData.data.length < 2) return null;
+
+    return (
+      <GlassCard style={styles.chartCard}>
+        <Text style={[styles.chartTitle, { color: colors.text }]}>{title}</Text>
+        <LineChart
+          data={{
+            labels: chartData.labels,
+            datasets: [{ data: chartData.data }],
+          }}
+          /*width={screenWidth - 64}*/
+          width={screenWidth - 64}
+          height={220}
+          chartConfig={{
+            backgroundColor: "rgba(0,0,0,0)",
+            backgroundGradientFrom: "rgba(0,0,0,0)",
+            backgroundGradientTo: "rgba(0,0,0,0)",
+            backgroundGradientFromOpacity: 0,
+            backgroundGradientToOpacity: 0,
+            decimalPlaces: type === "volume" ? 0 : 1,
+            color: (opacity = 1) => {
+              const hex = colors.tint.replace("#", "");
+              const alpha = Math.round(opacity * 255)
+                .toString(16)
+                .padStart(2, "0");
+              return `#${hex}${alpha}`;
+            },
+            labelColor: (opacity = 1) => {
+              const hex = colors.textSecondary.replace("#", "");
+              const alpha = Math.round(opacity * 255)
+                .toString(16)
+                .padStart(2, "0");
+              return `#${hex}${alpha}`;
+            },
+            strokeWidth: 5,
+            propsForBackgroundLines: {
+              strokeDasharray: "",
+              stroke: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+            },
+            propsForDots: {
+              r: "0",
+            },
+          }}
+          bezier
+          /*style={[styles.chart, { backgroundColor: "transparent" }]}*/
+          withDots={false}
+          transparent
+        />
+        <Text style={[styles.chartUnit, { color: colors.textSecondary }]}>
+          {unit}
+        </Text>
+      </GlassCard>
+    );
+  }
 
   function renderItem({ item }: { item: WorkoutEntry }) {
     const isBest = item.weight === maxWeight;
@@ -321,6 +408,14 @@ export default function ExerciseDetailScreen() {
         </GlassCard>
       )}
 
+      {entries.length >= 5 && (
+        <>
+          {renderChart("Gewicht Progression", "weight", "Kilogramm")}
+          {renderChart("Wiederholungen", "reps", "Anzahl")}
+          {renderChart("Volumen", "volume", "kg × Wdh")}
+        </>
+      )}
+
       {entries.length > 0 && (
         <Text style={[styles.historyTitle, { color: colors.text }]}>
           Verlauf
@@ -462,6 +557,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     marginBottom: 10,
+  },
+  chartCard: {
+    marginBottom: 16,
+  },
+  chartTitle: {
+    fontSize: 16,
+    fontWeight: "700",
+    marginBottom: 12,
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
+  },
+  chartUnit: {
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 4,
   },
   card: {
     marginBottom: 8,
