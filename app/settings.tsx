@@ -26,13 +26,21 @@ export default function SettingsScreen() {
   const { language, setLanguage, t } = useLanguage();
   const colors = Colors[theme];
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [selectedIcon, setSelectedIcon] = useState<"standard" | "glow">(
+    "standard",
+  );
 
   React.useEffect(() => {
-    async function loadNotificationStatus() {
+    async function loadSettings() {
       const enabled = await AsyncStorage.getItem("reminderScheduled");
       setNotificationsEnabled(enabled === "true");
+
+      const icon = await AsyncStorage.getItem("appIcon");
+      if (icon === "glow") {
+        setSelectedIcon("glow");
+      }
     }
-    loadNotificationStatus();
+    loadSettings();
   }, []);
 
   async function toggleNotifications(value: boolean) {
@@ -62,6 +70,23 @@ export default function SettingsScreen() {
     { label: "Deutsch", value: "de" as const },
     { label: "English", value: "en" as const },
   ];
+
+  const iconOptions = [
+    { label: "Standard", value: "standard" as const },
+    { label: "Glow", value: "glow" as const },
+  ];
+
+  async function changeAppIcon(icon: "standard" | "glow") {
+    setSelectedIcon(icon);
+    await AsyncStorage.setItem("appIcon", icon);
+
+    Alert.alert(
+      language === "de" ? "App-Icon geändert" : "App Icon Changed",
+      language === "de"
+        ? "Das App-Icon wurde geändert. Bitte starte die App neu, um die Änderung zu sehen."
+        : "The app icon has been changed. Please restart the app to see the change.",
+    );
+  }
 
   async function openURL(url: string) {
     await WebBrowser.openBrowserAsync(url);
@@ -210,7 +235,6 @@ export default function SettingsScreen() {
             </Text>
           </View>
 
-          {/* Theme Selection */}
           {renderSettingSection(
             t("theme"),
             renderDropdown(t("theme"), themeOptions, mode, (value) =>
@@ -218,7 +242,6 @@ export default function SettingsScreen() {
             ),
           )}
 
-          {/* Language Selection */}
           {renderSettingSection(
             t("language"),
             renderDropdown(t("language"), languageOptions, language, (value) =>
@@ -226,7 +249,16 @@ export default function SettingsScreen() {
             ),
           )}
 
-          {/* Notifications */}
+          {renderSettingSection(
+            language === "de" ? "App-Icon" : "App Icon",
+            renderDropdown(
+              language === "de" ? "App-Icon" : "App Icon",
+              iconOptions,
+              selectedIcon,
+              (value) => changeAppIcon(value as any),
+            ),
+          )}
+
           {renderSettingSection(
             "Benachrichtigungen",
             renderToggleSetting(
@@ -238,7 +270,6 @@ export default function SettingsScreen() {
             ),
           )}
 
-          {/* Links Section */}
           {renderSettingSection(
             "Links",
             <View style={styles.linksContainer}>
@@ -251,7 +282,6 @@ export default function SettingsScreen() {
             </View>,
           )}
 
-          {/* About Section */}
           {renderSettingSection(
             t("aboutTitle"),
             <View

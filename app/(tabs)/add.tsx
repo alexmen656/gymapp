@@ -14,7 +14,6 @@ export default function AddScreen() {
   const colors = Colors[theme];
   const router = useRouter();
 
-  // Automatically show the modal when this screen is focused
   useEffect(() => {
     setShowAddModal(true);
   }, []);
@@ -25,19 +24,16 @@ export default function AddScreen() {
     await addExercise(trimmed);
     setNewName("");
     setShowAddModal(false);
-    // Navigate back to home after adding
     router.replace("/");
   }
 
   function handleModalClose() {
     setShowAddModal(false);
-    // Navigate back to home when modal is closed
     router.replace("/");
   }
 
   return (
     <View style={styles.container}>
-      {/* Add Exercise Modal */}
       <Modal
         visible={showAddModal}
         transparent
