@@ -240,12 +240,12 @@ export default function SettingsScreen() {
             </Text>
           </View>
 
-          {renderSettingSection(
+          {/*renderSettingSection(
             t("theme"),
             renderDropdown(t("theme"), themeOptions, mode, (value) =>
               setMode(value as any),
             ),
-          )}
+          )*/}
 
           {renderSettingSection(
             t("language"),
@@ -305,7 +305,7 @@ export default function SettingsScreen() {
               </View>
               <TouchableOpacity
                 style={[styles.githubButton, { backgroundColor: colors.tint }]}
-                onPress={() => openURL("https://github.com")}
+                onPress={() => openURL("https://github.com/alexmen656/gymapp")}
               >
                 <FontAwesome name="github" size={18} color="#fff" />
                 <Text style={styles.githubButtonText}>{t("viewOnGithub")}</Text>
