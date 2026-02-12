@@ -170,9 +170,9 @@ export default function HomeScreen() {
   }
 
   function renderStats() {
-    return (
-      <View style={styles.statsGrid}>
-        <GlassCard style={styles.statCard}>
+    /*
+
+    <GlassCard style={styles.statCard}>
           <FontAwesome name="trophy" size={24} color={colors.tint} />
           <Text style={[styles.statValue, { color: colors.text }]}>
             {stats.totalWorkouts}
@@ -195,6 +195,36 @@ export default function HomeScreen() {
         <GlassCard style={styles.statCard}>
           <FontAwesome name="list" size={24} color="#4ECDC4" />
           <Text style={[styles.statValue, { color: colors.text }]}>
+            {stats.uniqueExercises}
+          </Text>
+          <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+            Übungen
+          </Text>
+        </GlassCard>
+
+        */
+    return (
+      <View style={styles.statsGrid}>
+        <GlassCard style={styles.statCard}>
+          <Text style={[styles.statValue, { color: colors.tint }]}>
+            {stats.totalWorkouts}
+          </Text>
+          <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+            Workouts
+          </Text>
+        </GlassCard>
+
+        <GlassCard style={styles.statCard}>
+          <Text style={[styles.statValue, { color: "#FF6B6B" }]}>
+            {Math.round(stats.totalVolume / 1000)}k
+          </Text>
+          <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
+            Total kg
+          </Text>
+        </GlassCard>
+
+        <GlassCard style={styles.statCard}>
+          <Text style={[styles.statValue, { color: "#4ECDC4" }]}>
             {stats.uniqueExercises}
           </Text>
           <Text style={[styles.statLabel, { color: colors.textSecondary }]}>
@@ -321,7 +351,7 @@ export default function HomeScreen() {
           >
             <View style={styles.header}>
               <Text style={[styles.screenTitle, { color: colors.text }]}>
-                Hello, Alex! 👋
+                Hello! 👋 {/*, Alex*/}
               </Text>
               {Platform.OS === "ios" ? (
                 <TouchableOpacity
@@ -441,18 +471,19 @@ const styles = StyleSheet.create({
   statCard: {
     flex: 1,
     alignItems: "center",
-    padding: 12,
+    padding: 4,
     minWidth: 0,
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "800",
-    marginTop: 8,
+    textAlign: "center",
+    /*marginTop: 8,*/
   },
   statLabel: {
     fontSize: 12,
     textAlign: "center",
-    marginTop: 4,
+    marginTop: 2,
   },
   section: {
     marginBottom: 16,

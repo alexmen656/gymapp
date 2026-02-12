@@ -83,6 +83,14 @@ export default function HomeScreen() {
   function renderItem({ item }: { item: ExerciseItem }) {
     const g = item.group;
     return (
+      /*
+                 <FontAwesome
+              name="trophy"
+              size={18}
+              color={isDark ? "#fbbf24" : "#f59e0b"}
+              style={styles.icon}
+            />
+            */
       <TouchableOpacity
         onPress={() => router.push(`/(tabs)/machines/exercise/${item.name}`)}
         onLongPress={() => handleLongPress(item.name)}
@@ -90,12 +98,6 @@ export default function HomeScreen() {
       >
         <GlassCard style={styles.card}>
           <View style={styles.cardHeader}>
-            <FontAwesome
-              name="trophy"
-              size={18}
-              color={isDark ? "#fbbf24" : "#f59e0b"}
-              style={styles.icon}
-            />
             <Text style={[styles.exerciseName, { color: colors.text }]}>
               {item.name}
             </Text>

@@ -252,7 +252,7 @@ export default function ExerciseDetailScreen() {
                       { color: isDark ? "#fbbf24" : "#92400e" },
                     ]}
                   >
-                    PR
+                    <FontAwesome name="trophy" size={16} color={colors.text} />
                   </Text>
                 </View>
               )}
@@ -520,7 +520,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   addTitle: {
-    fontSize: 17,
+    fontSize: 20,
     fontWeight: "700",
     marginBottom: 14,
   },
@@ -596,7 +596,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   historyTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "700",
     marginBottom: 10,
   },
