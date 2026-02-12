@@ -161,49 +161,52 @@ export default function ExerciseDetailScreen() {
     return (
       <GlassCard style={styles.chartCard}>
         <Text style={[styles.chartTitle, { color: colors.text }]}>{title}</Text>
-        <LineChart
-          data={{
-            labels: chartData.labels,
-            datasets: [{ data: chartData.data }],
-          }}
-          /*width={screenWidth - 64}*/
-          width={screenWidth - 64}
-          height={220}
-          chartConfig={{
-            backgroundColor: "rgba(0,0,0,0)",
-            backgroundGradientFrom: "rgba(0,0,0,0)",
-            backgroundGradientTo: "rgba(0,0,0,0)",
-            backgroundGradientFromOpacity: 0,
-            backgroundGradientToOpacity: 0,
-            decimalPlaces: type === "volume" ? 0 : 1,
-            color: (opacity = 1) => {
-              const hex = colors.tint.replace("#", "");
-              const alpha = Math.round(opacity * 255)
-                .toString(16)
-                .padStart(2, "0");
-              return `#${hex}${alpha}`;
-            },
-            labelColor: (opacity = 1) => {
-              const hex = colors.textSecondary.replace("#", "");
-              const alpha = Math.round(opacity * 255)
-                .toString(16)
-                .padStart(2, "0");
-              return `#${hex}${alpha}`;
-            },
-            strokeWidth: 5,
-            propsForBackgroundLines: {
-              strokeDasharray: "",
-              stroke: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
-            },
-            propsForDots: {
-              r: "0",
-            },
-          }}
-          bezier
-          /*style={[styles.chart, { backgroundColor: "transparent" }]}*/
-          withDots={false}
-          transparent
-        />
+        <View style={{ marginLeft: -40, marginRight: -16 }}>
+          <LineChart
+            data={{
+              labels: chartData.labels,
+              datasets: [{ data: chartData.data }],
+            }}
+            width={screenWidth - 8}
+            height={220}
+            chartConfig={{
+              backgroundColor: "rgba(0,0,0,0)",
+              backgroundGradientFrom: "rgba(0,0,0,0)",
+              backgroundGradientTo: "rgba(0,0,0,0)",
+              backgroundGradientFromOpacity: 0,
+              backgroundGradientToOpacity: 0,
+              decimalPlaces: type === "volume" ? 0 : 1,
+              color: (opacity = 1) => {
+                const hex = colors.tint.replace("#", "");
+                const alpha = Math.round(opacity * 255)
+                  .toString(16)
+                  .padStart(2, "0");
+                return `#${hex}${alpha}`;
+              },
+              labelColor: (opacity = 1) => {
+                const hex = colors.textSecondary.replace("#", "");
+                const alpha = Math.round(opacity * 255)
+                  .toString(16)
+                  .padStart(2, "0");
+                return `#${hex}${alpha}`;
+              },
+              strokeWidth: 5,
+              propsForBackgroundLines: {
+                strokeDasharray: "",
+                stroke: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+              },
+              propsForDots: {
+                r: "0",
+              },
+              paddingRight: 0,
+            }}
+            bezier
+            style={styles.chart}
+            withDots={false}
+            withHorizontalLabels={false}
+            transparent
+          />
+        </View>
         <Text style={[styles.chartUnit, { color: colors.textSecondary }]}>
           {unit}
         </Text>
@@ -560,6 +563,7 @@ const styles = StyleSheet.create({
   },
   chartCard: {
     marginBottom: 16,
+    overflow: "hidden",
   },
   chartTitle: {
     fontSize: 16,
@@ -569,6 +573,7 @@ const styles = StyleSheet.create({
   chart: {
     marginVertical: 8,
     borderRadius: 16,
+    marginLeft: -16,
   },
   chartUnit: {
     fontSize: 12,
