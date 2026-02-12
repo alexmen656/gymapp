@@ -124,7 +124,9 @@ export default function SettingsScreen() {
                   backgroundColor:
                     selectedValue === option.value
                       ? colors.tint + "40"
-                      : colors.background,
+                      : theme === "dark"
+                        ? "#2a2a2a"
+                        : "#f5f5f5",
                   borderColor:
                     selectedValue === option.value
                       ? colors.tint
@@ -160,7 +162,7 @@ export default function SettingsScreen() {
       <TouchableOpacity
         style={[
           styles.linkButton,
-          { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
+          { backgroundColor: theme === "dark" ? "#2a2a2a" : "#f5f5f5" },
         ]}
         onPress={onPress}
       >
@@ -190,7 +192,7 @@ export default function SettingsScreen() {
       <View
         style={[
           styles.toggleSetting,
-          { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
+          { backgroundColor: theme === "dark" ? "#2a2a2a" : "#f5f5f5" },
         ]}
       >
         <View style={styles.toggleSettingLeft}>
@@ -212,7 +214,10 @@ export default function SettingsScreen() {
         <Switch
           value={value}
           onValueChange={onToggle}
-          trackColor={{ false: "#767577", true: colors.tint + "80" }}
+          trackColor={{
+            false: theme === "dark" ? "#4a4a4a" : "#d1d1d6",
+            true: colors.tint + "80",
+          }}
           thumbColor={value ? colors.tint : "#f4f3f4"}
         />
       </View>
@@ -287,7 +292,7 @@ export default function SettingsScreen() {
             <View
               style={[
                 styles.aboutCard,
-                { backgroundColor: isDark ? "#2a2a2a" : "#f5f5f5" },
+                { backgroundColor: theme === "dark" ? "#2a2a2a" : "#f5f5f5" },
               ]}
             >
               <View style={styles.aboutHeader}>

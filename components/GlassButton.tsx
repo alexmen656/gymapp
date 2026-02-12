@@ -17,7 +17,7 @@ export const GlassButton = memo(function GlassButton({
   prominent = false,
   opacity = 1,
 }: GlassButtonProps) {
-  const { theme, isDark } = useTheme();
+  const { theme } = useTheme();
   const colors = Colors[theme];
 
   if (Platform.OS === "ios") {
@@ -30,10 +30,10 @@ export const GlassButton = memo(function GlassButton({
             styles.glassBtn,
             {
               backgroundColor: prominent
-                ? isDark
+                ? theme === "dark"
                   ? "rgba(10,132,255,0.5)"
                   : "rgba(0,122,255,0.4)"
-                : isDark
+                : theme === "dark"
                   ? "rgba(255,255,255,0.08)"
                   : "rgba(255,255,255,0.5)",
               opacity,
@@ -60,7 +60,7 @@ export const GlassButton = memo(function GlassButton({
         {
           backgroundColor: prominent
             ? colors.accent
-            : isDark
+            : theme === "dark"
               ? "rgba(255,255,255,0.1)"
               : "rgba(0,0,0,0.06)",
           opacity,

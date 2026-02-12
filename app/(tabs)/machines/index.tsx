@@ -160,7 +160,7 @@ export default function HomeScreen() {
           <FontAwesome
             name="plus-circle"
             size={64}
-            color={isDark ? "#555" : "#ccc"}
+            color={theme === "dark" ? "#555" : "#ccc"}
           />
           <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
             Noch keine Geräte.{"\n"}Tippe + um ein Gerät hinzuzufügen!

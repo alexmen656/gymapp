@@ -13,7 +13,7 @@ export function GlassCard({
   variant = "regular",
   ...props
 }: GlassCardProps) {
-  const { theme, isDark } = useTheme();
+  const { theme } = useTheme();
   const colors = Colors[theme];
 
   if (Platform.OS === "ios") {
@@ -23,9 +23,10 @@ export function GlassCard({
         style={[
           styles.container,
           {
-            backgroundColor: isDark
-              ? "rgba(255,255,255,0.06)"
-              : "rgba(255,255,255,0.45)",
+            backgroundColor:
+              theme === "dark"
+                ? "rgba(255,255,255,0.06)"
+                : "rgba(255,255,255,0.45)",
           },
           style,
         ]}

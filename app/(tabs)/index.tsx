@@ -49,6 +49,7 @@ export default function HomeScreen() {
     showChart: true,
     showTopExercises: true,
   });
+  const [activeChartIndex, setActiveChartIndex] = useState(0);
   const { theme, isDark } = useTheme();
   const router = useRouter();
   const colors = Colors[theme];
@@ -269,56 +270,70 @@ export default function HomeScreen() {
     );
   }
 
-  function renderChart() {
-    if (topExercises.length === 0 || entries.length < 5) return null;
-
-    const topExercise = topExercises[0].exercise;
-    const chartData = getExerciseChartData(entries, topExercise, 10);
-
+  function renderChart(title: string, exerciseName: string) {
+    const chartData = getExerciseChartData(entries, exerciseName, 10);
     if (chartData.data.length < 2) return null;
 
     return (
-      <GlassCard style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>
-          Trend: {topExercise}
-        </Text>
-        <LineChart
-          data={{
-            labels: chartData.labels,
-            datasets: [{ data: chartData.data }],
-          }}
-          width={screenWidth - 64}
-          height={200}
-          chartConfig={{
-            backgroundColor: "transparent",
-            backgroundGradientFrom: isDark ? "#1a1a1a" : "#f0f0f0",
-            backgroundGradientTo: isDark ? "#2a2a2a" : "#ffffff",
-            decimalPlaces: 1,
-            color: (opacity = 1) => {
-              const hex = colors.tint.replace("#", "");
-              const alpha = Math.round(opacity * 255)
-                .toString(16)
-                .padStart(2, "0");
-              return `#${hex}${alpha}`;
-            },
-            labelColor: (opacity = 1) => {
-              const hex = colors.textSecondary.replace("#", "");
-              const alpha = Math.round(opacity * 255)
-                .toString(16)
-                .padStart(2, "0");
-              return `#${hex}${alpha}`;
-            },
-            style: { borderRadius: 16 },
-            propsForDots: {
-              r: "4",
-              strokeWidth: "2",
-              stroke: colors.tint,
-            },
-          }}
-          bezier
-          style={styles.chart}
-        />
-      </GlassCard>
+      <View style={{ width: screenWidth - 32 }}>
+        <GlassCard style={styles.chartCard}>
+          <Text style={[styles.chartTitle, { color: colors.text }]}>
+            {title}
+          </Text>
+          <View style={{ marginLeft: -40, marginRight: -16 }}>
+            <LineChart
+              data={{
+                labels: chartData.labels,
+                datasets: [{ data: chartData.data }],
+              }}
+              width={screenWidth - 8}
+              height={220}
+              chartConfig={{
+                backgroundColor: "rgba(0,0,0,0)",
+                backgroundGradientFrom: "rgba(0,0,0,0)",
+                backgroundGradientTo: "rgba(0,0,0,0)",
+                backgroundGradientFromOpacity: 0,
+                backgroundGradientToOpacity: 0,
+                decimalPlaces: 1,
+                color: (opacity = 1) => {
+                  const hex = colors.tint.replace("#", "");
+                  const alpha = Math.round(opacity * 255)
+                    .toString(16)
+                    .padStart(2, "0");
+                  return `#${hex}${alpha}`;
+                },
+                labelColor: (opacity = 1) => {
+                  const hex = colors.textSecondary.replace("#", "");
+                  const alpha = Math.round(opacity * 255)
+                    .toString(16)
+                    .padStart(2, "0");
+                  return `#${hex}${alpha}`;
+                },
+                strokeWidth: 5,
+                propsForBackgroundLines: {
+                  strokeDasharray: "",
+                  stroke:
+                    theme === "dark"
+                      ? "rgba(255,255,255,0.05)"
+                      : "rgba(0,0,0,0.05)",
+                },
+                propsForDots: {
+                  r: "0",
+                },
+                paddingRight: 0,
+              }}
+              bezier
+              style={styles.chart}
+              withDots={false}
+              withHorizontalLabels={false}
+              transparent
+            />
+          </View>
+          <Text style={[styles.chartUnit, { color: colors.textSecondary }]}>
+            Kilogramm
+          </Text>
+        </GlassCard>
+      </View>
     );
   }
 
@@ -333,7 +348,7 @@ export default function HomeScreen() {
             <FontAwesome
               name="line-chart"
               size={64}
-              color={isDark ? "#555" : "#ccc"}
+              color={theme === "dark" ? "#555" : "#ccc"}
             />
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
               Starte dein erstes Workout!
@@ -363,7 +378,10 @@ export default function HomeScreen() {
                     style={[
                       styles.settingsButton,
                       {
-                        backgroundColor: "rgba(255,255,255,0.02)",
+                        backgroundColor:
+                          theme === "dark"
+                            ? "rgba(255,255,255,0.06)"
+                            : "rgba(255,255,255,0.45)",
                       },
                     ]}
                   >
@@ -376,9 +394,10 @@ export default function HomeScreen() {
                   style={[
                     styles.settingsButton,
                     {
-                      backgroundColor: isDark
-                        ? "rgba(255,255,255,0.1)"
-                        : "rgba(0,0,0,0.06)",
+                      backgroundColor:
+                        theme === "dark"
+                          ? "rgba(255,255,255,0.1)"
+                          : "rgba(0,0,0,0.06)",
                     },
                   ]}
                 >
@@ -388,7 +407,48 @@ export default function HomeScreen() {
             </View>
             {homeSettings.showProgressionAlert && renderProgressionAlert()}
             {homeSettings.showStats && renderStats()}
-            {homeSettings.showChart && renderChart()}
+            {homeSettings.showChart &&
+              topExercises.length > 0 &&
+              entries.length >= 5 && (
+                <>
+                  <ScrollView
+                    horizontal
+                    pagingEnabled
+                    showsHorizontalScrollIndicator={false}
+                    onScroll={(event) => {
+                      const offsetX = event.nativeEvent.contentOffset.x;
+                      const index = Math.round(offsetX / (screenWidth - 32));
+                      setActiveChartIndex(index);
+                    }}
+                    scrollEventThrottle={16}
+                    contentContainerStyle={styles.chartsContainer}
+                  >
+                    {topExercises.slice(0, 3).map((item, idx) => (
+                      <View key={idx}>
+                        {renderChart(`Trend: ${item.exercise}`, item.exercise)}
+                      </View>
+                    ))}
+                  </ScrollView>
+                  <View style={styles.paginationDots}>
+                    {topExercises.slice(0, 3).map((_, index) => (
+                      <View
+                        key={index}
+                        style={[
+                          styles.dot,
+                          {
+                            backgroundColor:
+                              activeChartIndex === index
+                                ? colors.tint
+                                : theme === "dark"
+                                  ? "rgba(255,255,255,0.2)"
+                                  : "rgba(0,0,0,0.2)",
+                          },
+                        ]}
+                      />
+                    ))}
+                  </View>
+                </>
+              )}
             {homeSettings.showTopExercises && renderTopExercises()}
 
             <GlassCard>
@@ -519,9 +579,39 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: "500",
   },
+  chartsContainer: {
+    gap: 0,
+  },
+  paginationDots: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 6,
+    marginTop: 12,
+    marginBottom: 16,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  chartCard: {
+    marginBottom: 2,
+    overflow: "hidden",
+  },
+  chartTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    marginBottom: 12,
+  },
   chart: {
-    marginVertical: 8,
+    marginTop: 8,
     borderRadius: 16,
+    marginLeft: -16,
+  },
+  chartUnit: {
+    fontSize: 14,
+    textAlign: "center",
   },
   emptyContainer: {
     flex: 1,

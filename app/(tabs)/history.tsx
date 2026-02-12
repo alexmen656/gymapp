@@ -99,7 +99,7 @@ export default function HistoryScreen() {
             <FontAwesome
               name="calendar-o"
               size={64}
-              color={isDark ? "#555" : "#ccc"}
+              color={theme === "dark" ? "#555" : "#ccc"}
             />
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
               Noch keine Trainingseinträge.

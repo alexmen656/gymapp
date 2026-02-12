@@ -198,9 +198,10 @@ export default function ExerciseDetailScreen() {
                 strokeWidth: 5,
                 propsForBackgroundLines: {
                   strokeDasharray: "",
-                  stroke: isDark
-                    ? "rgba(255,255,255,0.05)"
-                    : "rgba(0,0,0,0.05)",
+                  stroke:
+                    theme === "dark"
+                      ? "rgba(255,255,255,0.05)"
+                      : "rgba(0,0,0,0.05)",
                 },
                 propsForDots: {
                   r: "0",
@@ -240,16 +241,17 @@ export default function ExerciseDetailScreen() {
                   style={[
                     styles.bestBadge,
                     {
-                      backgroundColor: isDark
-                        ? "rgba(251, 191, 36, 0.2)"
-                        : "#fef3c7",
+                      backgroundColor:
+                        theme === "dark"
+                          ? "rgba(251, 191, 36, 0.2)"
+                          : "#fef3c7",
                     },
                   ]}
                 >
                   <Text
                     style={[
                       styles.bestText,
-                      { color: isDark ? "#fbbf24" : "#92400e" },
+                      { color: theme === "dark" ? "#fbbf24" : "#92400e" },
                     ]}
                   >
                     <FontAwesome name="trophy" size={16} color={colors.text} />
@@ -288,12 +290,14 @@ export default function ExerciseDetailScreen() {
               style={[
                 styles.input,
                 {
-                  backgroundColor: isDark
-                    ? "rgba(255,255,255,0.08)"
-                    : "rgba(0,0,0,0.04)",
-                  borderColor: isDark
-                    ? "rgba(255,255,255,0.12)"
-                    : "rgba(0,0,0,0.1)",
+                  backgroundColor:
+                    theme === "dark"
+                      ? "rgba(255,255,255,0.08)"
+                      : "rgba(0,0,0,0.04)",
+                  borderColor:
+                    theme === "dark"
+                      ? "rgba(255,255,255,0.12)"
+                      : "rgba(0,0,0,0.1)",
                   color: colors.text,
                 },
               ]}
@@ -312,12 +316,14 @@ export default function ExerciseDetailScreen() {
               style={[
                 styles.input,
                 {
-                  backgroundColor: isDark
-                    ? "rgba(255,255,255,0.08)"
-                    : "rgba(0,0,0,0.04)",
-                  borderColor: isDark
-                    ? "rgba(255,255,255,0.12)"
-                    : "rgba(0,0,0,0.1)",
+                  backgroundColor:
+                    theme === "dark"
+                      ? "rgba(255,255,255,0.08)"
+                      : "rgba(0,0,0,0.04)",
+                  borderColor:
+                    theme === "dark"
+                      ? "rgba(255,255,255,0.12)"
+                      : "rgba(0,0,0,0.1)",
                   color: colors.text,
                 },
               ]}
@@ -447,7 +453,7 @@ export default function ExerciseDetailScreen() {
                     backgroundColor:
                       activeChartIndex === index
                         ? colors.tint
-                        : isDark
+                        : theme === "dark"
                           ? "rgba(255,255,255,0.2)"
                           : "rgba(0,0,0,0.2)",
                   },
