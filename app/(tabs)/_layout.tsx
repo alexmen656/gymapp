@@ -26,8 +26,3 @@ export default function TabLayout() {
     </NativeTabs>
   );
 }
-
-/*    <NativeTabs.Trigger name="settings">
-        <Label>Settings</Label>
-        <Icon sf="gear" drawable="custom_android_drawable" />
-      </NativeTabs.Trigger>*/

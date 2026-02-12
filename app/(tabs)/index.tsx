@@ -58,7 +58,6 @@ export default function HomeScreen() {
     }, []),
   );
 
-  // Lade Home View Settings
   useFocusEffect(
     useCallback(() => {
       loadHomeSettings();
@@ -83,7 +82,6 @@ export default function HomeScreen() {
 
     const totalEntries = all.length;
 
-    // Feiere Meilensteine mit Notifications
     if ([10, 25, 50, 100, 200].includes(totalEntries)) {
       const celebrationSent = await AsyncStorage.getItem(
         `celebration_${totalEntries}`,
@@ -94,7 +92,6 @@ export default function HomeScreen() {
       }
     }
 
-    // Frage nach Notifications erst nach 5 Workouts (nicht zu früh)
     if (totalEntries === 5) {
       const hasAsked = await AsyncStorage.getItem(
         "notificationPermissionAsked",
@@ -106,11 +103,10 @@ export default function HomeScreen() {
             await scheduleWorkoutReminder();
           }
           await AsyncStorage.setItem("notificationPermissionAsked", "true");
-        }, 2000); // 2 Sekunden Verzögerung
+        }, 2000);
       }
     }
 
-    // Check for rating prompt bei 20 Einträgen
     const hasShownPrompt = await AsyncStorage.getItem("ratingPromptShown");
     if (totalEntries >= 20 && !hasShownPrompt) {
       showRatingPrompt();
@@ -118,13 +114,10 @@ export default function HomeScreen() {
   }
 
   async function showRatingPrompt() {
-    // Verwende den nativen iOS Review Prompt
     if (await StoreReview.hasAction()) {
       await AsyncStorage.setItem("ratingPromptShown", "true");
-      // Auf iOS zeigt dies den nativen Apple Review Dialog
       await StoreReview.requestReview();
     } else {
-      // Fallback für andere Plattformen oder Simulator
       Alert.alert(
         "Bewerte die App",
         "Du hast schon 20 Einträge gemacht! Hilf uns, indem du die App bewertest.",
@@ -144,7 +137,6 @@ export default function HomeScreen() {
   const stats = getWorkoutStats(entries);
   const progressionSuggestions = analyzeWeightProgression(entries);
   const topExercises = getTopExercisesByVolume(entries, 3);
-
   const screenWidth = Dimensions.get("window").width;
 
   function renderProgressionAlert() {
