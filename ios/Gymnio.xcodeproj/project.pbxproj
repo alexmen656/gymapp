@@ -3,63 +3,41 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		823244F7EE0B5667C3848E58 /* libPods-Gymnio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C9E5CCAF1FF51990BCF8C2B /* libPods-Gymnio.a */; };
-		B829FA06A93B7422D2B99396 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DF56521A64B66480201AE8 /* ExpoModulesProvider.swift */; };
+		900DBF411A409FDC64B302AF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C0137DC7C1DC2B9A7898B21D /* PrivacyInfo.xcprivacy */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
+		DEDA7638EEF423B73B223B58 /* libPods-Gymnio.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CF72A5144ABF328545AA5078 /* libPods-Gymnio.a */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
-		FCFD27B54084048EC1D731CC /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = CBBA545CEA44C17551D17474 /* PrivacyInfo.xcprivacy */; };
+		FFB80420C044AE134C7CFF1F /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E002424D9984A66ABDEBAC4D /* ExpoModulesProvider.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		D9C19D222F71E5F7009D5599 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = Gymnio;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		0C9E5CCAF1FF51990BCF8C2B /* libPods-Gymnio.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Gymnio.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* Gymnio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gymnio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Gymnio/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Gymnio/Info.plist; sourceTree = "<group>"; };
-		31DF56521A64B66480201AE8 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Gymnio/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		9F96B2DC7C2DCD5C0E32D8C5 /* Pods-Gymnio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gymnio.release.xcconfig"; path = "Target Support Files/Pods-Gymnio/Pods-Gymnio.release.xcconfig"; sourceTree = "<group>"; };
-		A6C195320F81D7A1655B3B61 /* Pods-Gymnio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gymnio.debug.xcconfig"; path = "Target Support Files/Pods-Gymnio/Pods-Gymnio.debug.xcconfig"; sourceTree = "<group>"; };
+		571A8B0857849E4AA66DFC18 /* Pods-Gymnio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gymnio.debug.xcconfig"; path = "Target Support Files/Pods-Gymnio/Pods-Gymnio.debug.xcconfig"; sourceTree = "<group>"; };
+		721698EE9808CE9C33E89B1C /* Pods-Gymnio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gymnio.release.xcconfig"; path = "Target Support Files/Pods-Gymnio/Pods-Gymnio.release.xcconfig"; sourceTree = "<group>"; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = Gymnio/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		CBBA545CEA44C17551D17474 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Gymnio/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		D9C19D1C2F71E5F7009D5599 /* GymnioUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymnioUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0137DC7C1DC2B9A7898B21D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = Gymnio/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		CF72A5144ABF328545AA5078 /* libPods-Gymnio.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Gymnio.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E002424D9984A66ABDEBAC4D /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Gymnio/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Gymnio/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* Gymnio-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Gymnio-Bridging-Header.h"; path = "Gymnio/Gymnio-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		D9C19D1D2F71E5F7009D5599 /* GymnioUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GymnioUITests; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				823244F7EE0B5667C3848E58 /* libPods-Gymnio.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D9C19D192F71E5F7009D5599 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				DEDA7638EEF423B73B223B58 /* libPods-Gymnio.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,7 +53,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				CBBA545CEA44C17551D17474 /* PrivacyInfo.xcprivacy */,
+				C0137DC7C1DC2B9A7898B21D /* PrivacyInfo.xcprivacy */,
 			);
 			name = Gymnio;
 			sourceTree = "<group>";
@@ -84,18 +62,17 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				0C9E5CCAF1FF51990BCF8C2B /* libPods-Gymnio.a */,
+				CF72A5144ABF328545AA5078 /* libPods-Gymnio.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		73DF5AA1109113BBD905DCB7 /* Pods */ = {
+		70B6B7C51E968C7F50CD65EE /* ExpoModulesProviders */ = {
 			isa = PBXGroup;
 			children = (
-				A6C195320F81D7A1655B3B61 /* Pods-Gymnio.debug.xcconfig */,
-				9F96B2DC7C2DCD5C0E32D8C5 /* Pods-Gymnio.release.xcconfig */,
+				DE7406980275CE1BEF0A3DBB /* Gymnio */,
 			);
-			path = Pods;
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -110,11 +87,10 @@
 			children = (
 				13B07FAE1A68108700A75B9A /* Gymnio */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				D9C19D1D2F71E5F7009D5599 /* GymnioUITests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				73DF5AA1109113BBD905DCB7 /* Pods */,
-				AF0F1F939C1A650076421F84 /* ExpoModulesProviders */,
+				F33FD93490998AA0C351E148 /* Pods */,
+				70B6B7C51E968C7F50CD65EE /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -125,25 +101,8 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* Gymnio.app */,
-				D9C19D1C2F71E5F7009D5599 /* GymnioUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		AF0F1F939C1A650076421F84 /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				B632646C720FBFDA5E8F16CA /* Gymnio */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		B632646C720FBFDA5E8F16CA /* Gymnio */ = {
-			isa = PBXGroup;
-			children = (
-				31DF56521A64B66480201AE8 /* ExpoModulesProvider.swift */,
-			);
-			name = Gymnio;
 			sourceTree = "<group>";
 		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
@@ -155,6 +114,24 @@
 			path = Gymnio/Supporting;
 			sourceTree = "<group>";
 		};
+		DE7406980275CE1BEF0A3DBB /* Gymnio */ = {
+			isa = PBXGroup;
+			children = (
+				E002424D9984A66ABDEBAC4D /* ExpoModulesProvider.swift */,
+			);
+			name = Gymnio;
+			sourceTree = "<group>";
+		};
+		F33FD93490998AA0C351E148 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				571A8B0857849E4AA66DFC18 /* Pods-Gymnio.debug.xcconfig */,
+				721698EE9808CE9C33E89B1C /* Pods-Gymnio.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -163,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Gymnio" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				46FB4682995CF61F50211901 /* [Expo] Configure project */,
+				3A5CB5480EF8E629452928D6 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				8802F19363C87D293472A93F /* [CP] Embed Pods Frameworks */,
+				939F41DB4909044E879FBE6B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -180,44 +157,16 @@
 			productReference = 13B07F961A680F5B00A75B9A /* Gymnio.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D9C19D1B2F71E5F7009D5599 /* GymnioUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = D9C19D262F71E5F7009D5599 /* Build configuration list for PBXNativeTarget "GymnioUITests" */;
-			buildPhases = (
-				D9C19D182F71E5F7009D5599 /* Sources */,
-				D9C19D192F71E5F7009D5599 /* Frameworks */,
-				D9C19D1A2F71E5F7009D5599 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				D9C19D232F71E5F7009D5599 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				D9C19D1D2F71E5F7009D5599 /* GymnioUITests */,
-			);
-			name = GymnioUITests;
-			packageProductDependencies = (
-			);
-			productName = GymnioUITests;
-			productReference = D9C19D1C2F71E5F7009D5599 /* GymnioUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1250;
-					};
-					D9C19D1B2F71E5F7009D5599 = {
-						CreatedOnToolsVersion = 26.3;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 				};
 			};
@@ -235,7 +184,6 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* Gymnio */,
-				D9C19D1B2F71E5F7009D5599 /* GymnioUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -248,14 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				FCFD27B54084048EC1D731CC /* PrivacyInfo.xcprivacy in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D9C19D1A2F71E5F7009D5599 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				900DBF411A409FDC64B302AF /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,7 +242,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		46FB4682995CF61F50211901 /* [Expo] Configure project */ = {
+		3A5CB5480EF8E629452928D6 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -359,7 +300,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Gymnio/Pods-Gymnio-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8802F19363C87D293472A93F /* [CP] Embed Pods Frameworks */ = {
+		939F41DB4909044E879FBE6B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -389,31 +330,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				B829FA06A93B7422D2B99396 /* ExpoModulesProvider.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D9C19D182F71E5F7009D5599 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				FFB80420C044AE134C7CFF1F /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		D9C19D232F71E5F7009D5599 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* Gymnio */;
-			targetProxy = D9C19D222F71E5F7009D5599 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6C195320F81D7A1655B3B61 /* Pods-Gymnio.debug.xcconfig */;
+			baseConfigurationReference = 571A8B0857849E4AA66DFC18 /* Pods-Gymnio.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -449,7 +375,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F96B2DC7C2DCD5C0E32D8C5 /* Pods-Gymnio.release.xcconfig */;
+			baseConfigurationReference = 721698EE9808CE9C33E89B1C /* Pods-Gymnio.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -595,79 +521,6 @@
 			};
 			name = Release;
 		};
-		D9C19D242F71E5F7009D5599 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = AS5BHHK5AW;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fringelo.GymnioUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Gymnio;
-			};
-			name = Debug;
-		};
-		D9C19D252F71E5F7009D5599 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_STYLE = Automatic;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = AS5BHHK5AW;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
-				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
-				MARKETING_VERSION = 1.0;
-				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.fringelo.GymnioUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = NO;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = Gymnio;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -685,15 +538,6 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		D9C19D262F71E5F7009D5599 /* Build configuration list for PBXNativeTarget "GymnioUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				D9C19D242F71E5F7009D5599 /* Debug */,
-				D9C19D252F71E5F7009D5599 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
