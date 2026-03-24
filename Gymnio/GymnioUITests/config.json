@@ -1,0 +1,19 @@
+{
+  "_config": {
+    "bgColor1": "#000000",
+    "bgColor2": "#1a1a1a",
+    "textColor": "#ffffff",
+    "scheme": "Gymnio",
+    "devices": [
+      "iPhone 16 Pro Max",
+      "iPhone 16 Pro",
+      "iPhone SE (3rd generation)",
+      "iPad Pro 13-inch (M4)"
+    ]
+  },
+  "01_HomeDashboard": "Startseite mit Statistiken, Progression und Charts auf Basis von Demo-Workouts",
+  "02_ExercisesOverview": "Uebersicht der Uebungen mit letzten Werten und Eintragsanzahl",
+  "03_ExerciseDetail": "Detailansicht einer Uebung mit Formular, Kennzahlen und Verlauf",
+  "04_History": "Chronologischer Verlauf aller Trainings-Eintraege",
+  "05_AddExerciseModal": "Modal zum Hinzufuegen einer neuen Uebung"
+}

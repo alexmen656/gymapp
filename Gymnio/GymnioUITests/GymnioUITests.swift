@@ -7,35 +7,82 @@
 
 import XCTest
 
+@MainActor
 final class GymnioUITests: XCTestCase {
+    var app: XCUIApplication!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        app = XCUIApplication()
+        setupSnapshot(app)
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        app = nil
     }
 
-    @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
+    // MARK: - Screenshot Tests
+
+    func testScreenshot01_HomeDashboard() throws {
+        launchAppWithDemoData()
+        XCTAssertTrue(app.staticTexts["Guten Morgen!"].waitForExistence(timeout: 6))
+        snapshot("01_HomeDashboard")
+    }
+
+    func testScreenshot02_ExercisesOverview() throws {
+        launchAppWithDemoData()
+        tapTab(["Übungen", "Exercises"])
+        XCTAssertTrue(app.staticTexts["Bankdruecken"].firstMatch.waitForExistence(timeout: 6))
+        snapshot("02_ExercisesOverview")
+    }
+
+    func testScreenshot03_ExerciseDetail() throws {
+        launchAppWithDemoData()
+        tapTab(["Übungen", "Exercises"])
+
+        let exercise = app.staticTexts["Bankdruecken"].firstMatch
+        XCTAssertTrue(exercise.waitForExistence(timeout: 6))
+        exercise.tap()
+
+        XCTAssertTrue(app.buttons["Eintrag hinzufügen"].waitForExistence(timeout: 6) || app.buttons["Add Entry"].waitForExistence(timeout: 1))
+        snapshot("03_ExerciseDetail")
+    }
+
+    func testScreenshot04_History() throws {
+        launchAppWithDemoData()
+        tapTab(["Verlauf", "History"])
+        XCTAssertTrue(app.staticTexts["Bankdruecken"].firstMatch.waitForExistence(timeout: 6))
+        snapshot("04_History")
+    }
+
+    func testScreenshot05_AddExerciseModal() throws {
+        launchAppWithDemoData()
+        tapTab(["Hinzufügen", "Add"])
+        XCTAssertTrue(app.staticTexts["Übung hinzufügen"].waitForExistence(timeout: 6) || app.staticTexts["Add Exercise"].waitForExistence(timeout: 1))
+        snapshot("05_AddExerciseModal")
+    }
+
+    // MARK: - Helpers
+
+    private func launchAppWithDemoData() {
+        app.launchArguments += [
+            "-ui_testing",
+            "-ui_test_seed_demo_data",
+            "-ui_test_language",
+            "de"
+        ]
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 10))
     }
 
-    @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
+    private func tapTab(_ names: [String]) {
+        for name in names {
+            let button = app.tabBars.buttons[name]
+            if button.waitForExistence(timeout: 2) {
+                button.tap()
+                return
+            }
         }
+        XCTFail("Could not find tab button. Tried: \(names)")
     }
 }

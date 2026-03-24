@@ -28,6 +28,11 @@ final class WorkoutStorage {
         save(exercises: list)
     }
 
+    func resetAll() {
+        defaults.removeObject(forKey: entriesKey)
+        defaults.removeObject(forKey: exercisesKey)
+    }
+
     func deleteExercise(_ name: String) {
         var list = getExercises()
         list.removeAll { $0.lowercased() == name.lowercased() }

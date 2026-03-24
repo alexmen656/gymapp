@@ -20,7 +20,6 @@ struct ContentView: View {
                     HistoryView()
                 }
 
-                // role: .search = separate floating circle to the right of the tab pill
                 Tab(store.t("nav.add"), systemImage: "plus", value: 3, role: .search) {
                     Color.clear
                 }
@@ -32,7 +31,6 @@ struct ContentView: View {
                 }
             }
 
-            // Centered overlay modal
             if store.showAddExercise {
                 Color.black
                     .opacity(scheme == .dark ? 0.55 : 0.35)
