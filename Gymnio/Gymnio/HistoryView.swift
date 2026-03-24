@@ -2,51 +2,52 @@ import SwiftUI
 
 struct HistoryView: View {
     @EnvironmentObject var store: AppStore
+    @Environment(\.colorScheme) var scheme
     @State private var allEntries: [WorkoutEntry] = []
-    @State private var deleteTarget: String? = nil
+    @State private var deleteTarget: String?
     @State private var showDeleteAlert = false
 
     var body: some View {
-        NavigationStack {
-            Group {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 12) {
+                ScreenTitle(text: store.t("nav.history"))
+                    .padding(.bottom, 4)
+
                 if allEntries.isEmpty {
-                    ContentUnavailableView(
-                        store.t("history.title"),
-                        systemImage: "clock",
-                        description: Text(store.t("history.empty"))
-                    )
+                    VStack(spacing: 12) {
+                        Image(systemName: "calendar")
+                            .font(.system(size: 64))
+                            .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
+                            .padding(.top, 60)
+                        Text(store.t("history.empty"))
+                            .font(.system(size: 16))
+                            .secondaryText()
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
                 } else {
-                    List {
-                        ForEach(allEntries) { entry in
-                            HistoryEntryRow(entry: entry, store: store)
-                                .listRowBackground(Color.clear)
-                                .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                                    Button(role: .destructive) {
-                                        deleteTarget = entry.id
-                                        showDeleteAlert = true
-                                    } label: {
-                                        Label(store.t("common.delete"), systemImage: "trash")
-                                    }
-                                }
-                        }
-                    }
-                    .listStyle(.plain)
-                }
-            }
-            .navigationTitle(store.t("nav.history"))
-            .onAppear(perform: reload)
-            .alert(store.t("history.delete.title"), isPresented: $showDeleteAlert) {
-                Button(store.t("common.delete"), role: .destructive) {
-                    if let id = deleteTarget {
-                        store.deleteEntry(id: id)
-                        reload()
+                    ForEach(allEntries) { entry in
+                        HistoryEntryCard(entry: entry, store: store, onDelete: {
+                            deleteTarget = entry.id
+                            showDeleteAlert = true
+                        })
                     }
                 }
-                Button(store.t("common.cancel"), role: .cancel) {}
-            } message: {
-                Text(store.t("history.delete.message"))
             }
+            .padding(.horizontal, 16)
+            .padding(.top, 40)
+            .padding(.bottom, 32)
+        }
+        .gymBackground()
+        .navigationBarHidden(true)
+        .onAppear(perform: reload)
+        .alert(store.t("history.delete.title"), isPresented: $showDeleteAlert) {
+            Button(store.t("common.delete"), role: .destructive) {
+                if let id = deleteTarget { store.deleteEntry(id: id); reload() }
+            }
+            Button(store.t("common.cancel"), role: .cancel) {}
+        } message: {
+            Text(store.t("history.delete.message"))
         }
     }
 
@@ -56,29 +57,44 @@ struct HistoryView: View {
     }
 }
 
-// MARK: - History Entry Row
+// MARK: - History Entry Card
 
-struct HistoryEntryRow: View {
+struct HistoryEntryCard: View {
     let entry: WorkoutEntry
     let store: AppStore
+    let onDelete: () -> Void
+    @Environment(\.colorScheme) var scheme
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(entry.exercise)
-                    .font(.headline)
-                HStack(spacing: 8) {
-                    Label(String(format: "%.1f kg", entry.weight), systemImage: "scalemass")
-                    Label("\(entry.reps) \(store.t("common.reps"))", systemImage: "repeat")
+        GlassCard {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(entry.exercise)
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                    Text("\(entry.weight, specifier: "%.1f") \(store.t("common.kg")) × \(entry.reps) \(store.t("common.reps"))")
+                        .font(.system(size: 15))
+                        .secondaryText()
+                    Text(formatDate(entry.date))
+                        .font(.system(size: 12))
+                        .secondaryText()
                 }
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+                Spacer()
+                Button(action: onDelete) {
+                    Image(systemName: "trash")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color(hex: "FF3B30"))
+                        .padding(8)
+                }
+                .buttonStyle(.plain)
             }
-            Spacer()
-            Text(entry.date.formatted(date: .abbreviated, time: .omitted))
-                .font(.caption)
-                .foregroundStyle(.tertiary)
         }
-        .padding(.vertical, 4)
+    }
+
+    private func formatDate(_ date: Date) -> String {
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
+        fmt.dateFormat = store.language == "de" ? "E, dd.MM.yyyy" : "E, MM/dd/yyyy"
+        return fmt.string(from: date)
     }
 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct AddExerciseView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var scheme
 
     @State private var name = ""
     @State private var showDuplicate = false
@@ -11,49 +12,69 @@ struct AddExerciseView: View {
     private var isValid: Bool { !name.trimmingCharacters(in: .whitespaces).isEmpty }
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 24) {
-                TextField(store.t("add.placeholder"), text: $name)
-                    .textFieldStyle(.roundedBorder)
-                    .autocapitalization(.words)
-                    .focused($isFocused)
-                    .onSubmit { add() }
-                    .padding(.horizontal)
+        ZStack {
+            LinearGradient(
+                colors: scheme == .dark
+                    ? [Color(hex: "0a0a1a"), .black]
+                    : [Color(hex: "e8f0fe"), Color(hex: "f0f2f5")],
+                startPoint: .top, endPoint: .bottom
+            )
+            .ignoresSafeArea()
 
-                if showDuplicate {
-                    Text(store.t("add.duplicate"))
-                        .foregroundColor(.red)
-                        .font(.caption)
-                }
+            VStack(spacing: 0) {
+                // Handle
+                Capsule()
+                    .fill(Color.secondary.opacity(0.4))
+                    .frame(width: 36, height: 4)
+                    .padding(.top, 12)
+                    .padding(.bottom, 24)
 
-                Button(action: add) {
-                    Text(store.t("add.button"))
-                        .frame(maxWidth: .infinity)
+                // Header
+                HStack {
+                    Button(store.t("add.cancel")) { dismiss() }
+                        .foregroundColor(.statBlue)
+                    Spacer()
+                    Text(store.t("add.title"))
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                    Spacer()
+                    Button(store.t("add.button")) { add() }
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(isValid ? .statBlue : .statBlue.opacity(0.4))
+                        .disabled(!isValid)
                 }
-                .buttonStyle(.borderedProminent)
-                .disabled(!isValid)
-                .padding(.horizontal)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
+
+                // Input
+                GlassCard {
+                    VStack(alignment: .leading, spacing: 8) {
+                        TextField(store.t("add.placeholder"), text: $name)
+                            .font(.system(size: 18, weight: .medium))
+                            .autocapitalization(.words)
+                            .focused($isFocused)
+                            .onSubmit { add() }
+                            .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+
+                        if showDuplicate {
+                            Text(store.t("add.duplicate"))
+                                .font(.system(size: 13))
+                                .foregroundColor(Color(hex: "FF3B30"))
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
 
                 Spacer()
             }
-            .padding(.top, 24)
-            .navigationTitle(store.t("add.title"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(store.t("add.cancel")) { dismiss() }
-                }
-            }
-            .onAppear { isFocused = true }
         }
+        .onAppear { isFocused = true }
     }
 
     private func add() {
         let trimmed = name.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return }
-
-        let existing = store.exercises.map { $0.lowercased() }
-        if existing.contains(trimmed.lowercased()) {
+        if store.exercises.contains(where: { $0.lowercased() == trimmed.lowercased() }) {
             showDuplicate = true
             return
         }

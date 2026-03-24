@@ -3,56 +3,112 @@ import SwiftUI
 struct CustomizeHomeView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.dismiss) private var dismiss
-
+    @Environment(\.colorScheme) var scheme
     @State private var settings = HomeViewSettings()
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    Toggle(store.t("customize.progression"), isOn: $settings.showProgressionAlert)
-                    Toggle(store.t("customize.stats"), isOn: $settings.showStats)
-                    Toggle(store.t("customize.charts"), isOn: $settings.showCharts)
-                    Toggle(store.t("customize.top"), isOn: $settings.showTopExercises)
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 20) {
+
+                // Toggles
+                GlassCard {
+                    VStack(spacing: 0) {
+                        CustomizeToggleRow(
+                            icon: "arrow.up.circle.fill", iconColor: .statBlue,
+                            label: store.t("customize.progression"),
+                            isOn: $settings.showProgressionAlert
+                        )
+                        Divider().padding(.leading, 44)
+                        CustomizeToggleRow(
+                            icon: "chart.bar.fill", iconColor: .statTeal,
+                            label: store.t("customize.stats"),
+                            isOn: $settings.showStats
+                        )
+                        Divider().padding(.leading, 44)
+                        CustomizeToggleRow(
+                            icon: "chart.line.uptrend.xyaxis", iconColor: Color(hex: "FF9500"),
+                            label: store.t("customize.charts"),
+                            isOn: $settings.showCharts
+                        )
+                        Divider().padding(.leading, 44)
+                        CustomizeToggleRow(
+                            icon: "list.number", iconColor: .statRed,
+                            label: store.t("customize.top"),
+                            isOn: $settings.showTopExercises
+                        )
+                    }
                 }
 
-                Section {
+                // Info card
+                GlassCard {
                     HStack(alignment: .top, spacing: 12) {
                         Image(systemName: "info.circle.fill")
-                            .foregroundColor(.accentColor)
+                            .font(.system(size: 20))
+                            .foregroundColor(.statBlue)
                         Text(store.t("customize.info"))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .font(.system(size: 14))
+                            .secondaryText()
+                            .lineSpacing(2)
                     }
                 }
 
-                Section {
+                // Tip card
+                GlassCard {
                     HStack(alignment: .top, spacing: 12) {
                         Image(systemName: "lightbulb.fill")
-                            .foregroundColor(.yellow)
+                            .font(.system(size: 20))
+                            .foregroundColor(Color(hex: "fbbf24"))
                         Text(store.t("customize.tip"))
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .font(.system(size: 14))
+                            .secondaryText()
+                            .lineSpacing(2)
                     }
                 }
             }
-            .navigationTitle(store.t("customize.title"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button(store.t("common.cancel")) { dismiss() }
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .padding(.bottom, 32)
+        }
+        .gymBackground()
+        .navigationTitle(store.t("customize.title"))
+        .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(store.t("common.save")) {
+                    store.saveHomeSettings(settings)
+                    dismiss()
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(store.t("common.save")) {
-                        store.saveHomeSettings(settings)
-                        dismiss()
-                    }
-                    .bold()
-                }
-            }
-            .onAppear {
-                settings = store.homeSettings
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundColor(.statBlue)
             }
         }
+        .onAppear { settings = store.homeSettings }
+    }
+}
+
+struct CustomizeToggleRow: View {
+    let icon: String
+    let iconColor: Color
+    let label: String
+    @Binding var isOn: Bool
+    @Environment(\.colorScheme) var scheme
+
+    var body: some View {
+        HStack(spacing: 12) {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(iconColor)
+                .frame(width: 32, height: 32)
+                .overlay(
+                    Image(systemName: icon)
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
+                )
+            Text(label)
+                .font(.system(size: 17))
+                .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+            Spacer()
+            Toggle("", isOn: $isOn).labelsHidden()
+        }
+        .padding(.vertical, 10)
     }
 }

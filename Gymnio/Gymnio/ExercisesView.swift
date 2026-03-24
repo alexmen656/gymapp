@@ -2,51 +2,59 @@ import SwiftUI
 
 struct ExercisesView: View {
     @EnvironmentObject var store: AppStore
+    @Environment(\.colorScheme) var scheme
     @State private var groups: [ExerciseGroup] = []
-    @State private var deleteTarget: String? = nil
+    @State private var deleteTarget: String?
     @State private var showDeleteAlert = false
 
     var body: some View {
-        NavigationStack {
-            Group {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 12) {
+                ScreenTitle(text: store.t("nav.exercises"))
+                    .padding(.bottom, 4)
+
                 if groups.isEmpty {
-                    ContentUnavailableView(
-                        store.t("exercises.title"),
-                        systemImage: "dumbbell",
-                        description: Text(store.t("exercises.empty"))
-                    )
-                } else {
-                    List {
-                        ForEach(groups) { group in
-                            NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
-                                ExerciseRow(group: group, store: store)
-                            }
-                            .listRowBackground(Color.clear)
-                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                                Button(role: .destructive) {
-                                    deleteTarget = group.exercise
-                                    showDeleteAlert = true
-                                } label: {
-                                    Label(store.t("common.delete"), systemImage: "trash")
-                                }
-                            }
-                        }
+                    VStack(spacing: 12) {
+                        Image(systemName: "plus.circle")
+                            .font(.system(size: 64))
+                            .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
+                            .padding(.top, 60)
+                        Text(store.t("exercises.empty"))
+                            .font(.system(size: 16))
+                            .secondaryText()
+                            .multilineTextAlignment(.center)
                     }
-                    .listStyle(.plain)
+                    .frame(maxWidth: .infinity)
+                } else {
+                    ForEach(groups) { group in
+                        NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
+                            ExerciseCard(group: group, store: store)
+                        }
+                        .buttonStyle(.plain)
+                        .simultaneousGesture(
+                            LongPressGesture().onEnded { _ in
+                                deleteTarget = group.exercise
+                                showDeleteAlert = true
+                            }
+                        )
+                    }
                 }
             }
-            .navigationTitle(store.t("nav.exercises"))
-            .onAppear(perform: reload)
-            .alert(store.t("exercises.delete.title"), isPresented: $showDeleteAlert) {
-                Button(store.t("common.delete"), role: .destructive) {
-                    if let name = deleteTarget { store.deleteExercise(name) }
-                    reload()
-                }
-                Button(store.t("common.cancel"), role: .cancel) {}
-            } message: {
-                Text(String(format: store.t("exercises.delete.message"), deleteTarget ?? ""))
+            .padding(.horizontal, 16)
+            .padding(.top, 40)
+            .padding(.bottom, 120)
+        }
+        .gymBackground()
+        .navigationBarHidden(true)
+        .onAppear(perform: reload)
+        .alert(store.t("exercises.delete.title"), isPresented: $showDeleteAlert) {
+            Button(store.t("common.delete"), role: .destructive) {
+                if let name = deleteTarget { store.deleteExercise(name) }
+                reload()
             }
+            Button(store.t("common.cancel"), role: .cancel) {}
+        } message: {
+            Text(String(format: store.t("exercises.delete.message"), deleteTarget ?? ""))
         }
     }
 
@@ -56,41 +64,69 @@ struct ExercisesView: View {
     }
 }
 
-// MARK: - Exercise Row
+// MARK: - Exercise Card
 
-struct ExerciseRow: View {
+struct ExerciseCard: View {
     let group: ExerciseGroup
     let store: AppStore
+    @Environment(\.colorScheme) var scheme
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text(group.exercise)
-                .font(.headline)
+        GlassCard {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(group.exercise)
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
 
-            if group.entries.isEmpty {
-                Text(store.t("exercises.noEntries"))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } else {
-                HStack(spacing: 16) {
-                    Label(String(format: "%.1f kg", group.lastWeight), systemImage: "scalemass")
-                        .font(.subheadline)
-                    Label("\(group.lastReps) \(store.t("common.reps"))", systemImage: "repeat")
-                        .font(.subheadline)
-                    Spacer()
-                    Label("\(group.entries.count)", systemImage: "list.number")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .foregroundStyle(.secondary)
+                if group.entries.isEmpty {
+                    Text(store.t("exercises.noEntries"))
+                        .font(.system(size: 13))
+                        .italic()
+                        .secondaryText()
+                } else {
+                    HStack(spacing: 0) {
+                        ExerciseStat(value: String(format: "%.1f", group.lastWeight),
+                                     label: store.t("common.kg"))
+                        ExerciseStat(value: "\(group.lastReps)",
+                                     label: store.t("common.reps"))
+                        ExerciseStat(value: "\(group.entries.count)",
+                                     label: store.t("exercises.entries"))
+                    }
 
-                if let date = group.lastDate {
-                    Text(date.formatted(date: .abbreviated, time: .omitted))
-                        .font(.caption2)
-                        .foregroundStyle(.tertiary)
+                    if let date = group.lastDate {
+                        Text(store.t("exercises.lastDate") + ": " + formatDate(date))
+                            .font(.system(size: 12))
+                            .secondaryText()
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                    }
                 }
             }
         }
-        .padding(.vertical, 4)
+    }
+
+    private func formatDate(_ date: Date) -> String {
+        let lang = store.language
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: lang == "de" ? "de_DE" : "en_US")
+        fmt.dateStyle = .short
+        return fmt.string(from: date)
+    }
+}
+
+struct ExerciseStat: View {
+    let value: String
+    let label: String
+    @Environment(\.colorScheme) var scheme
+
+    var body: some View {
+        VStack(spacing: 2) {
+            Text(value)
+                .font(.system(size: 20, weight: .semibold))
+                .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+            Text(label)
+                .font(.system(size: 12))
+                .secondaryText()
+        }
+        .frame(maxWidth: .infinity)
     }
 }
