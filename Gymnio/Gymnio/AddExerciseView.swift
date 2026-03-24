@@ -1,8 +1,8 @@
 import SwiftUI
 
+// Centered modal card — matches React Native Modal transparent + GlassCard
 struct AddExerciseView: View {
     @EnvironmentObject var store: AppStore
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) var scheme
 
     @State private var name = ""
@@ -12,60 +12,52 @@ struct AddExerciseView: View {
     private var isValid: Bool { !name.trimmingCharacters(in: .whitespaces).isEmpty }
 
     var body: some View {
-        ZStack {
-            LinearGradient(
-                colors: scheme == .dark
-                    ? [Color(hex: "0a0a1a"), .black]
-                    : [Color(hex: "e8f0fe"), Color(hex: "f0f2f5")],
-                startPoint: .top, endPoint: .bottom
-            )
-            .ignoresSafeArea()
+        GlassCard {
+            VStack(alignment: .leading, spacing: 16) {
+                Text(store.t("add.title"))
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
-            VStack(spacing: 0) {
-                // Handle
-                Capsule()
-                    .fill(Color.secondary.opacity(0.4))
-                    .frame(width: 36, height: 4)
-                    .padding(.top, 12)
-                    .padding(.bottom, 24)
+                // Input — matches modalInput style
+                TextField(store.t("add.placeholder"), text: $name)
+                    .font(.system(size: 16))
+                    .autocapitalization(.words)
+                    .focused($isFocused)
+                    .onSubmit { add() }
+                    .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
+                    .padding(14)
+                    .background(
+                        scheme == .dark
+                            ? Color(hex: "76768080").opacity(0.16)
+                            : Color(hex: "78788014").opacity(0.08)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(scheme == .dark
+                                    ? Color(hex: "76768040").opacity(0.24)
+                                    : Color(hex: "78788026").opacity(0.15),
+                                    lineWidth: 0.5)
+                    )
+                    .cornerRadius(12)
 
-                // Header
-                HStack {
-                    Button(store.t("add.cancel")) { dismiss() }
-                        .foregroundColor(.statBlue)
-                    Spacer()
-                    Text(store.t("add.title"))
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
-                    Spacer()
-                    Button(store.t("add.button")) { add() }
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(isValid ? .statBlue : .statBlue.opacity(0.4))
-                        .disabled(!isValid)
+                if showDuplicate {
+                    Text(store.t("add.duplicate"))
+                        .font(.system(size: 13))
+                        .foregroundColor(Color(hex: "FF3B30"))
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 24)
 
-                // Input
-                GlassCard {
-                    VStack(alignment: .leading, spacing: 8) {
-                        TextField(store.t("add.placeholder"), text: $name)
-                            .font(.system(size: 18, weight: .medium))
-                            .autocapitalization(.words)
-                            .focused($isFocused)
-                            .onSubmit { add() }
-                            .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
-
-                        if showDuplicate {
-                            Text(store.t("add.duplicate"))
-                                .font(.system(size: 13))
-                                .foregroundColor(Color(hex: "FF3B30"))
-                        }
+                // Buttons row — Cancel + Add (prominent)
+                HStack(spacing: 12) {
+                    Spacer()
+                    GlassBtn(store.t("add.cancel")) {
+                        store.showAddExercise = false
                     }
+                    GlassBtn(store.t("add.button"), prominent: true) {
+                        add()
+                    }
+                    .opacity(isValid ? 1 : 0.5)
+                    .disabled(!isValid)
                 }
-                .padding(.horizontal, 16)
-
-                Spacer()
             }
         }
         .onAppear { isFocused = true }
@@ -79,6 +71,6 @@ struct AddExerciseView: View {
             return
         }
         store.addExercise(trimmed)
-        dismiss()
+        store.showAddExercise = false
     }
 }

@@ -14,19 +14,15 @@ struct HomeView: View {
         NavigationStack(path: $navPath) {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
-                    // Header
+
+                    // Header — matches: title + gear icon (no slider here)
                     HStack {
                         Text(store.t("home.greeting.morning"))
                             .font(.system(size: 34, weight: .heavy))
-                            .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                            .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                         Spacer()
-                        HStack(spacing: 8) {
-                            GlassCircleButton(icon: "slider.horizontal.3") {
-                                navPath.append(NavDest.customizeHome)
-                            }
-                            GlassCircleButton(icon: "gearshape.fill") {
-                                navPath.append(NavDest.settings)
-                            }
+                        GlassCircleButton(icon: "gearshape.fill") {
+                            navPath.append(NavDest.settings)
                         }
                     }
                     .padding(.bottom, 4)
@@ -45,17 +41,18 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity)
                     } else {
+
                         // Progression Alert
                         if store.homeSettings.showProgressionAlert, let alert = alerts.first {
                             ProgressionAlertCard(alert: alert)
                         }
 
-                        // Stats
+                        // Stats grid — 3 equal cards
                         if store.homeSettings.showStats {
                             HStack(spacing: 12) {
                                 HomeStatCard(value: "\(stats.totalWorkouts)",
                                              label: store.t("home.stats.workouts"),
-                                             color: .statBlue)
+                                             color: Color.tint(scheme))
                                 HomeStatCard(value: "\(Int(stats.totalVolumeKg / 1000))k",
                                              label: store.t("home.stats.kg"),
                                              color: .statRed)
@@ -65,8 +62,8 @@ struct HomeView: View {
                             }
                         }
 
-                        // Charts (paging)
-                        if store.homeSettings.showCharts && topGroups.count > 0 && store.entries.count >= 5 {
+                        // Paged charts (only when >= 5 entries)
+                        if store.homeSettings.showCharts && !topGroups.isEmpty && store.entries.count >= 5 {
                             let chartGroups = Array(topGroups.prefix(3))
                             GeometryReader { geo in
                                 ScrollView(.horizontal, showsIndicators: false) {
@@ -78,42 +75,37 @@ struct HomeView: View {
                                     }
                                 }
                                 .scrollTargetBehavior(.paging)
-                                .scrollPosition(id: Binding(
-                                    get: { chartGroups.indices.contains(chartIndex) ? chartGroups[chartIndex].id : nil },
-                                    set: { newID in
-                                        if let id = newID, let idx = chartGroups.firstIndex(where: { $0.id == id }) {
-                                            chartIndex = idx
-                                        }
-                                    }
-                                ))
                             }
                             .frame(height: 230)
 
-                            PaginationDots(total: min(topGroups.count, 3), current: chartIndex)
+                            PaginationDots(total: chartGroups.count, current: chartIndex)
                                 .frame(maxWidth: .infinity)
                         }
 
-                        // Top Exercises
+                        // Top exercises — single GlassCard containing all rows
                         if store.homeSettings.showTopExercises && !topGroups.isEmpty {
                             GlassCard {
                                 VStack(alignment: .leading, spacing: 0) {
                                     Text(store.t("home.top.title"))
                                         .font(.system(size: 18, weight: .bold))
+                                        .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                                         .padding(.bottom, 16)
 
                                     ForEach(Array(topGroups.prefix(3).enumerated()), id: \.element.id) { idx, group in
                                         HStack(spacing: 12) {
+                                            // Rank badge: circle with tint bg
                                             Circle()
-                                                .fill(Color.statBlue.opacity(0.25))
+                                                .fill(Color.tint(scheme).opacity(0.25))
                                                 .frame(width: 32, height: 32)
                                                 .overlay(
                                                     Text("\(idx + 1)")
                                                         .font(.system(size: 14, weight: .bold))
-                                                        .foregroundColor(.statBlue)
+                                                        .foregroundColor(Color.tint(scheme))
                                                 )
                                             Text(group.exercise)
                                                 .font(.system(size: 15, weight: .semibold))
-                                            Spacer()
+                                                .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
                                             Text(String(format: "%.0f kg", group.totalVolume))
                                                 .font(.system(size: 13, weight: .medium))
                                                 .secondaryText()
@@ -124,23 +116,24 @@ struct HomeView: View {
                             }
                         }
 
-                        // Customize Dashboard button
+                        // Customize Home button — ONLY here at bottom (not in header)
                         GlassCard {
                             Button {
                                 navPath.append(NavDest.customizeHome)
                             } label: {
                                 HStack(spacing: 10) {
                                     Image(systemName: "slider.horizontal.3")
-                                        .foregroundColor(.statBlue)
+                                        .foregroundColor(Color.tint(scheme))
                                     Text(store.t("home.customize"))
                                         .font(.system(size: 15, weight: .semibold))
+                                        .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                     Image(systemName: "chevron.right")
-                                        .font(.caption)
+                                        .font(.system(size: 13, weight: .semibold))
                                         .secondaryText()
                                 }
-                                .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -169,14 +162,14 @@ struct HomeView: View {
     }
 }
 
-// MARK: - Nav Destination
+// MARK: - NavDest
 
 enum NavDest: Hashable {
     case settings
     case customizeHome
 }
 
-// MARK: - Progression Alert Card
+// MARK: - Progression Alert Card (left blue border)
 
 struct ProgressionAlertCard: View {
     let alert: ProgressionAlert
@@ -188,10 +181,10 @@ struct ProgressionAlertCard: View {
                 HStack(spacing: 12) {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 24))
-                        .foregroundColor(.statBlue)
-                    Text("Bereit für mehr?")
+                        .foregroundColor(Color.tint(scheme))
+                    Text(scheme == .dark ? "Bereit für mehr?" : "Bereit für mehr?")
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                        .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                 }
                 Text("**\(alert.exercise)**: 5× bei \(alert.currentWeight, specifier: "%.1f") kg → Versuche \(alert.suggestedWeight, specifier: "%.1f") kg! 💪")
                     .font(.system(size: 14))
@@ -202,7 +195,7 @@ struct ProgressionAlertCard: View {
     }
 }
 
-// MARK: - Home Stat Card
+// MARK: - Home Stat Card (flex: 1, center-aligned)
 
 struct HomeStatCard: View {
     let value: String
@@ -229,7 +222,7 @@ struct HomeStatCard: View {
     }
 }
 
-// MARK: - Home Chart Card
+// MARK: - Home Chart Card (paged, full width)
 
 struct HomeChartCard: View {
     let group: ExerciseGroup
@@ -242,26 +235,21 @@ struct HomeChartCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Trend: \(group.exercise)")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                    .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
                 if data.count >= 2 {
-                    Chart(data) { point in
-                        LineMark(
-                            x: .value("i", point.index),
-                            y: .value("kg", point.value)
-                        )
-                        .interpolationMethod(.catmullRom)
-                        .foregroundStyle(Color.statBlue)
-                        .lineStyle(StrokeStyle(lineWidth: 5))
-                        AreaMark(
-                            x: .value("i", point.index),
-                            y: .value("kg", point.value)
-                        )
-                        .interpolationMethod(.catmullRom)
-                        .foregroundStyle(Color.statBlue.opacity(0.12))
+                    Chart(data) { pt in
+                        LineMark(x: .value("i", pt.index), y: .value("kg", pt.value))
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(Color.tint(scheme))
+                            .lineStyle(StrokeStyle(lineWidth: 5))
+                        AreaMark(x: .value("i", pt.index), y: .value("kg", pt.value))
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(Color.tint(scheme).opacity(0.1))
                     }
                     .chartXAxis(.hidden)
                     .chartYAxis(.hidden)
+                    .chartBackground { _ in Color.clear }
                     .frame(height: 120)
                 }
 
@@ -271,6 +259,5 @@ struct HomeChartCard: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .padding(.horizontal, 0)
     }
 }

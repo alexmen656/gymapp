@@ -2,41 +2,55 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var store: AppStore
+    @Environment(\.colorScheme) var scheme
     @State private var selectedTab: Int = 0
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            HomeView()
-                .tabItem { Label(store.t("nav.home"), systemImage: "house") }
-                .tag(0)
+        ZStack {
+            TabView(selection: $selectedTab) {
+                HomeView()
+                    .tabItem { Label(store.t("nav.home"), systemImage: "house") }
+                    .tag(0)
 
-            NavigationStack {
-                ExercisesView()
-            }
-            .tabItem { Label(store.t("nav.exercises"), systemImage: "dumbbell") }
-            .tag(1)
-
-            HistoryView()
-                .tabItem {
-                    Label(store.t("nav.history"),
-                          systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                NavigationStack {
+                    ExercisesView()
                 }
-                .tag(2)
+                .tabItem { Label(store.t("nav.exercises"), systemImage: "dumbbell") }
+                .tag(1)
 
-            // "Add" tab: intercept selection, show sheet, snap back
-            Color.clear
-                .tabItem { Label(store.t("nav.add"), systemImage: "plus") }
-                .tag(3)
-        }
-        .onChange(of: selectedTab) { _, newVal in
-            if newVal == 3 {
-                store.showAddExercise = true
-                selectedTab = 0
+                HistoryView()
+                    .tabItem {
+                        Label(store.t("nav.history"),
+                              systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
+                    }
+                    .tag(2)
+
+                // Add tab — same as original "role=search" tab
+                EmptyView()
+                    .tabItem { Label(store.t("nav.add"), systemImage: "plus") }
+                    .tag(3)
+            }
+            .onChange(of: selectedTab) { _, newVal in
+                if newVal == 3 {
+                    store.showAddExercise = true
+                    selectedTab = 0
+                }
+            }
+
+            // Centered modal overlay — matches React Native Modal transparent + fade
+            if store.showAddExercise {
+                Color.black
+                    .opacity(scheme == .dark ? 0.55 : 0.35)
+                    .ignoresSafeArea()
+                    .onTapGesture { store.showAddExercise = false }
+                    .transition(.opacity)
+
+                AddExerciseView()
+                    .padding(.horizontal, 32)
+                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
             }
         }
-        .sheet(isPresented: $store.showAddExercise) {
-            AddExerciseView().environmentObject(store)
-        }
+        .animation(.easeInOut(duration: 0.2), value: store.showAddExercise)
         .preferredColorScheme(store.colorScheme)
     }
 }
