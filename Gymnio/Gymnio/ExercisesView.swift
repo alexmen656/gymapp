@@ -8,7 +8,6 @@ struct ExercisesView: View {
     @State private var showDeleteAlert = false
 
     var body: some View {
-        // ZStack puts gradient directly behind GlassCards
         ZStack {
             LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
@@ -30,6 +29,7 @@ struct ExercisesView: View {
                         ScreenTitle(text: store.t("nav.exercises"))
                             .padding(.bottom, 4)
 
+                        GlassEffectContainer(spacing: 12) {
                         ForEach(groups) { group in
                             NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
                                 ExerciseCard(group: group, store: store)
@@ -41,6 +41,7 @@ struct ExercisesView: View {
                                     showDeleteAlert = true
                                 }
                             )
+                        }
                         }
                     }
                     .padding(.horizontal, 16)

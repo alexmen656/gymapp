@@ -29,11 +29,13 @@ struct HistoryView: View {
                         ScreenTitle(text: store.t("nav.history"))
                             .padding(.bottom, 4)
 
+                        GlassEffectContainer(spacing: 10) {
                         ForEach(allEntries) { entry in
                             HistoryEntryCard(entry: entry, store: store) {
                                 deleteTarget = entry.id
                                 showDeleteAlert = true
                             }
+                        }
                         }
                     }
                     .padding(.horizontal, 16)

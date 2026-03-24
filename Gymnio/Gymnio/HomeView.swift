@@ -45,13 +45,12 @@ struct HomeView: View {
                             }
                             .frame(maxWidth: .infinity)
                         } else {
+                            GlassEffectContainer(spacing: 12) {
 
-                            // Progression Alert
                             if store.homeSettings.showProgressionAlert, let alert = alerts.first {
                                 ProgressionAlertCard(alert: alert)
                             }
 
-                            // Stats — 3 equal GlassCards
                             if store.homeSettings.showStats {
                                 HStack(spacing: 12) {
                                     HomeStatCard(value: "\(stats.totalWorkouts)",
@@ -66,7 +65,6 @@ struct HomeView: View {
                                 }
                             }
 
-                            // Paged charts (original: only when entries >= 5)
                             if store.homeSettings.showCharts && !topGroups.isEmpty && store.entries.count >= 5 {
                                 let chartGroups = Array(topGroups.prefix(3))
                                 GeometryReader { geo in
@@ -86,7 +84,6 @@ struct HomeView: View {
                                     .frame(maxWidth: .infinity)
                             }
 
-                            // Top exercises — single GlassCard with all rows
                             if store.homeSettings.showTopExercises && !topGroups.isEmpty {
                                 GlassCard {
                                     VStack(alignment: .leading, spacing: 0) {
@@ -119,7 +116,6 @@ struct HomeView: View {
                                 }
                             }
 
-                            // Customize Dashboard — bottom of scroll only (not in header)
                             GlassCard {
                                 Button {
                                     navPath.append(NavDest.customizeHome)
@@ -137,6 +133,7 @@ struct HomeView: View {
                                     }
                                 }
                                 .buttonStyle(.plain)
+                            }
                             }
                         }
                     }
