@@ -8,35 +8,31 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             TabView(selection: $selectedTab) {
-                HomeView()
-                    .tabItem { Label(store.t("nav.home"), systemImage: "house") }
-                    .tag(0)
+                Tab(store.t("nav.home"), systemImage: "house", value: 0) {
+                    HomeView()
+                }
 
-                NavigationStack { ExercisesView() }
-                    .tabItem { Label(store.t("nav.exercises"), systemImage: "dumbbell") }
-                    .tag(1)
+                Tab(store.t("nav.exercises"), systemImage: "dumbbell", value: 1) {
+                    NavigationStack { ExercisesView() }
+                }
 
-                HistoryView()
-                    .tabItem {
-                        Label(store.t("nav.history"),
-                              systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90")
-                    }
-                    .tag(2)
+                Tab(store.t("nav.history"), systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90", value: 2) {
+                    HistoryView()
+                }
 
-                // Add tab — Color.clear so the tab item registers correctly
-                Color.clear
-                    .tabItem { Label(store.t("nav.add"), systemImage: "plus") }
-                    .tag(3)
+                // role: .search = separate floating circle to the right of the tab pill
+                Tab(store.t("nav.add"), systemImage: "plus", value: 3, role: .search) {
+                    Color.clear
+                }
             }
             .onChange(of: selectedTab) { _, new in
                 if new == 3 {
                     store.showAddExercise = true
-                    // Snap back immediately
                     DispatchQueue.main.async { selectedTab = 0 }
                 }
             }
 
-            // Centered overlay modal — matches React Native Modal transparent+fade
+            // Centered overlay modal
             if store.showAddExercise {
                 Color.black
                     .opacity(scheme == .dark ? 0.55 : 0.35)
