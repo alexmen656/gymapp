@@ -17,16 +17,13 @@ extension Color {
         self.init(.sRGB, red: Double(r)/255, green: Double(g)/255, blue: Double(b)/255, opacity: Double(a)/255)
     }
 
-    // Matching Colors.ts exactly
-    static let statBlue   = Color(hex: "007AFF")  // tint light
-    static let statBlueDark = Color(hex: "0A84FF") // tint dark
-    static let statRed    = Color(hex: "FF6B6B")
-    static let statTeal   = Color(hex: "4ECDC4")
-    static let goldColor  = Color(hex: "fbbf24")
+    static let statBlue     = Color(hex: "007AFF")
+    static let statBlueDark = Color(hex: "0A84FF")
+    static let statRed      = Color(hex: "FF6B6B")
+    static let statTeal     = Color(hex: "4ECDC4")
+    static let goldColor    = Color(hex: "fbbf24")
     static let gymDestructive = Color(hex: "FF3B30")
 }
-
-// MARK: - Accent color helper
 
 extension Color {
     static func tint(_ scheme: ColorScheme) -> Color {
@@ -34,82 +31,41 @@ extension Color {
     }
 }
 
-// MARK: - Gradient Background  (matches gradientStart/gradientEnd from Colors.ts)
+// MARK: - Gradient
 
-struct GymGradientBackground: ViewModifier {
-    @Environment(\.colorScheme) var scheme
-
-    func body(content: Content) -> some View {
-        ZStack {
-            LinearGradient(
-                colors: scheme == .dark
-                    ? [Color(hex: "0a0a1a"), Color.black]
-                    : [Color(hex: "e8f0fe"), Color(hex: "f0f2f5")],
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
-            content
-        }
-    }
+func gymGradientColors(_ scheme: ColorScheme) -> [Color] {
+    scheme == .dark
+        ? [Color(hex: "0a0a1a"), Color.black]
+        : [Color(hex: "e8f0fe"), Color(hex: "f0f2f5")]
 }
 
-extension View {
-    func gymBackground() -> some View { modifier(GymGradientBackground()) }
-}
-
-// MARK: - GlassCard  (matches expo-glass-effect GlassView with correct rgba values)
+// MARK: - GlassCard  — iOS 26 Liquid Glass via .glassEffect()
 
 struct GlassCard<Content: View>: View {
     var leftAccent: Bool = false
     @Environment(\.colorScheme) var scheme
     @ViewBuilder let content: () -> Content
 
-    // Light: rgba(255,255,255,0.45)   Dark: rgba(255,255,255,0.06)  — from Colors.ts
-    var fillColor: Color {
-        scheme == .dark
-            ? Color.white.opacity(0.06)
-            : Color.white.opacity(0.45)
-    }
-    // Border: light rgba(255,255,255,0.8)  dark rgba(255,255,255,0.08)
-    var strokeColor: Color {
-        scheme == .dark
-            ? Color.white.opacity(0.08)
-            : Color.white.opacity(0.8)
-    }
-
     var body: some View {
         content()
             .padding(16)
-            .background {
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(.ultraThinMaterial)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .fill(fillColor)
-                    }
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 16, style: .continuous)
-                            .stroke(strokeColor, lineWidth: 0.5)
-                    }
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .glassEffect(in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay(alignment: .leading) {
                 if leftAccent {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(.tint)
+                    Rectangle()
+                        .fill(Color.tint(scheme))
                         .frame(width: 4)
+                        .clipShape(RoundedRectangle(cornerRadius: 16))
                 }
             }
     }
 }
 
-// MARK: - Screen Title (fontSize 34, fontWeight 800)
+// MARK: - Screen Title
 
 struct ScreenTitle: View {
     let text: String
     @Environment(\.colorScheme) var scheme
-
     var body: some View {
         Text(text)
             .font(.system(size: 34, weight: .heavy))
@@ -117,7 +73,7 @@ struct ScreenTitle: View {
     }
 }
 
-// MARK: - Secondary text color helper
+// MARK: - Secondary Text
 
 struct SecondaryText: ViewModifier {
     @Environment(\.colorScheme) var scheme
@@ -127,7 +83,7 @@ struct SecondaryText: ViewModifier {
 }
 extension View { func secondaryText() -> some View { modifier(SecondaryText()) } }
 
-// MARK: - Glass Circle Button (settings button, 40×40)
+// MARK: - Glass Circle Button  — iOS 26 Liquid Glass
 
 struct GlassCircleButton: View {
     let icon: String
@@ -140,27 +96,18 @@ struct GlassCircleButton: View {
                 .font(.system(size: 18, weight: .medium))
                 .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                 .frame(width: 40, height: 40)
-                .background {
-                    Circle()
-                        .fill(.ultraThinMaterial)
-                        .overlay {
-                            Circle().fill(scheme == .dark
-                                          ? Color.white.opacity(0.06)
-                                          : Color.white.opacity(0.45))
-                        }
-                }
+                .glassEffect(in: Circle())
         }
     }
 }
 
-// MARK: - Accent Button (blue filled, matches saveButton style)
+// MARK: - AccentButton
 
 struct AccentButton: View {
     let label: String
     let disabled: Bool
     let action: () -> Void
     @Environment(\.colorScheme) var scheme
-
     var body: some View {
         Button(action: action) {
             Text(label)
@@ -168,7 +115,6 @@ struct AccentButton: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
-                .padding(.horizontal, 24)
                 .background(Color.tint(scheme).opacity(disabled ? 0.5 : 1.0))
                 .cornerRadius(12)
         }
@@ -176,7 +122,7 @@ struct AccentButton: View {
     }
 }
 
-// MARK: - Glass Button (matches GlassButton.tsx)
+// MARK: - GlassBtn (matches GlassButton.tsx)  — iOS 26 Liquid Glass
 
 struct GlassBtn: View {
     let label: String
@@ -185,34 +131,22 @@ struct GlassBtn: View {
     @Environment(\.colorScheme) var scheme
 
     init(_ label: String, prominent: Bool = false, action: @escaping () -> Void) {
-        self.label = label
-        self.prominent = prominent
-        self.action = action
-    }
-
-    var bgColor: Color {
-        if prominent {
-            return scheme == .dark ? Color.statBlueDark.opacity(0.5) : Color.statBlue.opacity(0.4)
-        } else {
-            return scheme == .dark ? Color.white.opacity(0.08) : Color.white.opacity(0.5)
-        }
+        self.label = label; self.prominent = prominent; self.action = action
     }
 
     var body: some View {
         Button(action: action) {
             Text(label)
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(prominent ? .white : .tint(scheme))
+                .foregroundColor(prominent ? .white : Color.tint(scheme))
                 .padding(.vertical, 14)
                 .padding(.horizontal, 24)
-                .background {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(.ultraThinMaterial)
-                        .overlay {
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .fill(bgColor)
-                        }
-                }
+                .glassEffect(
+                    prominent
+                        ? .regular.tint(Color.tint(scheme).opacity(0.5)).interactive()
+                        : .regular.interactive(),
+                    in: RoundedRectangle(cornerRadius: 12, style: .continuous)
+                )
         }
     }
 }
@@ -223,7 +157,6 @@ struct PaginationDots: View {
     let total: Int
     let current: Int
     @Environment(\.colorScheme) var scheme
-
     var body: some View {
         HStack(spacing: 6) {
             ForEach(0..<total, id: \.self) { i in
@@ -237,12 +170,11 @@ struct PaginationDots: View {
     }
 }
 
-// MARK: - Settings row components
+// MARK: - Settings helpers
 
 struct SettingsSectionTitle: View {
     let title: String
     @Environment(\.colorScheme) var scheme
-
     var body: some View {
         Text(title)
             .font(.system(size: 13, weight: .semibold))
@@ -259,17 +191,12 @@ struct SettingsRow<Trailing: View>: View {
     let label: String
     @ViewBuilder let trailing: () -> Trailing
     @Environment(\.colorScheme) var scheme
-
     var body: some View {
         HStack(spacing: 12) {
             RoundedRectangle(cornerRadius: 8)
                 .fill(iconColor)
                 .frame(width: 32, height: 32)
-                .overlay(
-                    Image(systemName: icon)
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
-                )
+                .overlay(Image(systemName: icon).font(.system(size: 16, weight: .medium)).foregroundColor(.white))
             Text(label)
                 .font(.system(size: 17))
                 .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
@@ -285,13 +212,10 @@ struct SettingsLinkRow: View {
     let iconColor: Color
     let label: String
     let url: String
-
     var body: some View {
         Link(destination: URL(string: url)!) {
             SettingsRow(icon: icon, iconColor: iconColor, label: label) {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.secondary)
+                Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold)).foregroundColor(.secondary)
             }
         }
         .buttonStyle(.plain)

@@ -8,6 +8,9 @@ struct SettingsView: View {
     private let notifKey = "daily_reminder_enabled"
 
     var body: some View {
+        ZStack {
+            LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
                 // Preferences Section
@@ -95,8 +98,8 @@ struct SettingsView: View {
             .padding(.horizontal, 16)
             .padding(.top, 16)
             .padding(.bottom, 32)
-        }
-        .gymBackground()
+        } // end ScrollView
+        } // end ZStack
         .navigationTitle(store.t("settings.title"))
         .navigationBarTitleDisplayMode(.large)
         .onAppear {

@@ -23,149 +23,133 @@ struct ExerciseDetailView: View {
     private var isFilled: Bool { weightValue != nil && repsValue != nil }
     private var maxWeight: Double { entries.map { $0.weight }.max() ?? 0 }
     private var maxReps: Int { entries.map { $0.reps }.max() ?? 0 }
-    private var showCharts: Bool { entries.count >= 5 }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 16) {
-                // Large title in content (matching original)
-                Text(exerciseName)
-                    .font(.system(size: 34, weight: .heavy))
-                    .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
-                    .padding(.top, -16)
-                    .padding(.bottom, 8)
+        ZStack {
+            LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
 
-                // Add Entry Form
-                GlassCard {
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text(store.t("detail.add"))
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 16) {
 
-                        // Inputs
-                        HStack(spacing: 12) {
-                            DetailInputField(
-                                label: store.t("detail.weight") ,
-                                placeholder: "0",
-                                text: $weightText,
-                                keyboardType: .decimalPad,
-                                focused: $focusedField,
-                                field: .weight
-                            )
-                            DetailInputField(
-                                label: store.t("detail.reps"),
-                                placeholder: "0",
-                                text: $repsText,
-                                keyboardType: .numberPad,
-                                focused: $focusedField,
-                                field: .reps
-                            )
-                        }
+                    // Large title in scroll (matches original)
+                    Text(exerciseName)
+                        .font(.system(size: 34, weight: .heavy))
+                        .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
+                        .padding(.top, -16)
+                        .padding(.bottom, 8)
 
-                        // Date picker row
-                        Button {
-                            showDatePicker.toggle()
-                            focusedField = nil
-                        } label: {
-                            HStack(spacing: 8) {
-                                Image(systemName: "calendar")
-                                    .foregroundColor(scheme == .dark ? Color(hex: "98989f") : Color(hex: "666666"))
-                                Text(formatShortDate(selectedDate))
-                                    .font(.system(size: 14))
-                                    .secondaryText()
-                            }
-                        }
-
-                        if showDatePicker {
-                            DatePicker("", selection: $selectedDate,
-                                       in: ...Date(),
-                                       displayedComponents: .date)
-                                .datePickerStyle(.wheel)
-                                .labelsHidden()
-                                .frame(maxWidth: .infinity)
-                            Button(store.language == "de" ? "Fertig" : "Done") {
-                                showDatePicker = false
-                            }
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.statBlue)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
-
-                        // Add Button
-                        AccentButton(label: store.t("detail.add"), disabled: !isFilled) {
-                            addEntry()
-                        }
-                    }
-                }
-
-                // Summary Card
-                if !entries.isEmpty {
+                    // Add Entry Form
                     GlassCard {
-                        HStack(spacing: 0) {
-                            SummaryItem(value: "\(entries.count)", label: store.t("detail.stats.total"))
-                            SummaryItem(value: "\(maxWeight) kg", label: store.language == "de" ? "Max Gewicht" : "Max Weight")
-                            SummaryItem(value: "\(maxReps)", label: store.language == "de" ? "Max Wdh" : "Max Reps")
-                        }
-                    }
-                }
+                        VStack(alignment: .leading, spacing: 14) {
+                            Text(store.language == "de" ? "Neuer Eintrag" : "New Entry")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
-                // Charts (only when >= 5 entries)
-                if showCharts {
-                    let charts: [(String, String, [ChartDataPoint])] = [
-                        (store.t("detail.chart.weight"), store.t("common.kg"), Analytics.weightChartData(entries: entries)),
-                        (store.t("detail.chart.reps"), store.language == "de" ? "Anzahl" : "Count", Analytics.repsChartData(entries: entries)),
-                        (store.t("detail.chart.volume"), "\(store.t("common.kg")) × \(store.t("common.reps"))", Analytics.volumeChartData(entries: entries))
-                    ]
+                            HStack(spacing: 12) {
+                                DetailInput(label: store.t("detail.weight"),
+                                            text: $weightText, kb: .decimalPad,
+                                            focused: $focusedField, field: .weight)
+                                DetailInput(label: store.t("detail.reps"),
+                                            text: $repsText, kb: .numberPad,
+                                            focused: $focusedField, field: .reps)
+                            }
 
-                    GeometryReader { geo in
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 0) {
-                                ForEach(Array(charts.enumerated()), id: \.offset) { idx, chart in
-                                    DetailChartCard(title: chart.0, unit: chart.1, data: chart.2)
-                                        .frame(width: geo.size.width)
+                            Button { showDatePicker.toggle(); focusedField = nil } label: {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "calendar")
+                                        .secondaryText()
+                                    Text(fmtShort(selectedDate))
+                                        .font(.system(size: 14))
+                                        .secondaryText()
                                 }
                             }
-                        }
-                        .scrollTargetBehavior(.paging)
-                    }
-                    .frame(height: 220)
 
-                    PaginationDots(total: 3, current: chartIndex)
-                        .frame(maxWidth: .infinity)
-                }
-
-                // History List
-                if !entries.isEmpty {
-                    Text(store.t("detail.history.title"))
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
-
-                    ForEach(entries) { entry in
-                        EntryCard(
-                            entry: entry,
-                            isPB: entry.weight == maxWeight,
-                            language: store.language,
-                            onDelete: {
-                                deleteTarget = entry.id
-                                showDeleteAlert = true
+                            if showDatePicker {
+                                DatePicker("", selection: $selectedDate, in: ...Date(), displayedComponents: .date)
+                                    .datePickerStyle(.wheel)
+                                    .labelsHidden()
+                                    .frame(maxWidth: .infinity)
+                                Button(store.language == "de" ? "Fertig" : "Done") { showDatePicker = false }
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(Color.tint(scheme))
+                                    .frame(maxWidth: .infinity, alignment: .trailing)
                             }
-                        )
+
+                            AccentButton(label: store.t("detail.add"), disabled: !isFilled, action: addEntry)
+                        }
                     }
-                } else {
-                    Text(store.t("detail.history.empty"))
-                        .font(.system(size: 15))
-                        .secondaryText()
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.top, 40)
+
+                    // Summary Card
+                    if !entries.isEmpty {
+                        GlassCard {
+                            HStack(spacing: 0) {
+                                SummaryItem(value: "\(entries.count)", label: store.t("detail.stats.total"))
+                                SummaryItem(value: "\(maxWeight) kg",
+                                            label: store.language == "de" ? "Max Gewicht" : "Max Weight")
+                                SummaryItem(value: "\(maxReps)",
+                                            label: store.language == "de" ? "Max Wdh" : "Max Reps")
+                            }
+                        }
+                    }
+
+                    // Charts (only when >= 5 entries like original)
+                    if entries.count >= 5 {
+                        let charts: [(String, String, [ChartDataPoint])] = [
+                            (store.t("detail.chart.weight"), store.t("common.kg"),
+                             Analytics.weightChartData(entries: entries)),
+                            (store.t("detail.chart.reps"),
+                             store.language == "de" ? "Anzahl" : "Count",
+                             Analytics.repsChartData(entries: entries)),
+                            (store.t("detail.chart.volume"),
+                             "\(store.t("common.kg")) × \(store.t("common.reps"))",
+                             Analytics.volumeChartData(entries: entries))
+                        ]
+
+                        GeometryReader { geo in
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 0) {
+                                    ForEach(Array(charts.enumerated()), id: \.offset) { i, c in
+                                        DetailChartCard(title: c.0, unit: c.1, data: c.2)
+                                            .frame(width: geo.size.width)
+                                    }
+                                }
+                            }
+                            .scrollTargetBehavior(.paging)
+                        }
+                        .frame(height: 220)
+
+                        PaginationDots(total: 3, current: chartIndex)
+                            .frame(maxWidth: .infinity)
+                    }
+
+                    // History title + entries
+                    if !entries.isEmpty {
+                        Text(store.t("detail.history.title"))
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
+
+                        ForEach(entries) { entry in
+                            EntryCard(entry: entry, isPB: entry.weight == maxWeight,
+                                      language: store.language) {
+                                deleteTarget = entry.id; showDeleteAlert = true
+                            }
+                        }
+                    } else {
+                        Text(store.t("detail.history.empty"))
+                            .font(.system(size: 15))
+                            .secondaryText()
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.vertical, 40)
+                    }
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+                .padding(.bottom, 32)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
-            .padding(.bottom, 32)
         }
-        .gymBackground()
-        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
         .onTapGesture { focusedField = nil }
         .onAppear(perform: reload)
         .alert(store.t("detail.delete.title"), isPresented: $showDeleteAlert) {
@@ -176,36 +160,30 @@ struct ExerciseDetailView: View {
         } message: { Text(store.t("detail.delete.message")) }
     }
 
-    private func reload() {
-        entries = store.entriesForExercise(exerciseName)
-    }
+    private func reload() { entries = store.entriesForExercise(exerciseName) }
 
     private func addEntry() {
         guard let w = weightValue, let r = repsValue, w > 0, r > 0 else { return }
         store.addEntry(exercise: exerciseName, weight: w, reps: r, date: selectedDate)
-        weightText = ""
-        repsText = ""
-        selectedDate = Date()
-        focusedField = nil
-        showDatePicker = false
+        weightText = ""; repsText = ""; selectedDate = Date()
+        focusedField = nil; showDatePicker = false
         reload()
     }
 
-    private func formatShortDate(_ date: Date) -> String {
-        let fmt = DateFormatter()
-        fmt.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
-        fmt.dateStyle = .short
-        return fmt.string(from: date)
+    private func fmtShort(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
+        f.dateStyle = .short
+        return f.string(from: date)
     }
 }
 
-// MARK: - Input Field
+// MARK: - Detail Input
 
-struct DetailInputField: View {
+struct DetailInput: View {
     let label: String
-    let placeholder: String
     @Binding var text: String
-    let keyboardType: UIKeyboardType
+    let kb: UIKeyboardType
     var focused: FocusState<ExerciseDetailView.Field?>.Binding
     let field: ExerciseDetailView.Field
     @Environment(\.colorScheme) var scheme
@@ -215,22 +193,18 @@ struct DetailInputField: View {
             Text(label)
                 .font(.system(size: 12, weight: .semibold))
                 .secondaryText()
-            TextField(placeholder, text: $text)
-                .keyboardType(keyboardType)
+            TextField("0", text: $text)
+                .keyboardType(kb)
                 .focused(focused, equals: field)
                 .font(.system(size: 20, weight: .semibold))
                 .multilineTextAlignment(.center)
+                .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                 .padding(14)
-                .background(scheme == .dark
-                    ? Color.white.opacity(0.08)
-                    : Color.black.opacity(0.04))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(scheme == .dark
-                                ? Color.white.opacity(0.12)
-                                : Color.black.opacity(0.1),
-                                lineWidth: 0.5)
-                )
+                .background(scheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.04))
+                .overlay(RoundedRectangle(cornerRadius: 12)
+                    .stroke(scheme == .dark
+                            ? Color.white.opacity(0.12)
+                            : Color.black.opacity(0.1), lineWidth: 0.5))
                 .cornerRadius(12)
         }
         .frame(maxWidth: .infinity)
@@ -243,12 +217,11 @@ struct SummaryItem: View {
     let value: String
     let label: String
     @Environment(\.colorScheme) var scheme
-
     var body: some View {
         VStack(spacing: 4) {
             Text(value)
                 .font(.system(size: 22, weight: .bold))
-                .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
             Text(label)
                 .font(.system(size: 12))
                 .secondaryText()
@@ -270,29 +243,22 @@ struct DetailChartCard: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text(title)
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
-
+                    .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                 if data.count >= 2 {
-                    Chart(data) { point in
-                        LineMark(
-                            x: .value("i", point.index),
-                            y: .value("v", point.value)
-                        )
-                        .interpolationMethod(.catmullRom)
-                        .foregroundStyle(Color.statBlue)
-                        .lineStyle(StrokeStyle(lineWidth: 5))
-                        AreaMark(
-                            x: .value("i", point.index),
-                            y: .value("v", point.value)
-                        )
-                        .interpolationMethod(.catmullRom)
-                        .foregroundStyle(Color.statBlue.opacity(0.12))
+                    Chart(data) { pt in
+                        LineMark(x: .value("i", pt.index), y: .value("v", pt.value))
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(Color.tint(scheme))
+                            .lineStyle(StrokeStyle(lineWidth: 5))
+                        AreaMark(x: .value("i", pt.index), y: .value("v", pt.value))
+                            .interpolationMethod(.catmullRom)
+                            .foregroundStyle(Color.tint(scheme).opacity(0.1))
                     }
                     .chartXAxis(.hidden)
                     .chartYAxis(.hidden)
+                    .chartBackground { _ in Color.clear }
                     .frame(height: 120)
                 }
-
                 Text(unit)
                     .font(.system(size: 14))
                     .secondaryText()
@@ -318,15 +284,13 @@ struct EntryCard: View {
                     HStack(spacing: 4) {
                         Text(String(format: "%.1f kg", entry.weight))
                             .font(.system(size: 17, weight: .bold))
-                            .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                            .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                         Text("× \(entry.reps) Wdh")
                             .font(.system(size: 15))
                             .secondaryText()
                         if isPB {
                             RoundedRectangle(cornerRadius: 6)
-                                .fill(scheme == .dark
-                                      ? Color(hex: "fbbf24").opacity(0.2)
-                                      : Color(hex: "fef3c7"))
+                                .fill(scheme == .dark ? Color(hex: "fbbf24").opacity(0.2) : Color(hex: "fef3c7"))
                                 .frame(width: 26, height: 22)
                                 .overlay(
                                     Image(systemName: "trophy.fill")
@@ -335,7 +299,7 @@ struct EntryCard: View {
                                 )
                         }
                     }
-                    Text(formatDate(entry.date))
+                    Text(fmtDate(entry.date))
                         .font(.system(size: 12))
                         .secondaryText()
                 }
@@ -351,10 +315,10 @@ struct EntryCard: View {
         }
     }
 
-    private func formatDate(_ date: Date) -> String {
-        let fmt = DateFormatter()
-        fmt.locale = Locale(identifier: language == "de" ? "de_DE" : "en_US")
-        fmt.dateFormat = language == "de" ? "E, dd.MM.yyyy" : "E, MM/dd/yyyy"
-        return fmt.string(from: date)
+    private func fmtDate(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: language == "de" ? "de_DE" : "en_US")
+        f.dateFormat = language == "de" ? "E, dd.MM.yyyy" : "E, MM/dd/yyyy"
+        return f.string(from: date)
     }
 }

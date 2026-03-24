@@ -7,6 +7,9 @@ struct CustomizeHomeView: View {
     @State private var settings = HomeViewSettings()
 
     var body: some View {
+        ZStack {
+            LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
 
@@ -68,8 +71,8 @@ struct CustomizeHomeView: View {
             .padding(.horizontal, 16)
             .padding(.top, 16)
             .padding(.bottom, 32)
-        }
-        .gymBackground()
+        } // end ScrollView
+        } // end ZStack
         .navigationTitle(store.t("customize.title"))
         .navigationBarTitleDisplayMode(.large)
         .toolbar {

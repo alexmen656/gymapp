@@ -8,37 +8,40 @@ struct HistoryView: View {
     @State private var showDeleteAlert = false
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(alignment: .leading, spacing: 12) {
-                ScreenTitle(text: store.t("nav.history"))
-                    .padding(.bottom, 4)
+        ZStack {
+            LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
 
-                if allEntries.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "calendar")
-                            .font(.system(size: 64))
-                            .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
-                            .padding(.top, 60)
-                        Text(store.t("history.empty"))
-                            .font(.system(size: 16))
-                            .secondaryText()
-                            .multilineTextAlignment(.center)
+            if allEntries.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "calendar")
+                        .font(.system(size: 64))
+                        .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
+                    Text(store.t("history.empty"))
+                        .font(.system(size: 16))
+                        .secondaryText()
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, 32)
+            } else {
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ScreenTitle(text: store.t("nav.history"))
+                            .padding(.bottom, 4)
+
+                        ForEach(allEntries) { entry in
+                            HistoryEntryCard(entry: entry, store: store) {
+                                deleteTarget = entry.id
+                                showDeleteAlert = true
+                            }
+                        }
                     }
-                    .frame(maxWidth: .infinity)
-                } else {
-                    ForEach(allEntries) { entry in
-                        HistoryEntryCard(entry: entry, store: store, onDelete: {
-                            deleteTarget = entry.id
-                            showDeleteAlert = true
-                        })
-                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 40)
+                    .padding(.bottom, 32)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 40)
-            .padding(.bottom, 32)
         }
-        .gymBackground()
         .navigationBarHidden(true)
         .onAppear(perform: reload)
         .alert(store.t("history.delete.title"), isPresented: $showDeleteAlert) {
@@ -46,9 +49,7 @@ struct HistoryView: View {
                 if let id = deleteTarget { store.deleteEntry(id: id); reload() }
             }
             Button(store.t("common.cancel"), role: .cancel) {}
-        } message: {
-            Text(store.t("history.delete.message"))
-        }
+        } message: { Text(store.t("history.delete.message")) }
     }
 
     private func reload() {
@@ -71,11 +72,11 @@ struct HistoryEntryCard: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(entry.exercise)
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(scheme == .dark ? .white : Color(hex: "1a1a1a"))
+                        .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                     Text("\(entry.weight, specifier: "%.1f") \(store.t("common.kg")) × \(entry.reps) \(store.t("common.reps"))")
                         .font(.system(size: 15))
                         .secondaryText()
-                    Text(formatDate(entry.date))
+                    Text(fmt(entry.date))
                         .font(.system(size: 12))
                         .secondaryText()
                 }
@@ -91,10 +92,10 @@ struct HistoryEntryCard: View {
         }
     }
 
-    private func formatDate(_ date: Date) -> String {
-        let fmt = DateFormatter()
-        fmt.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
-        fmt.dateFormat = store.language == "de" ? "E, dd.MM.yyyy" : "E, MM/dd/yyyy"
-        return fmt.string(from: date)
+    private func fmt(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
+        f.dateFormat = store.language == "de" ? "E, dd.MM.yyyy" : "E, MM/dd/yyyy"
+        return f.string(from: date)
     }
 }
