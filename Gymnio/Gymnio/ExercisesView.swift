@@ -29,7 +29,7 @@ struct ExercisesView: View {
                         ScreenTitle(text: store.t("nav.exercises"))
                             .padding(.bottom, 4)
 
-                        GlassEffectContainer(spacing: 12) {
+                        VStack(spacing: 12) {
                         ForEach(groups) { group in
                             NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
                                 ExerciseCard(group: group, store: store)

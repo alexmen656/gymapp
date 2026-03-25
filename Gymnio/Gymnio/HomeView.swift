@@ -45,7 +45,7 @@ struct HomeView: View {
                             }
                             .frame(maxWidth: .infinity)
                         } else {
-                            GlassEffectContainer(spacing: 12) {
+                            VStack(spacing: 12) {
 
                             if store.homeSettings.showProgressionAlert, let alert = alerts.first {
                                 ProgressionAlertCard(alert: alert)
