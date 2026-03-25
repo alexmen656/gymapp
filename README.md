@@ -1,6 +1,7 @@
-# Gym Logbook 💪
+# Gymnio
 
-Eine React Native Expo App zum Protokollieren deiner Trainingseinheiten.
+Gymnio is a simple app for logging fitness weights
+in native Swift
 
 ## Features
 
@@ -14,37 +15,6 @@ Eine React Native Expo App zum Protokollieren deiner Trainingseinheiten.
 
 ## Tech Stack
 
-- **React Native** mit **Expo SDK 54**
-- **Expo Router** (dateibasiertes Routing)
-- **AsyncStorage** (lokale Datenspeicherung)
-- **TypeScript**
-
-## Starten
-
-```bash
-# Abhängigkeiten installieren
-npm install
-
-# App starten
-npx expo start
-```
-
-Danach mit der **Expo Go** App auf dem Handy den QR-Code scannen oder einen Simulator verwenden.
-
-## Projektstruktur
-
-```
-app/
-  (tabs)/
-    index.tsx      – Startseite: alle Geräte
-    add.tsx        – Neuen Eintrag hinzufügen
-    history.tsx    – Trainings-Verlauf
-  exercise/
-    [name].tsx     – Detail-Ansicht pro Gerät
-storage/
-  workoutStorage.ts – AsyncStorage CRUD-Operationen
-types/
-  workout.ts       – TypeScript-Typen
-```
+- **Swift**
 
 test marteso
