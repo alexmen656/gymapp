@@ -30,18 +30,18 @@ struct ExercisesView: View {
                             .padding(.bottom, 4)
 
                         VStack(spacing: 12) {
-                        ForEach(groups) { group in
-                            NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
-                                ExerciseCard(group: group, store: store)
-                            }
-                            .buttonStyle(.plain)
-                            .simultaneousGesture(
-                                LongPressGesture().onEnded { _ in
-                                    deleteTarget = group.exercise
-                                    showDeleteAlert = true
+                            ForEach(groups) { group in
+                                NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
+                                    ExerciseCard(group: group)
                                 }
-                            )
-                        }
+                                .buttonStyle(.plain)
+                                .simultaneousGesture(
+                                    LongPressGesture().onEnded { _ in
+                                        deleteTarget = group.exercise
+                                        showDeleteAlert = true
+                                    }
+                                )
+                            }
                         }
                     }
                     .padding(.horizontal, 16)
@@ -73,7 +73,7 @@ struct ExercisesView: View {
 
 struct ExerciseCard: View {
     let group: ExerciseGroup
-    let store: AppStore
+    @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
 
     var body: some View {

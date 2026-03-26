@@ -11,16 +11,14 @@ final class NotificationManager {
 
     // MARK: - Daily reminder
 
-    func scheduleDailyReminder(language: String, enabled: Bool) {
+    func scheduleDailyReminder(enabled: Bool) {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
         guard enabled else { return }
 
         let content = UNMutableNotificationContent()
-        content.title = language == "de" ? "Zeit fürs Training! 💪" : "Time to work out! 💪"
-        content.body = language == "de"
-            ? "Vergiss nicht dein heutiges Training zu loggen."
-            : "Don't forget to log today's workout."
+        content.title = String(localized: "notification.reminder.title")
+        content.body  = String(localized: "notification.reminder.body")
         content.sound = .default
 
         var dateComponents = DateComponents()
@@ -34,38 +32,23 @@ final class NotificationManager {
 
     // MARK: - Celebration
 
-    func sendCelebrationNotification(entryCount: Int, language: String) {
+    func sendCelebrationNotification(entryCount: Int) {
         let center = UNUserNotificationCenter.current()
         center.getNotificationSettings { settings in
             guard settings.authorizationStatus == .authorized else { return }
 
             let content = UNMutableNotificationContent()
-            if language == "de" {
-                content.title = "Glückwunsch! 🎉"
-                content.body = "Du hast \(entryCount) Einträge erreicht. Weiter so!"
-            } else {
-                content.title = "Congratulations! 🎉"
-                content.body = "You've reached \(entryCount) entries. Keep it up!"
-            }
+            content.title = String(localized: "notification.celebration.title")
+            content.body  = String(format: String(localized: "notification.celebration.body"), entryCount)
             content.sound = .default
 
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-            let request = UNNotificationRequest(
-                identifier: "celebration_\(entryCount)",
-                content: content,
-                trigger: trigger
-            )
+            let request = UNNotificationRequest(identifier: "celebration_\(entryCount)", content: content, trigger: trigger)
             center.add(request)
         }
     }
 
-    // MARK: - Cancel
-
     func cancelDailyReminder() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: ["daily_reminder"])
-    }
-
-    func cancelAll() {
-        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
 }

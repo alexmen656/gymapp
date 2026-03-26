@@ -10,14 +10,15 @@ final class AppStore: ObservableObject {
 
     @Published var exercises: [String] = []
     @Published var entries: [WorkoutEntry] = []
-    @Published var language: String = "de"
+    @Published var language: String = "en"          // resolved: "de" or "en"
+    @Published var languageOverride: String = "auto" // stored: "auto", "de", "en"
     @Published var homeSettings: HomeViewSettings = HomeViewSettings()
-    @Published var themeMode: String = "system"   // "system" | "light" | "dark"
+    @Published var themeMode: String = "system"
     @Published var showAddExercise: Bool = false
 
-    private let languageKey = "@language"
+    private let languageKey  = "@language_override"
     private let homeSettingsKey = "homeViewSettings"
-    private let themeKey = "@theme_mode"
+    private let themeKey     = "@theme_mode"
 
     init() {
         configureForUITestsIfNeeded()
@@ -28,9 +29,18 @@ final class AppStore: ObservableObject {
 
     func loadAll() {
         exercises = storage.getExercises()
-        entries = storage.getAllEntries()
-        language = defaults.string(forKey: languageKey) ?? "de"
+        entries   = storage.getAllEntries()
         themeMode = defaults.string(forKey: themeKey) ?? "system"
+        if let stored = defaults.string(forKey: languageKey) {
+            language = stored
+            languageOverride = stored
+        } else {
+            // First launch — detect device language, persist it
+            let detected = deviceLanguage
+            language = detected
+            languageOverride = detected
+            defaults.set(detected, forKey: languageKey)
+        }
         if let data = defaults.data(forKey: homeSettingsKey),
            let s = try? JSONDecoder().decode(HomeViewSettings.self, from: data) {
             homeSettings = s
@@ -39,7 +49,30 @@ final class AppStore: ObservableObject {
 
     func reload() {
         exercises = storage.getExercises()
-        entries = storage.getAllEntries()
+        entries   = storage.getAllEntries()
+    }
+
+    // MARK: - Language
+
+    /// Returns a String from Localizable.xcstrings using the user-selected language bundle.
+    func t(_ key: String) -> String {
+        NSLocalizedString(key, bundle: localizedBundle, comment: "")
+    }
+
+    func setLanguageOverride(_ lang: String) {
+        language = lang
+        languageOverride = lang
+        defaults.set(lang, forKey: languageKey)
+    }
+
+    private var localizedBundle: Bundle {
+        Bundle.main.path(forResource: language, ofType: "lproj")
+            .flatMap(Bundle.init) ?? .main
+    }
+
+    private var deviceLanguage: String {
+        let code = Locale.current.language.languageCode?.identifier ?? "en"
+        return ["de", "en"].contains(code) ? code : "en"
     }
 
     // MARK: - Exercises
@@ -52,7 +85,7 @@ final class AppStore: ObservableObject {
     func deleteExercise(_ name: String) {
         storage.deleteExercise(name)
         exercises = storage.getExercises()
-        entries = storage.getAllEntries()
+        entries   = storage.getAllEntries()
     }
 
     // MARK: - Entries
@@ -70,11 +103,6 @@ final class AppStore: ObservableObject {
     }
 
     // MARK: - Settings
-
-    func setLanguage(_ lang: String) {
-        language = lang
-        defaults.set(lang, forKey: languageKey)
-    }
 
     func setThemeMode(_ mode: String) {
         themeMode = mode
@@ -102,29 +130,22 @@ final class AppStore: ObservableObject {
 
     private func checkMilestones() {
         let count = entries.count
-        let milestones = [10, 25, 50, 100, 200]
-        if milestones.contains(count) {
-            NotificationManager.shared.sendCelebrationNotification(entryCount: count, language: language)
+        if [10, 25, 50, 100, 200].contains(count) {
+            NotificationManager.shared.sendCelebrationNotification(entryCount: count)
         }
         if count == 5 {
             NotificationManager.shared.requestPermissions()
         }
     }
 
-    // MARK: - Computed theme
+    // MARK: - Theme
 
     var colorScheme: ColorScheme? {
         switch themeMode {
         case "light": return .light
-        case "dark": return .dark
-        default: return nil
+        case "dark":  return .dark
+        default:      return nil
         }
-    }
-
-    // MARK: - Translation helper
-
-    func t(_ key: String) -> String {
-        L10n.string(key, language: language)
     }
 
     // MARK: - UI tests
@@ -132,60 +153,28 @@ final class AppStore: ObservableObject {
     private func configureForUITestsIfNeeded() {
         let args = ProcessInfo.processInfo.arguments
         guard args.contains("-ui_testing") else { return }
-
         storage.resetAll()
         defaults.removeObject(forKey: languageKey)
         defaults.removeObject(forKey: homeSettingsKey)
         defaults.removeObject(forKey: themeKey)
-
-        let lang = value(after: "-ui_test_language", in: args) ?? "de"
-        defaults.set(lang, forKey: languageKey)
         defaults.set("system", forKey: themeKey)
-
-        if args.contains("-ui_test_seed_demo_data") {
-            seedDemoDataForUITests()
-        }
-    }
-
-    private func value(after key: String, in args: [String]) -> String? {
-        guard let i = args.firstIndex(of: key), i + 1 < args.count else { return nil }
-        return args[i + 1]
+        if args.contains("-ui_test_seed_demo_data") { seedDemoDataForUITests() }
     }
 
     private func seedDemoDataForUITests() {
         let baseDate = Date()
         let calendar = Calendar.current
-
         let demo: [(exercise: String, weights: [Double], reps: [Int])] = [
-            (
-                exercise: "Bankdruecken",
-                weights: [70.0, 75.0, 80.0, 80.0, 80.0, 80.0, 80.0],
-                reps: [8, 8, 6, 6, 6, 6, 6]
-            ),
-            (
-                exercise: "Kniebeuge",
-                weights: [95.0, 100.0, 102.5, 105.0, 107.5, 110.0],
-                reps: [10, 8, 8, 6, 6, 5]
-            ),
-            (
-                exercise: "Kreuzheben",
-                weights: [110.0, 115.0, 120.0, 125.0, 130.0],
-                reps: [6, 5, 5, 4, 3]
-            )
+            ("Bankdrücken", [70, 75, 80, 80, 80, 80, 80], [8, 8, 6, 6, 6, 6, 6]),
+            ("Kniebeuge",   [95, 100, 102.5, 105, 107.5, 110], [10, 8, 8, 6, 6, 5]),
+            ("Kreuzheben",  [110, 115, 120, 125, 130], [6, 5, 5, 4, 3])
         ]
-
         for item in demo {
             storage.addExercise(item.exercise)
             for idx in item.weights.indices {
                 let offset = -(item.weights.count - idx)
                 let date = calendar.date(byAdding: .day, value: offset, to: baseDate) ?? baseDate
-                let entry = WorkoutEntry.create(
-                    exercise: item.exercise,
-                    weight: item.weights[idx],
-                    reps: item.reps[idx],
-                    date: date
-                )
-                storage.saveEntry(entry)
+                storage.saveEntry(WorkoutEntry.create(exercise: item.exercise, weight: item.weights[idx], reps: item.reps[idx], date: date))
             }
         }
     }

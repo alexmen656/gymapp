@@ -1,6 +1,5 @@
 import SwiftUI
 
-// Centered modal card — matches React Native Modal transparent + GlassCard
 struct AddExerciseView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
@@ -18,7 +17,6 @@ struct AddExerciseView: View {
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
-                // Input — matches modalInput style
                 TextField(store.t("add.placeholder"), text: $name)
                     .font(.system(size: 16))
                     .autocapitalization(.words)
@@ -46,7 +44,6 @@ struct AddExerciseView: View {
                         .foregroundColor(Color(hex: "FF3B30"))
                 }
 
-                // Buttons row — Cancel + Add (prominent)
                 HStack(spacing: 12) {
                     Spacer()
                     GlassBtn(store.t("add.cancel")) {

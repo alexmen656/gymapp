@@ -13,36 +13,34 @@ struct CustomizeHomeView: View {
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
 
-                // Toggles
                 GlassCard {
                     VStack(spacing: 0) {
                         CustomizeToggleRow(
                             icon: "arrow.up.circle.fill", iconColor: .statBlue,
-                            label: store.t("customize.progression"),
+                            label: String(localized: "customize.progression"),
                             isOn: $settings.showProgressionAlert
                         )
                         Divider().padding(.leading, 44)
                         CustomizeToggleRow(
                             icon: "chart.bar.fill", iconColor: .statTeal,
-                            label: store.t("customize.stats"),
+                            label: String(localized: "customize.stats"),
                             isOn: $settings.showStats
                         )
                         Divider().padding(.leading, 44)
                         CustomizeToggleRow(
                             icon: "chart.line.uptrend.xyaxis", iconColor: Color(hex: "FF9500"),
-                            label: store.t("customize.charts"),
+                            label: String(localized: "customize.charts"),
                             isOn: $settings.showCharts
                         )
                         Divider().padding(.leading, 44)
                         CustomizeToggleRow(
                             icon: "list.number", iconColor: .statRed,
-                            label: store.t("customize.top"),
+                            label: String(localized: "customize.top"),
                             isOn: $settings.showTopExercises
                         )
                     }
                 }
 
-                // Info card
                 GlassCard {
                     HStack(alignment: .top, spacing: 12) {
                         Image(systemName: "info.circle.fill")
@@ -55,7 +53,6 @@ struct CustomizeHomeView: View {
                     }
                 }
 
-                // Tip card
                 GlassCard {
                     HStack(alignment: .top, spacing: 12) {
                         Image(systemName: "lightbulb.fill")
@@ -71,13 +68,13 @@ struct CustomizeHomeView: View {
             .padding(.horizontal, 16)
             .padding(.top, 16)
             .padding(.bottom, 32)
-        } // end ScrollView
-        } // end ZStack
-        .navigationTitle(store.t("customize.title"))
+        }
+        }
+        .navigationTitle(String(localized: "customize.title"))
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button(store.t("common.save")) {
+                Button(String(localized: "common.save")) {
                     store.saveHomeSettings(settings)
                     dismiss()
                 }

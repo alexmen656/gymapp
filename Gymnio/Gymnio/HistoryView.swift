@@ -30,12 +30,12 @@ struct HistoryView: View {
                             .padding(.bottom, 4)
 
                         VStack(spacing: 10) {
-                        ForEach(allEntries) { entry in
-                            HistoryEntryCard(entry: entry, store: store) {
-                                deleteTarget = entry.id
-                                showDeleteAlert = true
+                            ForEach(allEntries) { entry in
+                                HistoryEntryCard(entry: entry) {
+                                    deleteTarget = entry.id
+                                    showDeleteAlert = true
+                                }
                             }
-                        }
                         }
                     }
                     .padding(.horizontal, 16)
@@ -64,8 +64,8 @@ struct HistoryView: View {
 
 struct HistoryEntryCard: View {
     let entry: WorkoutEntry
-    let store: AppStore
     let onDelete: () -> Void
+    @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
 
     var body: some View {
@@ -97,7 +97,7 @@ struct HistoryEntryCard: View {
     private func fmt(_ date: Date) -> String {
         let f = DateFormatter()
         f.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
-        f.dateFormat = store.language == "de" ? "E, dd.MM.yyyy" : "E, MM/dd/yyyy"
+        f.dateStyle = .medium
         return f.string(from: date)
     }
 }

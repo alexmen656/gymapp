@@ -10,9 +10,17 @@ struct HomeView: View {
     @State private var chartIndex: Int = 0
     @State private var navPath = NavigationPath()
 
+    private var greeting: String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 5..<12: return store.t("home.greeting.morning")
+        case 12..<18: return store.t("home.greeting.afternoon")
+        default:     return store.t("home.greeting.evening")
+        }
+    }
+
     var body: some View {
         NavigationStack(path: $navPath) {
-            // ZStack puts gradient DIRECTLY behind cards so .ultraThinMaterial can see it
             ZStack {
                 LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
@@ -20,9 +28,8 @@ struct HomeView: View {
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 16) {
 
-                        // Header: greeting + gear icon only (no slider here)
                         HStack {
-                            Text(store.t("home.greeting.morning"))
+                            Text(greeting)
                                 .font(.system(size: 34, weight: .heavy))
                                 .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                             Spacer()
@@ -171,6 +178,7 @@ enum NavDest: Hashable {
 
 struct ProgressionAlertCard: View {
     let alert: ProgressionAlert
+    @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
     var body: some View {
         GlassCard(leftAccent: true) {
@@ -179,11 +187,12 @@ struct ProgressionAlertCard: View {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 24))
                         .foregroundColor(Color.tint(scheme))
-                    Text("Bereit für mehr?")
+                    Text(store.t("home.progression.ready"))
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                 }
-                Text("**\(alert.exercise)**: 5× bei \(alert.currentWeight, specifier: "%.1f") kg → Versuche \(alert.suggestedWeight, specifier: "%.1f") kg! 💪")
+                Text(String(format: store.t("home.progression.body"),
+                            alert.exercise, alert.currentWeight, alert.suggestedWeight))
                     .font(.system(size: 14))
                     .secondaryText()
                     .lineSpacing(3)
@@ -221,13 +230,14 @@ struct HomeStatCard: View {
 
 struct HomeChartCard: View {
     let group: ExerciseGroup
+    @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
     var data: [ChartDataPoint] { Analytics.weightChartData(entries: group.entries) }
 
     var body: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 12) {
-                Text("Trend: \(group.exercise)")
+                Text(group.exercise)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
@@ -247,7 +257,7 @@ struct HomeChartCard: View {
                     .frame(height: 120)
                 }
 
-                Text("Kilogramm")
+                Text(store.t("home.charts.weight"))
                     .font(.system(size: 14))
                     .secondaryText()
                     .frame(maxWidth: .infinity, alignment: .center)

@@ -32,7 +32,6 @@ struct ExerciseDetailView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 16) {
 
-                    // Large title in scroll (matches original)
                     Text(exerciseName)
                         .font(.system(size: 34, weight: .heavy))
                         .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
@@ -42,7 +41,7 @@ struct ExerciseDetailView: View {
                     // Add Entry Form
                     GlassCard {
                         VStack(alignment: .leading, spacing: 14) {
-                            Text(store.language == "de" ? "Neuer Eintrag" : "New Entry")
+                            Text(store.t("detail.new_entry"))
                                 .font(.system(size: 20, weight: .bold))
                                 .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
@@ -57,8 +56,7 @@ struct ExerciseDetailView: View {
 
                             Button { showDatePicker.toggle(); focusedField = nil } label: {
                                 HStack(spacing: 8) {
-                                    Image(systemName: "calendar")
-                                        .secondaryText()
+                                    Image(systemName: "calendar").secondaryText()
                                     Text(fmtShort(selectedDate))
                                         .font(.system(size: 14))
                                         .secondaryText()
@@ -70,7 +68,7 @@ struct ExerciseDetailView: View {
                                     .datePickerStyle(.wheel)
                                     .labelsHidden()
                                     .frame(maxWidth: .infinity)
-                                Button(store.language == "de" ? "Fertig" : "Done") { showDatePicker = false }
+                                Button(store.t("detail.done")) { showDatePicker = false }
                                     .font(.system(size: 16, weight: .semibold))
                                     .foregroundColor(Color.tint(scheme))
                                     .frame(maxWidth: .infinity, alignment: .trailing)
@@ -85,21 +83,18 @@ struct ExerciseDetailView: View {
                         GlassCard {
                             HStack(spacing: 0) {
                                 SummaryItem(value: "\(entries.count)", label: store.t("detail.stats.total"))
-                                SummaryItem(value: "\(maxWeight) kg",
-                                            label: store.language == "de" ? "Max Gewicht" : "Max Weight")
-                                SummaryItem(value: "\(maxReps)",
-                                            label: store.language == "de" ? "Max Wdh" : "Max Reps")
+                                SummaryItem(value: "\(maxWeight) kg", label: store.t("detail.stats.maxWeight"))
+                                SummaryItem(value: "\(maxReps)", label: store.t("detail.stats.maxReps"))
                             }
                         }
                     }
 
-                    // Charts (only when >= 5 entries like original)
+                    // Charts (only when >= 5 entries)
                     if entries.count >= 5 {
                         let charts: [(String, String, [ChartDataPoint])] = [
                             (store.t("detail.chart.weight"), store.t("common.kg"),
                              Analytics.weightChartData(entries: entries)),
-                            (store.t("detail.chart.reps"),
-                             store.language == "de" ? "Anzahl" : "Count",
+                            (store.t("detail.chart.reps"), store.t("detail.stats.count"),
                              Analytics.repsChartData(entries: entries)),
                             (store.t("detail.chart.volume"),
                              "\(store.t("common.kg")) × \(store.t("common.reps"))",
@@ -123,15 +118,14 @@ struct ExerciseDetailView: View {
                             .frame(maxWidth: .infinity)
                     }
 
-                    // History title + entries
+                    // History
                     if !entries.isEmpty {
                         Text(store.t("detail.history.title"))
                             .font(.system(size: 18, weight: .bold))
                             .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
                         ForEach(entries) { entry in
-                            EntryCard(entry: entry, isPB: entry.weight == maxWeight,
-                                      language: store.language) {
+                            EntryCard(entry: entry, isPB: entry.weight == maxWeight) {
                                 deleteTarget = entry.id; showDeleteAlert = true
                             }
                         }
@@ -273,8 +267,8 @@ struct DetailChartCard: View {
 struct EntryCard: View {
     let entry: WorkoutEntry
     let isPB: Bool
-    let language: String
     let onDelete: () -> Void
+    @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
 
     var body: some View {
@@ -285,7 +279,7 @@ struct EntryCard: View {
                         Text(String(format: "%.1f kg", entry.weight))
                             .font(.system(size: 17, weight: .bold))
                             .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
-                        Text("× \(entry.reps) Wdh")
+                        Text("× \(entry.reps) \(store.t("common.reps"))")
                             .font(.system(size: 15))
                             .secondaryText()
                         if isPB {
@@ -317,8 +311,8 @@ struct EntryCard: View {
 
     private func fmtDate(_ date: Date) -> String {
         let f = DateFormatter()
-        f.locale = Locale(identifier: language == "de" ? "de_DE" : "en_US")
-        f.dateFormat = language == "de" ? "E, dd.MM.yyyy" : "E, MM/dd/yyyy"
+        f.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
+        f.dateStyle = .medium
         return f.string(from: date)
     }
 }

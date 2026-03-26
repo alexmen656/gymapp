@@ -13,19 +13,18 @@ struct SettingsView: View {
                 .ignoresSafeArea()
         ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 20) {
-                // Preferences Section
+
                 SettingsSectionTitle(title: store.t("settings.section.preferences"))
 
                 GlassCard {
                     VStack(spacing: 0) {
-                        // Language
                         SettingsRow(icon: "globe", iconColor: .statBlue, label: store.t("settings.language")) {
                             Picker("", selection: Binding(
-                                get: { store.language },
-                                set: { store.setLanguage($0) }
+                                get: { store.languageOverride },
+                                set: { store.setLanguageOverride($0) }
                             )) {
-                                Text("Deutsch").tag("de")
-                                Text("English").tag("en")
+                                Text(store.t("settings.language.de")).tag("de")
+                                Text(store.t("settings.language.en")).tag("en")
                             }
                             .pickerStyle(.menu)
                             .foregroundColor(.statBlue)
@@ -33,7 +32,6 @@ struct SettingsView: View {
 
                         Divider().padding(.leading, 44)
 
-                        // Theme
                         SettingsRow(icon: "moon.fill", iconColor: Color(hex: "8e44ad"), label: store.t("settings.theme")) {
                             Picker("", selection: Binding(
                                 get: { store.themeMode },
@@ -49,20 +47,18 @@ struct SettingsView: View {
 
                         Divider().padding(.leading, 44)
 
-                        // Notifications
                         SettingsRow(icon: "bell.fill", iconColor: Color(hex: "FF9500"), label: store.t("settings.notifications")) {
                             Toggle("", isOn: $notificationsEnabled)
                                 .labelsHidden()
                                 .onChange(of: notificationsEnabled) { _, enabled in
                                     UserDefaults.standard.set(enabled, forKey: notifKey)
                                     if enabled { NotificationManager.shared.requestPermissions() }
-                                    NotificationManager.shared.scheduleDailyReminder(language: store.language, enabled: enabled)
+                                    NotificationManager.shared.scheduleDailyReminder(enabled: enabled)
                                 }
                         }
                     }
                 }
 
-                // Links Section
                 SettingsSectionTitle(title: store.t("settings.section.links"))
 
                 GlassCard {
@@ -77,7 +73,6 @@ struct SettingsView: View {
                     }
                 }
 
-                // About Section
                 SettingsSectionTitle(title: store.t("settings.section.about"))
 
                 GlassCard {
@@ -98,8 +93,8 @@ struct SettingsView: View {
             .padding(.horizontal, 16)
             .padding(.top, 16)
             .padding(.bottom, 32)
-        } // end ScrollView
-        } // end ZStack
+        }
+        }
         .navigationTitle(store.t("settings.title"))
         .navigationBarTitleDisplayMode(.large)
         .onAppear {
@@ -111,4 +106,3 @@ struct SettingsView: View {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
     }
 }
-
