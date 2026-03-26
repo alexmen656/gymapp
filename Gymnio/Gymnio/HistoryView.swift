@@ -12,23 +12,25 @@ struct HistoryView: View {
             LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
 
-            if allEntries.isEmpty {
-                VStack(spacing: 12) {
-                    Image(systemName: "calendar")
-                        .font(.system(size: 64))
-                        .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
-                    Text(store.t("history.empty"))
-                        .font(.system(size: 16))
-                        .secondaryText()
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.horizontal, 32)
-            } else {
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 10) {
-                        ScreenTitle(text: store.t("nav.history"))
-                            .padding(.bottom, 4)
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 10) {
+                    ScreenTitle(text: store.t("nav.history"))
+                        .padding(.bottom, 4)
 
+                    if allEntries.isEmpty {
+                        VStack(spacing: 12) {
+                            Image(systemName: "calendar")
+                                .font(.system(size: 64))
+                                .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
+                            Text(store.t("history.empty"))
+                                .font(.system(size: 16))
+                                .secondaryText()
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 60)
+                        .padding(.horizontal, 32)
+                    } else {
                         VStack(spacing: 10) {
                             ForEach(allEntries) { entry in
                                 HistoryEntryCard(entry: entry) {
@@ -38,10 +40,10 @@ struct HistoryView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 40)
-                    .padding(.bottom, 32)
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 40)
+                .padding(.bottom, 32)
             }
         }
         .navigationBarHidden(true)

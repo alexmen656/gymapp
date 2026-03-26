@@ -1,9 +1,11 @@
 import SwiftUI
 import Charts
+import StoreKit
 
 struct HomeView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
+    @Environment(\.requestReview) var requestReview
     @State private var stats = WorkoutStats(totalWorkouts: 0, uniqueExercises: 0, totalVolumeKg: 0)
     @State private var alerts: [ProgressionAlert] = []
     @State private var topGroups: [ExerciseGroup] = []
@@ -41,11 +43,11 @@ struct HomeView: View {
 
                         if store.entries.isEmpty {
                             VStack(spacing: 12) {
-                                Image(systemName: "chart.line.uptrend.xyaxis")
+                                Image(systemName: store.exercises.isEmpty ? "plus.circle" : "chart.line.uptrend.xyaxis")
                                     .font(.system(size: 64))
                                     .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
                                     .padding(.top, 60)
-                                Text(store.t("home.empty"))
+                                Text(store.exercises.isEmpty ? store.t("exercises.empty") : store.t("home.empty"))
                                     .font(.system(size: 18, weight: .semibold))
                                     .secondaryText()
                                     .multilineTextAlignment(.center)
@@ -138,6 +140,8 @@ struct HomeView: View {
                                             .font(.system(size: 13, weight: .semibold))
                                             .secondaryText()
                                     }
+                                    .frame(maxWidth: .infinity)
+                                    .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -158,6 +162,13 @@ struct HomeView: View {
             }
         }
         .onAppear(perform: reload)
+        .onChange(of: store.entries.count) { _, count in
+            let key = "review_requested_at_10"
+            if count >= 20 && !UserDefaults.standard.bool(forKey: key) {
+                UserDefaults.standard.set(true, forKey: key)
+                requestReview()
+            }
+        }
     }
 
     private func reload() {

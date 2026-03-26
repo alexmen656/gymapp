@@ -14,6 +14,19 @@ struct CustomizeHomeView: View {
             VStack(alignment: .leading, spacing: 20) {
 
                 GlassCard {
+                    HStack(alignment: .top, spacing: 12) {
+                        Image(systemName: "info.circle.fill")
+                            .font(.system(size: 20))
+                            .foregroundColor(.statBlue)
+                        Text(store.t("customize.info"))
+                            .font(.system(size: 14))
+                            .secondaryText()
+                            .lineSpacing(2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                
+                GlassCard {
                     VStack(spacing: 0) {
                         CustomizeToggleRow(
                             icon: "arrow.up.circle.fill", iconColor: .statBlue,
@@ -43,18 +56,6 @@ struct CustomizeHomeView: View {
 
                 GlassCard {
                     HStack(alignment: .top, spacing: 12) {
-                        Image(systemName: "info.circle.fill")
-                            .font(.system(size: 20))
-                            .foregroundColor(.statBlue)
-                        Text(store.t("customize.info"))
-                            .font(.system(size: 14))
-                            .secondaryText()
-                            .lineSpacing(2)
-                    }
-                }
-
-                GlassCard {
-                    HStack(alignment: .top, spacing: 12) {
                         Image(systemName: "lightbulb.fill")
                             .font(.system(size: 20))
                             .foregroundColor(Color(hex: "fbbf24"))
@@ -62,6 +63,7 @@ struct CustomizeHomeView: View {
                             .font(.system(size: 14))
                             .secondaryText()
                             .lineSpacing(2)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             }

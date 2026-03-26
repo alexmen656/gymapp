@@ -78,7 +78,7 @@ struct SettingsView: View {
                 GlassCard {
                     VStack(spacing: 0) {
                         SettingsLinkRow(icon: "chevron.left.forwardslash.chevron.right",
-                                        iconColor: scheme == .dark ? .white : Color(hex: "1a1a1a"),
+                                        iconColor: scheme == .dark ? Color(hex: "2c2c2e") : Color(hex: "1a1a1a"),
                                         label: store.t("settings.github"),
                                         url: "https://github.com/alexmen656/gymapp")
                         Divider().padding(.leading, 44)

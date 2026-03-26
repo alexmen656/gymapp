@@ -33,14 +33,10 @@ struct ExercisesView: View {
                             ForEach(groups) { group in
                                 NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
                                     ExerciseCard(group: group)
+                                        .frame(maxWidth: .infinity)
+                                        .contentShape(Rectangle())
                                 }
                                 .buttonStyle(.plain)
-                                .simultaneousGesture(
-                                    LongPressGesture().onEnded { _ in
-                                        deleteTarget = group.exercise
-                                        showDeleteAlert = true
-                                    }
-                                )
                             }
                         }
                     }
@@ -82,12 +78,14 @@ struct ExerciseCard: View {
                 Text(group.exercise)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 if group.entries.isEmpty {
                     Text(store.t("exercises.noEntries"))
                         .font(.system(size: 13))
                         .italic()
                         .secondaryText()
+                        .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
                     HStack(spacing: 0) {
                         ExerciseStat(value: String(format: "%.1f", group.lastWeight), label: store.t("common.kg"))
