@@ -49,8 +49,7 @@ struct GlassCard<Content: View>: View {
     var body: some View {
         content()
             .padding(16)
-            // Glass.clear = leichtere Variante, weniger Shadow als .regular
-            .glassEffect(.clear, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .glassEffect(in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay(alignment: .leading) {
                 if leftAccent {
                     Rectangle()

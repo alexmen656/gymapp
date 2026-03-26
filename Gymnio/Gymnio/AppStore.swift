@@ -10,8 +10,8 @@ final class AppStore: ObservableObject {
 
     @Published var exercises: [String] = []
     @Published var entries: [WorkoutEntry] = []
-    @Published var language: String = "en"          // resolved: "de" or "en"
-    @Published var languageOverride: String = "auto" // stored: "auto", "de", "en"
+    @Published var language: String = "en"
+    @Published var languageOverride: String = "auto"
     @Published var homeSettings: HomeViewSettings = HomeViewSettings()
     @Published var themeMode: String = "system"
     @Published var showAddExercise: Bool = false
@@ -35,7 +35,6 @@ final class AppStore: ObservableObject {
             language = stored
             languageOverride = stored
         } else {
-            // First launch — detect device language, persist it
             let detected = deviceLanguage
             language = detected
             languageOverride = detected
@@ -54,7 +53,6 @@ final class AppStore: ObservableObject {
 
     // MARK: - Language
 
-    /// Returns a String from Localizable.xcstrings using the user-selected language bundle.
     func t(_ key: String) -> String {
         NSLocalizedString(key, bundle: localizedBundle, comment: "")
     }
