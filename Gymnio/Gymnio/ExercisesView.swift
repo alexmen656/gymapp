@@ -12,23 +12,25 @@ struct ExercisesView: View {
             LinearGradient(colors: gymGradientColors(scheme), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
 
-            if groups.isEmpty {
-                VStack(spacing: 12) {
-                    Image(systemName: "plus.circle")
-                        .font(.system(size: 64))
-                        .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
-                    Text(store.t("exercises.empty"))
-                        .font(.system(size: 16))
-                        .secondaryText()
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.horizontal, 32)
-            } else {
-                ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 12) {
-                        ScreenTitle(text: store.t("nav.exercises"))
-                            .padding(.bottom, 4)
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading, spacing: 12) {
+                    ScreenTitle(text: store.t("nav.exercises"))
+                        .padding(.bottom, 4)
 
+                    if groups.isEmpty {
+                        VStack(spacing: 12) {
+                            Image(systemName: "plus.circle")
+                                .font(.system(size: 64))
+                                .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
+                            Text(store.t("exercises.empty"))
+                                .font(.system(size: 16))
+                                .secondaryText()
+                                .multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, 60)
+                        .padding(.horizontal, 32)
+                    } else {
                         VStack(spacing: 12) {
                             ForEach(groups) { group in
                                 NavigationLink(destination: ExerciseDetailView(exerciseName: group.exercise)) {
@@ -40,10 +42,10 @@ struct ExercisesView: View {
                             }
                         }
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 40)
-                    .padding(.bottom, 120)
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 40)
+                .padding(.bottom, 120)
             }
         }
         .navigationBarHidden(true)
@@ -88,7 +90,7 @@ struct ExerciseCard: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 } else {
                     HStack(spacing: 0) {
-                        ExerciseStat(value: String(format: "%.1f", group.lastWeight), label: store.t("common.kg"))
+                        ExerciseStat(value: String(format: "%.1f", store.displayWeight(group.lastWeight)), label: store.unitLabel)
                         ExerciseStat(value: "\(group.lastReps)", label: store.t("common.reps"))
                         ExerciseStat(value: "\(group.entries.count)", label: store.t("exercises.entries"))
                     }

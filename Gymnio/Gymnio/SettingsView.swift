@@ -47,6 +47,22 @@ struct SettingsView: View {
 
                         Divider().padding(.leading, 44)
 
+                        Divider().padding(.leading, 44)
+
+                        SettingsRow(icon: "scalemass.fill", iconColor: Color(hex: "34c759"), label: store.t("settings.unit")) {
+                            Picker("", selection: Binding(
+                                get: { store.weightUnit },
+                                set: { store.setWeightUnit($0) }
+                            )) {
+                                Text("kg").tag("kg")
+                                Text("lbs").tag("lbs")
+                            }
+                            .pickerStyle(.menu)
+                            .foregroundColor(.statBlue)
+                        }
+
+                        Divider().padding(.leading, 44)
+
                         SettingsRow(icon: "bell.fill", iconColor: Color(hex: "FF9500"), label: store.t("settings.notifications")) {
                             Toggle("", isOn: $notificationsEnabled)
                                 .labelsHidden()

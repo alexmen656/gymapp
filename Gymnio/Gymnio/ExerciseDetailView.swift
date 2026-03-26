@@ -14,6 +14,8 @@ struct ExerciseDetailView: View {
     @State private var chartIndex = 0
     @State private var deleteTarget: String?
     @State private var showDeleteAlert = false
+    @State private var showDeleteExerciseAlert = false
+    @Environment(\.dismiss) private var dismiss
     @FocusState private var focusedField: Field?
 
     enum Field { case weight, reps }
@@ -38,7 +40,6 @@ struct ExerciseDetailView: View {
                         .padding(.top, -16)
                         .padding(.bottom, 8)
 
-                    // Add Entry Form
                     GlassCard {
                         VStack(alignment: .leading, spacing: 14) {
                             Text(store.t("detail.new_entry"))
@@ -46,7 +47,7 @@ struct ExerciseDetailView: View {
                                 .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
 
                             HStack(spacing: 12) {
-                                DetailInput(label: store.t("detail.weight"),
+                                DetailInput(label: "\(store.t("detail.weight")) (\(store.unitLabel))",
                                             text: $weightText, kb: .decimalPad,
                                             focused: $focusedField, field: .weight)
                                 DetailInput(label: store.t("detail.reps"),
@@ -78,18 +79,16 @@ struct ExerciseDetailView: View {
                         }
                     }
 
-                    // Summary Card
                     if !entries.isEmpty {
                         GlassCard {
                             HStack(spacing: 0) {
                                 SummaryItem(value: "\(entries.count)", label: store.t("detail.stats.total"))
-                                SummaryItem(value: "\(maxWeight) kg", label: store.t("detail.stats.maxWeight"))
+                                SummaryItem(value: String(format: "%.1f \(store.unitLabel)", store.displayWeight(maxWeight)), label: store.t("detail.stats.maxWeight"))
                                 SummaryItem(value: "\(maxReps)", label: store.t("detail.stats.maxReps"))
                             }
                         }
                     }
 
-                    // Charts (only when >= 5 entries)
                     if entries.count >= 5 {
                         let charts: [(String, String, [ChartDataPoint])] = [
                             (store.t("detail.chart.weight"), store.t("common.kg"),
@@ -118,7 +117,6 @@ struct ExerciseDetailView: View {
                             .frame(maxWidth: .infinity)
                     }
 
-                    // History
                     if !entries.isEmpty {
                         Text(store.t("detail.history.title"))
                             .font(.system(size: 18, weight: .bold))
@@ -144,6 +142,20 @@ struct ExerciseDetailView: View {
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu {
+                    Button(role: .destructive) {
+                        showDeleteExerciseAlert = true
+                    } label: {
+                        Label(store.t("exercises.delete.title"), systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .font(.system(size: 17))
+                }
+            }
+        }
         .onTapGesture { focusedField = nil }
         .onAppear(perform: reload)
         .alert(store.t("detail.delete.title"), isPresented: $showDeleteAlert) {
@@ -152,13 +164,22 @@ struct ExerciseDetailView: View {
             }
             Button(store.t("common.cancel"), role: .cancel) {}
         } message: { Text(store.t("detail.delete.message")) }
+        .alert(store.t("exercises.delete.title"), isPresented: $showDeleteExerciseAlert) {
+            Button(store.t("common.delete"), role: .destructive) {
+                store.deleteExercise(exerciseName)
+                dismiss()
+            }
+            Button(store.t("common.cancel"), role: .cancel) {}
+        } message: {
+            Text(String(format: store.t("exercises.delete.message"), exerciseName))
+        }
     }
 
     private func reload() { entries = store.entriesForExercise(exerciseName) }
 
     private func addEntry() {
         guard let w = weightValue, let r = repsValue, w > 0, r > 0 else { return }
-        store.addEntry(exercise: exerciseName, weight: w, reps: r, date: selectedDate)
+        store.addEntry(exercise: exerciseName, weight: store.toKg(w), reps: r, date: selectedDate)
         weightText = ""; repsText = ""; selectedDate = Date()
         focusedField = nil; showDatePicker = false
         reload()
@@ -276,7 +297,7 @@ struct EntryCard: View {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 4) {
-                        Text(String(format: "%.1f kg", entry.weight))
+                        Text(String(format: "%.1f \(store.unitLabel)", store.displayWeight(entry.weight)))
                             .font(.system(size: 17, weight: .bold))
                             .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                         Text("× \(entry.reps) \(store.t("common.reps"))")

@@ -77,7 +77,7 @@ struct HistoryEntryCard: View {
                     Text(entry.exercise)
                         .font(.system(size: 16, weight: .bold))
                         .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
-                    Text("\(entry.weight, specifier: "%.1f") \(store.t("common.kg")) × \(entry.reps) \(store.t("common.reps"))")
+                    Text("\(store.displayWeight(entry.weight), specifier: "%.1f") \(store.unitLabel) × \(entry.reps) \(store.t("common.reps"))")
                         .font(.system(size: 15))
                         .secondaryText()
                     Text(fmt(entry.date))

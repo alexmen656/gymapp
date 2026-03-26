@@ -14,11 +14,13 @@ final class AppStore: ObservableObject {
     @Published var languageOverride: String = "auto"
     @Published var homeSettings: HomeViewSettings = HomeViewSettings()
     @Published var themeMode: String = "system"
+    @Published var weightUnit: String = "kg"
     @Published var showAddExercise: Bool = false
 
-    private let languageKey  = "@language_override"
+    private let languageKey     = "@language_override"
     private let homeSettingsKey = "homeViewSettings"
-    private let themeKey     = "@theme_mode"
+    private let themeKey        = "@theme_mode"
+    private let weightUnitKey   = "@weight_unit"
 
     init() {
         configureForUITestsIfNeeded()
@@ -31,6 +33,11 @@ final class AppStore: ObservableObject {
         exercises = storage.getExercises()
         entries   = storage.getAllEntries()
         themeMode = defaults.string(forKey: themeKey) ?? "system"
+        if let stored = defaults.string(forKey: weightUnitKey) {
+            weightUnit = stored
+        } else {
+            weightUnit = Locale.current.measurementSystem == .us ? "lbs" : "kg"
+        }
         if let stored = defaults.string(forKey: languageKey) {
             language = stored
             languageOverride = stored
@@ -106,6 +113,25 @@ final class AppStore: ObservableObject {
         themeMode = mode
         defaults.set(mode, forKey: themeKey)
     }
+
+    func setWeightUnit(_ unit: String) {
+        weightUnit = unit
+        defaults.set(unit, forKey: weightUnitKey)
+    }
+
+    // MARK: - Weight conversion
+
+    /// Converts a stored kg value to the user's display unit
+    func displayWeight(_ kg: Double) -> Double {
+        weightUnit == "lbs" ? kg * 2.20462 : kg
+    }
+
+    /// Converts a user-entered value in their unit back to kg for storage
+    func toKg(_ value: Double) -> Double {
+        weightUnit == "lbs" ? value / 2.20462 : value
+    }
+
+    var unitLabel: String { weightUnit }
 
     func saveHomeSettings(_ s: HomeViewSettings) {
         homeSettings = s

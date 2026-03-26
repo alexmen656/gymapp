@@ -43,11 +43,13 @@ struct HomeView: View {
 
                         if store.entries.isEmpty {
                             VStack(spacing: 12) {
-                                Image(systemName: store.exercises.isEmpty ? "plus.circle" : "chart.line.uptrend.xyaxis")
+                                Image(systemName: store.exercises.isEmpty ? "plus.circle" : "dumbbell")
                                     .font(.system(size: 64))
                                     .foregroundColor(scheme == .dark ? Color(hex: "555555") : Color(hex: "cccccc"))
                                     .padding(.top, 60)
-                                Text(store.exercises.isEmpty ? store.t("exercises.empty") : store.t("home.empty"))
+                                Text(store.exercises.isEmpty
+                                     ? store.t("exercises.empty")
+                                     : store.t("home.noLogs"))
                                     .font(.system(size: 18, weight: .semibold))
                                     .secondaryText()
                                     .multilineTextAlignment(.center)
@@ -115,7 +117,7 @@ struct HomeView: View {
                                                     .font(.system(size: 15, weight: .semibold))
                                                     .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                                                     .frame(maxWidth: .infinity, alignment: .leading)
-                                                Text(String(format: "%.0f kg", group.totalVolume))
+                                                Text(String(format: "%.0f \(store.unitLabel)", store.displayWeight(group.totalVolume)))
                                                     .font(.system(size: 13, weight: .medium))
                                                     .secondaryText()
                                             }
@@ -202,8 +204,8 @@ struct ProgressionAlertCard: View {
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                 }
-                Text(String(format: store.t("home.progression.body"),
-                            alert.exercise, alert.currentWeight, alert.suggestedWeight))
+                Text(String(format: store.t(store.weightUnit == "lbs" ? "home.progression.body.lbs" : "home.progression.body"),
+                            alert.exercise, store.displayWeight(alert.currentWeight), store.displayWeight(alert.suggestedWeight)))
                     .font(.system(size: 14))
                     .secondaryText()
                     .lineSpacing(3)
