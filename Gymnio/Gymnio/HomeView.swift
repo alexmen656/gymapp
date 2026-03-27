@@ -76,7 +76,7 @@ struct HomeView: View {
                                 }
                             }
 
-                            if store.homeSettings.showCharts && !topGroups.isEmpty && store.entries.count >= 5 {
+                            if store.homeSettings.showCharts && !topGroups.isEmpty && store.entries.count >= 3 {
                                 let chartGroups = Array(topGroups.prefix(3))
                                 GeometryReader { geo in
                                     ScrollView(.horizontal, showsIndicators: false) {

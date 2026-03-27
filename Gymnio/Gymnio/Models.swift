@@ -19,7 +19,7 @@ struct WorkoutEntry: Codable, Identifiable, Equatable {
 struct ExerciseGroup: Identifiable {
     var id: String { exercise }
     var exercise: String
-    var entries: [WorkoutEntry]   // sorted oldest → newest
+    var entries: [WorkoutEntry]
 
     var lastWeight: Double { entries.last?.weight ?? 0 }
     var lastReps: Int { entries.last?.reps ?? 0 }
@@ -29,7 +29,7 @@ struct ExerciseGroup: Identifiable {
 
 // MARK: - HomeViewSettings
 
-struct HomeViewSettings: Codable {
+struct HomeViewSettings: Codable, Equatable {
     var showProgressionAlert: Bool = true
     var showStats: Bool = true
     var showCharts: Bool = true

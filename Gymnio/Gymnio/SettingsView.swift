@@ -99,7 +99,7 @@ struct SettingsView: View {
                                         url: "https://github.com/alexmen656/gymapp")
                         Divider().padding(.leading, 44)
                         SettingsRow(icon: "info.circle.fill", iconColor: .statBlue, label: "Gymnio") {
-                            Text(appVersion)
+                            Text("v\(appVersion)")
                                 .font(.system(size: 15))
                                 .secondaryText()
                         }

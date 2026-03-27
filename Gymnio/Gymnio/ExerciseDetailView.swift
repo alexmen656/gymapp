@@ -89,14 +89,14 @@ struct ExerciseDetailView: View {
                         }
                     }
 
-                    if entries.count >= 5 {
+                    if entries.count >= 3 {
                         let charts: [(String, String, [ChartDataPoint])] = [
-                            (store.t("detail.chart.weight"), store.t("common.kg"),
+                            (store.t("detail.chart.weight"), store.unitLabel,
                              Analytics.weightChartData(entries: entries)),
                             (store.t("detail.chart.reps"), store.t("detail.stats.count"),
                              Analytics.repsChartData(entries: entries)),
                             (store.t("detail.chart.volume"),
-                             "\(store.t("common.kg")) × \(store.t("common.reps"))",
+                             "\(store.unitLabel) × \(store.t("common.reps"))",
                              Analytics.volumeChartData(entries: entries))
                         ]
 
@@ -115,6 +115,8 @@ struct ExerciseDetailView: View {
 
                         PaginationDots(total: 3, current: chartIndex)
                             .frame(maxWidth: .infinity)
+                    } else if !entries.isEmpty {
+                        LockedChartCard(current: entries.count, required: 3)
                     }
 
                     if !entries.isEmpty {
@@ -335,5 +337,46 @@ struct EntryCard: View {
         f.locale = Locale(identifier: store.language == "de" ? "de_DE" : "en_US")
         f.dateStyle = .medium
         return f.string(from: date)
+    }
+}
+
+// MARK: - Locked Chart Card
+
+struct LockedChartCard: View {
+    let current: Int
+    let required: Int
+    @EnvironmentObject var store: AppStore
+    @Environment(\.colorScheme) var scheme
+
+    var body: some View {
+        GlassCard {
+            VStack(spacing: 14) {
+                ZStack {
+                    VStack(spacing: 8) {
+                        ForEach(0..<3, id: \.self) { _ in
+                            RoundedRectangle(cornerRadius: 3)
+                                .fill(Color.tint(scheme).opacity(0.15))
+                                .frame(height: 6)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                    .blur(radius: 3)
+
+                    VStack(spacing: 8) {
+                        Image(systemName: "lock.fill")
+                            .font(.system(size: 22, weight: .semibold))
+                            .foregroundColor(scheme == .dark ? Color(hex: "98989f") : Color(hex: "888888"))
+                        Text(store.language == "de"
+                             ? "Charts ab \(required) Einträgen (\(current)/\(required))"
+                             : "Charts unlock at \(required) entries (\(current)/\(required))")
+                            .font(.system(size: 14, weight: .medium))
+                            .secondaryText()
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+            }
+        }
     }
 }

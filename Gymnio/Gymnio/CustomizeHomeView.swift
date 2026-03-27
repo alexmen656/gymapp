@@ -74,17 +74,10 @@ struct CustomizeHomeView: View {
         }
         .navigationTitle(String(localized: "customize.title"))
         .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(String(localized: "common.save")) {
-                    store.saveHomeSettings(settings)
-                    dismiss()
-                }
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.statBlue)
-            }
-        }
         .onAppear { settings = store.homeSettings }
+        .onChange(of: settings) { _, newValue in
+            store.saveHomeSettings(newValue)
+        }
     }
 }
 
