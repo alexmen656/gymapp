@@ -50,6 +50,7 @@ struct ExercisesView: View {
         }
         .navigationBarHidden(true)
         .onAppear(perform: reload)
+        .onChange(of: store.exercises) { _, _ in reload() }
         .alert(store.t("exercises.delete.title"), isPresented: $showDeleteAlert) {
             Button(store.t("common.delete"), role: .destructive) {
                 if let n = deleteTarget { store.deleteExercise(n) }

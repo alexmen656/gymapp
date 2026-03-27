@@ -27,7 +27,7 @@ struct ContentView: View {
             .onChange(of: selectedTab) { _, new in
                 if new == 3 {
                     store.showAddExercise = true
-                    DispatchQueue.main.async { selectedTab = 0 }
+                    DispatchQueue.main.async { selectedTab = 1 }
                 }
             }
 
