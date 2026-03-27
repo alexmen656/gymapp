@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1733000001,
+    "title": "Apple Wallet Integration",
+    "description": "Add loyalty cards directly to Apple Wallet so they appear automatically when near a store.",
+    "email": null,
+    "category": "cards",
+    "votes": 48,
+    "status": "planned",
+    "createdAt": "2024-11-15T10:30:00.000Z"
+  },
+  {
+    "id": 1733000002,
+    "title": "Android App",
+    "description": "Please make an Android version of Pocketz! My family uses both iOS and Android.",
+    "email": null,
+    "category": "general",
+    "votes": 90,
+    "status": "in-progress",
+    "createdAt": "2024-10-20T14:15:00.000Z"
+  },
+  {
+    "id": 1733000003,
+    "title": "Scan receipts for automatic points",
+    "description": "Allow scanning store receipts to automatically track earned points and rewards.",
+    "email": null,
+    "category": "cards",
+    "votes": 33,
+    "status": "pending",
+    "createdAt": "2024-11-28T09:00:00.000Z"
+  },
+  {
+    "id": 1733000004,
+    "title": "Mac App with Menu Bar widget",
+    "description": "A Mac app that shows my cards in the menu bar for quick access when shopping online.",
+    "email": null,
+    "category": "widgets",
+    "votes": 22,
+    "status": "pending",
+    "createdAt": "2024-11-30T16:45:00.000Z"
+  },
+  {
+    "id": 1733000005,
+    "title": "Dark mode for card display",
+    "description": "When showing a barcode, have an option for dark background to save battery on OLED screens.",
+    "email": null,
+    "category": "ui",
+    "votes": 16,
+    "status": "completed",
+    "createdAt": "2024-09-10T11:20:00.000Z"
+  },
+  {
+    "id": 1733000006,
+    "title": "Share cards with non-Pocketz users",
+    "description": "Generate a simple image or PDF of the barcode to share with people who don't have the app.",
+    "email": null,
+    "category": "sharing",
+    "votes": 29,
+    "status": "planned",
+    "createdAt": "2024-11-05T08:30:00.000Z"
+  }
+]

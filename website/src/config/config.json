@@ -1,0 +1,763 @@
+{
+  "appName": "Gymnio",
+  "appIcon": "256.png",
+  "ctaButtonText": "Download",
+  "iosLink": "https://apps.apple.com/app/gymnio",
+  "androidLink": null,
+  "headline": "Track your lifts,<br /> see your progress.",
+  "description": "Gymnio logs every set, weight and rep — so you always know how far you've come.<br />Clean, fast, private. No account required.",
+  "links": [
+    { "name": "Support", "href": "/support" },
+    { "name": "Updates", "href": "/updates" }
+  ],
+  "copyrightCompany": "Alex Polan",
+  "appStoreLink": "https://apps.apple.com/app/gymnio",
+  "googlePlayLink": null,
+  "socialLinks": [{ "platform": "x", "link": "https://x.com" }],
+  "feature_detail": {
+    "title": "Know when it's time<br />to push harder.",
+    "description": "Gymnio tracks your last 5 sessions per exercise and alerts you when you're ready to increase the weight. No guesswork — just clear, data-driven suggestions."
+  },
+  "feature_highlight": {
+    "image1": "/assets/iphone.png",
+    "image2": "/assets/iphone.png",
+    "title": "Your entire gym history,<br />always in your pocket.",
+    "description": "Every workout entry is saved locally on your device. Browse your full history, spot personal bests, and track volume over time — all offline, all private."
+  },
+  "showcase_title": "Everything you need to train smarter.",
+  "feature_list": [
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Exercise Tracking",
+      "description": "Log weight, reps and date.<br />Every session, every set."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Progress Charts",
+      "description": "Weight, reps and volume.<br />Visualized over time."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Progression Alerts",
+      "description": "Know when to add weight.<br />Based on your real data."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "kg & lbs",
+      "description": "Switch units anytime.<br />Stored data stays correct."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Privacy First",
+      "description": "No account, no cloud.<br />Your data stays on device."
+    }
+  ],
+  "supportCards": [
+    {
+      "title": "Getting Started",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><path d=\"M12 8h24a4 4 0 014 4v24a4 4 0 01-4 4H12a4 4 0 01-4-4V12a4 4 0 014-4z\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M16 20l6 6 10-10\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
+    },
+    {
+      "title": "Logging Workouts",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><rect x=\"16\" y=\"8\" width=\"16\" height=\"32\" rx=\"2\" stroke=\"currentColor\" stroke-width=\"2\" /><circle cx=\"24\" cy=\"36\" r=\"1.5\" fill=\"currentColor\" /></svg>"
+    },
+    {
+      "title": "Charts & Stats",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><path d=\"M8 36l10-12 8 6 10-16\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
+    },
+    {
+      "title": "Settings",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><circle cx=\"24\" cy=\"24\" r=\"6\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M24 8v4M24 36v4M8 24h4M36 24h4\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>"
+    }
+  ],
+  "supportTitle": "How can we help?",
+  "supportSearchPlaceholder": "Search for a topic or question",
+  "supportSectionTitle": "Getting started",
+  "supportCategories2": [
+    {
+      "id": "getting-started",
+      "title": "Getting Started",
+      "description": "Learn how to add exercises and log your first workout.",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><path d=\"M12 8h24a4 4 0 014 4v24a4 4 0 01-4 4H12a4 4 0 01-4-4V12a4 4 0 014-4z\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M16 20l6 6 10-10\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
+    },
+    {
+      "id": "logging",
+      "title": "Logging Workouts",
+      "description": "How to add, edit, and delete workout entries.",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><rect x=\"8\" y=\"14\" width=\"32\" height=\"20\" rx=\"2\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M14 24h20M14 30h12\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>"
+    },
+    {
+      "id": "charts",
+      "title": "Charts & Progress",
+      "description": "Understanding your progress charts and stats.",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><path d=\"M8 36l10-12 8 6 10-16\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
+    },
+    {
+      "id": "settings",
+      "title": "Settings",
+      "description": "Language, theme, weight units and more.",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><circle cx=\"24\" cy=\"24\" r=\"6\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M24 8v4M24 36v4M8 24h4M36 24h4\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>"
+    },
+    {
+      "id": "privacy",
+      "title": "Privacy & Data",
+      "description": "How your workout data is stored and protected.",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><path d=\"M24 4L8 12v12c0 11 7 18 16 20 9-2 16-9 16-20V12L24 4z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M18 24l4 4 8-8\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting",
+      "description": "Solutions for common issues.",
+      "icon": "<svg width=\"48\" height=\"48\" viewBox=\"0 0 48 48\" fill=\"none\"><circle cx=\"24\" cy=\"24\" r=\"18\" stroke=\"currentColor\" stroke-width=\"2\"/><path d=\"M24 32v.01M24 16v10\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>"
+    }
+  ],
+  "supportCategories": [
+    {
+      "id": "getting-started",
+      "title": "Getting Started with Gymnio",
+      "articles": [
+        {
+          "id": "add-first-exercise",
+          "title": "Add your first exercise",
+          "description": "Learn how to create an exercise and start tracking.",
+          "intro": "Getting started with Gymnio is simple. First, you create an exercise — then you can log sets, weights and reps for it.",
+          "sections": [
+            {
+              "heading": "Create an exercise",
+              "content": "Tap the <strong>+</strong> button in the tab bar at the bottom. A sheet appears where you can type the exercise name (e.g. \"Bench Press\"). Tap <strong>Add</strong> to save it."
+            },
+            {
+              "heading": "Open the exercise",
+              "content": "After creating it, the exercise appears in the <strong>Exercises</strong> tab. Tap on it to open the detail view where you can log entries."
+            },
+            {
+              "heading": "Log your first set",
+              "content": "Enter the weight and number of reps, optionally change the date, then tap <strong>Add Entry</strong>. Your set is saved instantly."
+            }
+          ]
+        },
+        {
+          "id": "navigate-app",
+          "title": "Navigating the app",
+          "description": "Overview of the four main tabs in Gymnio.",
+          "intro": "Gymnio has four sections accessible from the tab bar at the bottom of the screen.",
+          "sections": [
+            {
+              "heading": "Home",
+              "content": "Your personal dashboard showing stats, progress charts, top exercises by volume, and a progression alert when you're ready to increase weight. You can customize which cards appear via the <strong>Customize</strong> button."
+            },
+            {
+              "heading": "Exercises",
+              "content": "A list of all your exercises. Tap an exercise to see its full history, charts and stats. Tap and hold to delete an exercise, or use the <strong>⋯</strong> menu in the detail view."
+            },
+            {
+              "heading": "History",
+              "content": "A chronological log of every entry you've ever logged, newest first. Tap the trash icon to delete an individual entry."
+            },
+            {
+              "heading": "Plus (+)",
+              "content": "The + tab at the bottom right opens the \"Add Exercise\" sheet so you can quickly create a new exercise from anywhere in the app."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "logging",
+      "title": "Logging Workouts",
+      "articles": [
+        {
+          "id": "log-entry",
+          "title": "Log a workout entry",
+          "description": "How to add weight, reps and date for an exercise.",
+          "intro": "Every entry in Gymnio represents one set or session for a specific exercise.",
+          "sections": [
+            {
+              "heading": "Open an exercise",
+              "content": "Go to the <strong>Exercises</strong> tab and tap the exercise you want to log for."
+            },
+            {
+              "heading": "Enter weight and reps",
+              "content": "Fill in the weight field and the reps field at the top of the detail view. The weight is entered in your selected unit (kg or lbs)."
+            },
+            {
+              "heading": "Change the date",
+              "content": "By default the current date is selected. Tap the calendar icon to pick a different date — useful when logging a session from yesterday."
+            },
+            {
+              "heading": "Save the entry",
+              "content": "Tap <strong>Add Entry</strong>. The entry appears immediately in the history list below and is counted in your stats."
+            }
+          ]
+        },
+        {
+          "id": "delete-entry",
+          "title": "Delete a workout entry",
+          "description": "How to remove an entry from your history.",
+          "intro": "You can delete individual entries from both the exercise detail view and the history tab.",
+          "sections": [
+            {
+              "heading": "From exercise detail",
+              "content": "Scroll down to the history list in the exercise detail view. Tap the <strong>trash icon</strong> on the right side of any entry."
+            },
+            {
+              "heading": "From History tab",
+              "content": "Open the <strong>History</strong> tab. Tap the trash icon next to the entry you want to remove."
+            },
+            {
+              "heading": "Confirm deletion",
+              "content": "A confirmation alert will appear. Tap <strong>Delete</strong> to confirm. This action cannot be undone."
+            }
+          ]
+        },
+        {
+          "id": "delete-exercise",
+          "title": "Delete an exercise",
+          "description": "How to remove an exercise and all its entries.",
+          "intro": "Deleting an exercise also removes all logged entries for that exercise.",
+          "sections": [
+            {
+              "heading": "Open the exercise",
+              "content": "Tap on the exercise in the <strong>Exercises</strong> tab to open its detail view."
+            },
+            {
+              "heading": "Use the menu",
+              "content": "Tap the <strong>⋯</strong> button in the top-right corner of the detail view, then select <strong>Delete Exercise</strong>."
+            },
+            {
+              "heading": "Confirm",
+              "content": "Tap <strong>Delete</strong> in the confirmation alert. The exercise and all its entries are permanently removed."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "charts",
+      "title": "Charts & Progress",
+      "articles": [
+        {
+          "id": "unlock-charts",
+          "title": "When do charts appear?",
+          "description": "Charts unlock after a minimum number of entries.",
+          "intro": "Gymnio needs at least 3 entries for an exercise before it can draw meaningful charts.",
+          "sections": [
+            {
+              "heading": "Locked chart state",
+              "content": "If you have fewer than 3 entries, you'll see a locked chart placeholder showing your current progress, e.g. \"Charts unlock at 3 entries (1/3)\"."
+            },
+            {
+              "heading": "Three chart types",
+              "content": "Once unlocked, you can swipe between three charts: <strong>Weight over time</strong>, <strong>Reps over time</strong>, and <strong>Volume (weight × reps) over time</strong>."
+            },
+            {
+              "heading": "Home dashboard charts",
+              "content": "The home screen also shows a chart for your top exercises once you have at least 3 total entries logged."
+            }
+          ]
+        },
+        {
+          "id": "progression-alert",
+          "title": "Progression alerts",
+          "description": "How Gymnio tells you when to increase the weight.",
+          "intro": "Gymnio automatically detects when you're ready to progress to a heavier weight.",
+          "sections": [
+            {
+              "heading": "How it works",
+              "content": "If your last 5 sessions for an exercise all have the same weight, Gymnio suggests increasing by 2.5 kg (or the equivalent in lbs). This appears as a card at the top of your home screen."
+            },
+            {
+              "heading": "Customize visibility",
+              "content": "You can hide or show the progression alert card on your home screen via <strong>Customize Dashboard</strong>."
+            }
+          ]
+        },
+        {
+          "id": "personal-bests",
+          "title": "Personal bests (PB)",
+          "description": "How Gymnio marks your heaviest lifts.",
+          "intro": "Gymnio automatically highlights your personal best (heaviest weight) for each exercise.",
+          "sections": [
+            {
+              "heading": "Trophy icon",
+              "content": "In the exercise history list, entries that match your maximum weight are marked with a <strong>trophy icon</strong>. There can be multiple PBs if you've matched your best weight in different sessions."
+            },
+            {
+              "heading": "Summary card",
+              "content": "The summary card at the top of each exercise detail view shows your all-time max weight, max reps and total entry count."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "settings",
+      "title": "Settings",
+      "articles": [
+        {
+          "id": "weight-unit",
+          "title": "Switch between kg and lbs",
+          "description": "How to change your preferred weight unit.",
+          "intro": "Gymnio supports both kilograms (kg) and pounds (lbs). All stored data stays in kg internally — only the display converts.",
+          "sections": [
+            {
+              "heading": "Auto-detection",
+              "content": "On first launch, Gymnio reads your iOS measurement system preference from <strong>Settings → General → Language & Region → Measurement System</strong>. If it's set to US, lbs is used by default."
+            },
+            {
+              "heading": "Change manually",
+              "content": "Open the Gymnio <strong>Settings</strong> tab (gear icon on the home screen). Under <strong>Preferences</strong>, tap <strong>Weight Unit</strong> and choose kg or lbs."
+            },
+            {
+              "heading": "Existing data",
+              "content": "Switching units does not alter any stored data. All entries are always stored in kg and converted for display. Your history remains fully accurate."
+            }
+          ]
+        },
+        {
+          "id": "language",
+          "title": "Change the app language",
+          "description": "Switch between German and English.",
+          "intro": "Gymnio is available in German and English.",
+          "sections": [
+            {
+              "heading": "Change language",
+              "content": "Go to <strong>Settings</strong> in Gymnio and tap <strong>Language</strong>. Select <strong>Deutsch</strong> or <strong>English</strong>. The app updates immediately."
+            },
+            {
+              "heading": "Auto-detection",
+              "content": "By default Gymnio uses your device language. If your device is set to German, the app launches in German."
+            }
+          ]
+        },
+        {
+          "id": "theme",
+          "title": "Dark mode and appearance",
+          "description": "How to switch between light, dark, and system theme.",
+          "intro": "Gymnio supports Light Mode, Dark Mode, and follows your system setting.",
+          "sections": [
+            {
+              "heading": "Change theme",
+              "content": "Open <strong>Settings</strong> and tap <strong>Appearance</strong>. Choose between <strong>System</strong> (follows iOS), <strong>Light</strong>, or <strong>Dark</strong>."
+            }
+          ]
+        },
+        {
+          "id": "customize-home",
+          "title": "Customize the home dashboard",
+          "description": "Show or hide sections on your home screen.",
+          "intro": "You can control exactly which cards appear on your home dashboard.",
+          "sections": [
+            {
+              "heading": "Open customization",
+              "content": "On the <strong>Home</strong> tab, scroll down and tap <strong>Customize Dashboard</strong>. Alternatively, tap the slider icon."
+            },
+            {
+              "heading": "Available toggles",
+              "content": "You can individually show or hide: <strong>Progression Alert</strong>, <strong>Stats</strong> (total workouts, volume, exercises), <strong>Charts</strong>, and <strong>Top Exercises</strong>."
+            },
+            {
+              "heading": "Changes apply instantly",
+              "content": "Toggles take effect immediately — no save button needed."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "privacy",
+      "title": "Privacy & Data",
+      "articles": [
+        {
+          "id": "data-storage",
+          "title": "Where is my data stored?",
+          "description": "All workout data stays on your device.",
+          "intro": "Gymnio is built privacy-first. Your workout data never leaves your device.",
+          "sections": [
+            {
+              "heading": "Local only",
+              "content": "All exercises and entries are stored locally using iOS's built-in storage. No account, no server, no cloud sync."
+            },
+            {
+              "heading": "No tracking",
+              "content": "Gymnio does not track your location, movements, or training patterns. No analytics data is sent to any server."
+            },
+            {
+              "heading": "Open source",
+              "content": "Gymnio's source code is publicly available on GitHub. You can verify exactly what the app does with your data."
+            }
+          ]
+        },
+        {
+          "id": "data-loss",
+          "title": "What happens if I delete the app?",
+          "description": "Understand what data is removed when uninstalling.",
+          "intro": "Because all data is stored locally, deleting the app also deletes all your workout data.",
+          "sections": [
+            {
+              "heading": "No cloud backup",
+              "content": "Gymnio does not use iCloud or any cloud backup service. If you delete the app, your exercise history is permanently removed."
+            },
+            {
+              "heading": "Before deleting",
+              "content": "If you plan to reinstall or switch devices, note that your data cannot be transferred automatically at this time. We are considering export features for a future update."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Troubleshooting",
+      "articles": [
+        {
+          "id": "charts-not-showing",
+          "title": "Charts are not showing",
+          "description": "Why charts might not be visible yet.",
+          "intro": "If you don't see charts for an exercise, there is usually a simple reason.",
+          "sections": [
+            {
+              "heading": "Not enough entries",
+              "content": "Charts require at least <strong>3 entries</strong> for the exercise. Until then, a locked placeholder is shown with your current progress (e.g. 2/3)."
+            },
+            {
+              "heading": "Home dashboard charts",
+              "content": "The home screen chart is hidden if you have fewer than 3 total entries across all exercises, or if you've turned off charts in <strong>Customize Dashboard</strong>."
+            }
+          ]
+        },
+        {
+          "id": "no-progression-alert",
+          "title": "Progression alert not appearing",
+          "description": "Why the weight increase suggestion might not show.",
+          "intro": "The progression alert only appears under specific conditions.",
+          "sections": [
+            {
+              "heading": "Condition",
+              "content": "Gymnio triggers a progression suggestion when your <strong>last 5 entries</strong> for an exercise all have exactly the same weight. If your recent sessions have varied weights, no alert appears."
+            },
+            {
+              "heading": "Hidden by settings",
+              "content": "Check that the Progression Alert is enabled in <strong>Customize Dashboard</strong> on the home screen."
+            }
+          ]
+        },
+        {
+          "id": "app-crashes",
+          "title": "App crashes or freezes",
+          "description": "Steps to fix app stability issues.",
+          "intro": "If Gymnio is crashing or not responding, try these steps.",
+          "sections": [
+            {
+              "heading": "Force quit and restart",
+              "content": "Swipe up from the bottom of your screen and swipe away Gymnio. Reopen the app."
+            },
+            {
+              "heading": "Update the app",
+              "content": "Make sure you have the latest version installed. Open the App Store and check for updates."
+            },
+            {
+              "heading": "Contact support",
+              "content": "If the issue persists, please open a GitHub issue at <strong>github.com/alexmen656/gymapp</strong> with details about what happened."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "popularArticles": [
+    {
+      "id": "add-first-exercise",
+      "categoryId": "getting-started",
+      "category": "Getting Started",
+      "title": "Add your first exercise"
+    },
+    {
+      "id": "log-entry",
+      "categoryId": "logging",
+      "category": "Logging Workouts",
+      "title": "Log a workout entry"
+    },
+    {
+      "id": "unlock-charts",
+      "categoryId": "charts",
+      "category": "Charts & Progress",
+      "title": "When do charts appear?"
+    },
+    {
+      "id": "weight-unit",
+      "categoryId": "settings",
+      "category": "Settings",
+      "title": "Switch between kg and lbs"
+    },
+    {
+      "id": "data-storage",
+      "categoryId": "privacy",
+      "category": "Privacy",
+      "title": "Where is my data stored?"
+    }
+  ],
+  "privacyPolicyEffectiveDate": "1. March 2025",
+  "termsOfUseEffectiveDate": "1. March 2025",
+  "updatesView": {
+    "hero": {
+      "title": "What's New?",
+      "description": "All updates, new features and improvements at a glance."
+    },
+    "releases": [
+      {
+        "isLatest": true,
+        "badge": "New",
+        "version": "Version 1.3",
+        "date": "March 2025",
+        "title": "Units, Charts & Polish",
+        "description": "This update brings kg/lbs support, improved charts that unlock earlier, a fully redesigned empty state experience, and lots of small details that make Gymnio feel even more at home on iOS 26.",
+        "features": [
+          {
+            "icon": "⚖️",
+            "title": "kg & lbs support",
+            "description": "Auto-detects your iOS measurement setting. Switch anytime in Settings."
+          },
+          {
+            "icon": "📊",
+            "title": "Charts from 3 entries",
+            "description": "Charts now unlock after just 3 entries instead of 5, with a progress indicator while locked."
+          },
+          {
+            "icon": "✨",
+            "title": "Instant dashboard customization",
+            "description": "Toggle home screen sections and changes apply immediately — no save button."
+          }
+        ],
+        "imageUrl": "/assets/iphone.png"
+      },
+      {
+        "isLatest": false,
+        "version": "Version 1.2",
+        "date": "February 2025",
+        "title": "Dashboard & Progression Alerts",
+        "description": "The home screen is now fully customizable. Gymnio also now detects when you've been lifting the same weight for 5 sessions in a row and suggests increasing the load.",
+        "changelog": [
+          "Customizable home dashboard (show/hide stats, charts, top exercises)",
+          "Progression alert card when ready to increase weight",
+          "Top exercises by total volume",
+          "Celebration notifications at workout milestones"
+        ]
+      },
+      {
+        "isLatest": false,
+        "version": "Version 1.1",
+        "date": "January 2025",
+        "title": "Charts & Personal Bests",
+        "description": "Detailed progress charts per exercise and automatic personal best tracking.",
+        "changelog": [
+          "Weight, reps and volume charts per exercise",
+          "Personal best (PB) trophy badge on entries",
+          "Summary card with max weight, max reps, total entries",
+          "German and English language support"
+        ]
+      },
+      {
+        "isLatest": false,
+        "version": "Version 1.0",
+        "date": "December 2024",
+        "title": "First Release",
+        "description": "The very first version of Gymnio. Simple, fast workout logging with a clean iOS 26 Liquid Glass design.",
+        "changelog": [
+          "Add and manage exercises",
+          "Log weight, reps and date per exercise",
+          "Full workout history",
+          "Light, Dark and System theme",
+          "Local storage — no account required"
+        ]
+      }
+    ],
+    "sidebar": {
+      "newsletter": {
+        "title": "Stay Updated",
+        "description": "Get notified about new Gymnio releases.",
+        "placeholder": "your@email.com"
+      },
+      "quickAccess": {
+        "title": "Quick Access",
+        "links": [
+          { "version": "v1.3 – March 2025" },
+          { "version": "v1.2 – February 2025" },
+          { "version": "v1.1 – January 2025" },
+          { "version": "v1.0 – December 2024" }
+        ]
+      },
+      "cta": {
+        "title": "Ready to train smarter?",
+        "description": "Download Gymnio for free on the App Store.",
+        "buttonText": "Download App"
+      }
+    }
+  },
+  "reviews": {
+    "title": "What lifters say.",
+    "reviews": [
+      {
+        "type": "appstore",
+        "title": "Finally a gym tracker that doesn't get in the way",
+        "date": "Feb 2025 • by StrengthFan99",
+        "stars": 5,
+        "text": "I've tried so many workout apps and they're all bloated with features I don't need. Gymnio does exactly one thing perfectly — log my lifts and show me my progress. Love it."
+      },
+      {
+        "type": "tweet",
+        "avatar": "🏋️",
+        "name": "Markus L.",
+        "handle": "@markus_lifts",
+        "texts": [
+          "Started using Gymnio a month ago. Already hit 3 personal bests this week and the progression alert actually motivated me to push for a new max.",
+          "Simple app, big results. 💪"
+        ]
+      },
+      {
+        "type": "testimonial",
+        "avatar": "👩",
+        "name": "Sarah",
+        "handle": "No fluff, just gains",
+        "date": "Jan 15, 2025",
+        "text": "I love that there's no account, no subscription, no nonsense. Open the app, log the set, done. The charts are a nice bonus to see how far I've come."
+      },
+      {
+        "type": "appstore",
+        "title": "Exactly what I was looking for",
+        "date": "Mar 2025 • by PowerlifterMike",
+        "stars": 5,
+        "text": "Clean design, fast to use, and it just works offline. The kg/lbs toggle was the last thing I needed and now it's perfect."
+      },
+      {
+        "type": "tweet",
+        "avatar": "🏃",
+        "name": "Julia K.",
+        "handle": "@juliakfit",
+        "text": "The progression alert feature is underrated. It told me I was ready to go up in weight on squats before I even thought about it. Nailed it."
+      }
+    ]
+  },
+  "footer": {
+    "section1": {
+      "title": "Product",
+      "links": [
+        { "name": "Download", "href": "/download" },
+        { "name": "Updates", "href": "/updates" },
+        { "name": "Support", "href": "/support" }
+      ]
+    },
+    "section3": {
+      "title": "More",
+      "links": [
+        { "name": "Privacy Policy", "href": "/privacy-policy" },
+        { "name": "Terms of Use", "href": "/terms" },
+        { "name": "GitHub", "href": "https://github.com/alexmen656/gymapp" },
+        { "name": "Contact", "href": "/contact" }
+      ]
+    }
+  },
+  "blogView": {
+    "hero": {
+      "title": "Blog",
+      "description": "Training tips, app updates and insights from the Gymnio team."
+    },
+    "featuredPost": {
+      "image": "/assets/iphone.png",
+      "category": "Training",
+      "date": "March 10, 2025",
+      "readTime": "5 min read",
+      "title": "Why tracking your lifts changes everything",
+      "excerpt": "Most gym-goers train by feel. But the ones who make consistent progress are the ones who track their numbers. Here's why logging every set pays off — and how to make it a habit.",
+      "link": "#"
+    },
+    "posts": [
+      {
+        "image": "/assets/iphone.png",
+        "category": "Feature",
+        "date": "March 5, 2025",
+        "readTime": "3 min read",
+        "title": "New in v1.3: kg & lbs support",
+        "excerpt": "Gymnio now auto-detects your preferred unit from iOS settings and lets you switch anytime.",
+        "link": "#"
+      },
+      {
+        "image": "/assets/iphone.png",
+        "category": "Tutorial",
+        "date": "February 20, 2025",
+        "readTime": "4 min read",
+        "title": "How to use the progression alert",
+        "excerpt": "Gymnio tells you when you've been lifting the same weight for 5 sessions — here's what to do when it fires.",
+        "link": "#"
+      },
+      {
+        "image": "/assets/iphone.png",
+        "category": "Training",
+        "date": "February 10, 2025",
+        "readTime": "6 min read",
+        "title": "Progressive overload: the only principle that matters",
+        "excerpt": "If you're not gradually increasing the demands on your muscles, you're not growing. Here's the science behind it.",
+        "link": "#"
+      },
+      {
+        "image": "/assets/iphone.png",
+        "category": "Feature",
+        "date": "January 28, 2025",
+        "readTime": "3 min read",
+        "title": "Understanding your progress charts",
+        "excerpt": "A breakdown of the three chart types in Gymnio and what to look for in each one.",
+        "link": "#"
+      }
+    ],
+    "sidebar": {
+      "categories": {
+        "title": "Categories",
+        "items": [
+          { "name": "All Posts", "count": 8, "link": "#" },
+          { "name": "Training", "count": 3, "link": "#" },
+          { "name": "Features", "count": 3, "link": "#" },
+          { "name": "Tutorials", "count": 2, "link": "#" }
+        ]
+      },
+      "newsletter": {
+        "title": "Newsletter",
+        "description": "New articles directly in your inbox.",
+        "placeholder": "your@email.com",
+        "buttonText": "Subscribe"
+      },
+      "popularPosts": {
+        "title": "Popular Articles",
+        "posts": [
+          {
+            "number": "01",
+            "title": "Why tracking your lifts changes everything",
+            "link": "#"
+          },
+          {
+            "number": "02",
+            "title": "How to use the progression alert",
+            "link": "#"
+          },
+          {
+            "number": "03",
+            "title": "Progressive overload explained",
+            "link": "#"
+          },
+          {
+            "number": "04",
+            "title": "Understanding your progress charts",
+            "link": "#"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Start tracking today",
+        "description": "Download Gymnio for free.",
+        "buttonText": "Download App"
+      }
+    },
+    "loadMore": {
+      "buttonText": "Load More Articles"
+    }
+  }
+}

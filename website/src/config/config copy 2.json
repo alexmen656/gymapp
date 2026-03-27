@@ -1,0 +1,92 @@
+{
+  "appName": "Pocket",
+  "appIcon": "256.png",
+  "ctaButtonText": "Try for free",
+  "headline": "Your clipboard,<br /> supercharged and secure",
+  "description": "Paste keeps everything you copy organized and searchable. Lightweight,<br />intuitive, packed with smart features, and private by design.",
+  "links": [
+    { "name": "Support", "href": "/support" },
+    { "name": "Blog", "href": "/blog" },
+    { "name": "Updates", "href": "/updates" }
+  ],
+  "copyrightCompany": "Alex Polan",
+  "appStoreLink": "https://apple.com",
+  "googlePlayLink": "https://google.com",
+  "socialLinks": [
+    { "platform": "instagram", "link": "https://instagram.com" },
+    { "platform": "facebook", "link": "https://faceebook.com" },
+    { "platform": "tiktok", "link": "https://tiktok.com" },
+    { "platform": "x", "link": "https://x.com" }
+  ],
+  "feature_detail": {
+    "title": "Teile deine Daten mit<br />Freunden und Familie.",
+    "description": "Mit der Teilen-Funktion kannst du deine Informationen sofort mit deinen Liebsten teilen, damit sie immer auf dem Laufenden bleiben. Füge deine Kontakte einmal hinzu und teile automatisch – ganz ohne manuellen Aufwand."
+  },
+  "feature_highlight": {
+    "image1": "/src/config/assets/iphone.png",
+    "image2": "/src/config/assets/iphone.png",
+    "title": "Nie wieder \"Kannst du mir die Infos schicken?\" hören.",
+    "description": "Wähle aus, mit wem du teilen möchtest. Deine Kontakte können dann selbst entscheiden, welche Benachrichtigungen sie erhalten möchten (z.B. bei Updates, Änderungen und mehr)."
+  },
+  "feature_list": [
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Produktivität",
+      "description": "Alles an einem Ort.<br />Immer griffbereit."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Organisation",
+      "description": "Smart sortiert.<br />Automatisch organisiert."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Sicherheit",
+      "description": "Privat und sicher.<br />Von Anfang an."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Synchronisation",
+      "description": "Überall dabei.<br />Auf allen Geräten."
+    },
+    {
+      "icon": "/src/config/assets/iphone.png",
+      "title": "Suche",
+      "description": "Blitzschnell finden.<br />Nie mehr suchen."
+    }
+  ],
+  "articles": [
+    {
+      "category": "News",
+      "date": "10. November 2024",
+      "readTime": "2 Min. Lesezeit",
+      "title": "Wir sind App des Tages!",
+      "excerpt": "Apple hat uns im App Store als \"App des Tages\" ausgezeichnet. Danke an alle!",
+      "readMoreLink": "#"
+    },
+    {
+      "category": "Tipps",
+      "date": "5. November 2024",
+      "readTime": "6 Min. Lesezeit",
+      "title": "Tastenkürzel für Power-User",
+      "excerpt": "Diese versteckten Shortcuts machen dich zum Profi.",
+      "readMoreLink": "#"
+    },
+    {
+      "category": "Interview",
+      "date": "1. November 2024",
+      "readTime": "8 Min. Lesezeit",
+      "title": "Im Gespräch mit unserem Design-Team",
+      "excerpt": "Einblicke in den Designprozess hinter der neuen Benutzeroberfläche.",
+      "readMoreLink": "#"
+    },
+    {
+      "category": "Tutorial",
+      "date": "28. Oktober 2024",
+      "readTime": "5 Min. Lesezeit",
+      "title": "Automatisierung mit Shortcuts",
+      "excerpt": "Verbinde unsere App mit iOS Shortcuts für maximale Effizienz.",
+      "readMoreLink": "#"
+    }
+  ]
+}
