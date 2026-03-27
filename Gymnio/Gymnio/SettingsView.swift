@@ -3,9 +3,6 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
-    @State private var notificationsEnabled = false
-
-    private let notifKey = "daily_reminder_enabled"
 
     var body: some View {
         ZStack {
@@ -63,15 +60,14 @@ struct SettingsView: View {
 
                         Divider().padding(.leading, 44)
 
-                        SettingsRow(icon: "bell.fill", iconColor: Color(hex: "FF9500"), label: store.t("settings.notifications")) {
-                            Toggle("", isOn: $notificationsEnabled)
-                                .labelsHidden()
-                                .onChange(of: notificationsEnabled) { _, enabled in
-                                    UserDefaults.standard.set(enabled, forKey: notifKey)
-                                    if enabled { NotificationManager.shared.requestPermissions() }
-                                    NotificationManager.shared.scheduleDailyReminder(enabled: enabled)
-                                }
+                        NavigationLink(destination: RemindersView()) {
+                            SettingsRow(icon: "bell.fill", iconColor: Color(hex: "FF9500"), label: store.t("settings.notifications")) {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 13, weight: .semibold))
+                                    .foregroundColor(.secondary)
+                            }
                         }
+                        .buttonStyle(.plain)
                     }
                 }
 
@@ -113,9 +109,6 @@ struct SettingsView: View {
         }
         .navigationTitle(store.t("settings.title"))
         .navigationBarTitleDisplayMode(.large)
-        .onAppear {
-            notificationsEnabled = UserDefaults.standard.bool(forKey: notifKey)
-        }
     }
 
     private var appVersion: String {

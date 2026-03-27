@@ -78,21 +78,29 @@ struct HomeView: View {
 
                             if store.homeSettings.showCharts && !topGroups.isEmpty && store.entries.count >= 3 {
                                 let chartGroups = Array(topGroups.prefix(3))
-                                GeometryReader { geo in
-                                    ScrollView(.horizontal, showsIndicators: false) {
-                                        HStack(spacing: 0) {
-                                            ForEach(chartGroups) { group in
-                                                HomeChartCard(group: group)
-                                                    .frame(width: geo.size.width)
+                                VStack(spacing: 6) {
+                                    GeometryReader { geo in
+                                        ScrollView(.horizontal, showsIndicators: false) {
+                                            HStack(spacing: 0) {
+                                                ForEach(Array(chartGroups.enumerated()), id: \.element.id) { i, group in
+                                                    HomeChartCard(group: group)
+                                                        .frame(width: geo.size.width)
+                                                        .id(i)
+                                                }
                                             }
+                                            .scrollTargetLayout()
                                         }
+                                        .scrollTargetBehavior(.paging)
+                                        .scrollPosition(id: Binding<Int?>(
+                                            get: { chartIndex },
+                                            set: { chartIndex = $0 ?? 0 }
+                                        ))
                                     }
-                                    .scrollTargetBehavior(.paging)
-                                }
-                                .frame(height: 230)
+                                    .frame(height: 230)
 
-                                PaginationDots(total: chartGroups.count, current: chartIndex)
-                                    .frame(maxWidth: .infinity)
+                                    PaginationDots(total: chartGroups.count, current: chartIndex)
+                                        .frame(maxWidth: .infinity)
+                                }
                             }
 
                             if store.homeSettings.showTopExercises && !topGroups.isEmpty {

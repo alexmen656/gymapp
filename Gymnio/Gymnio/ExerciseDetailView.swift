@@ -100,21 +100,29 @@ struct ExerciseDetailView: View {
                              Analytics.volumeChartData(entries: entries))
                         ]
 
-                        GeometryReader { geo in
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 0) {
-                                    ForEach(Array(charts.enumerated()), id: \.offset) { i, c in
-                                        DetailChartCard(title: c.0, unit: c.1, data: c.2)
-                                            .frame(width: geo.size.width)
+                        VStack(spacing: 6) {
+                            GeometryReader { geo in
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    HStack(spacing: 0) {
+                                        ForEach(Array(charts.enumerated()), id: \.offset) { i, c in
+                                            DetailChartCard(title: c.0, unit: c.1, data: c.2)
+                                                .frame(width: geo.size.width)
+                                                .id(i)
+                                        }
                                     }
+                                    .scrollTargetLayout()
                                 }
+                                .scrollTargetBehavior(.paging)
+                                .scrollPosition(id: Binding<Int?>(
+                                    get: { chartIndex },
+                                    set: { chartIndex = $0 ?? 0 }
+                                ))
                             }
-                            .scrollTargetBehavior(.paging)
-                        }
-                        .frame(height: 220)
+                            .frame(height: 220)
 
-                        PaginationDots(total: 3, current: chartIndex)
-                            .frame(maxWidth: .infinity)
+                            PaginationDots(total: 3, current: chartIndex)
+                                .frame(maxWidth: .infinity)
+                        }
                     } else if !entries.isEmpty {
                         LockedChartCard(current: entries.count, required: 3)
                     }
