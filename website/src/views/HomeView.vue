@@ -16,52 +16,52 @@
       <div class="feature-cards-left" v-if="!mobile">
         <div class="feature-card card-float-1">
           <div class="card-connector connector-left"></div>
-          <div class="feature-card-icon icon-avatar">
-            <span>👩</span>
-          </div>
-          <div class="feature-card-content">
-            <div class="feature-card-title">Card saved: BILLA</div>
-            <div class="feature-card-subtitle">Barcode saved — ready to scan</div>
-          </div>
-        </div>
-        <div class="feature-card card-float-2">
-          <div class="card-connector connector-left"></div>
-          <div class="feature-card-icon icon-blue">
-            <span>✈️</span>
-          </div>
-          <div class="feature-card-content">
-            <div class="feature-card-title"><strong>Barcode erkannt: Starbucks</strong></div>
-            <div class="feature-card-subtitle">Schnelles Hinzufügen per Scan</div>
-          </div>
-        </div>
-        <div class="feature-card card-float-3">
-          <div class="card-connector connector-left"></div>
-          <div class="feature-card-icon icon-coral">
-            <span>△</span>
-          </div>
-          <div class="feature-card-content">
-            <div class="feature-card-title">Points updated</div>
-            <div class="feature-card-subtitle">Deine Punkte wurden automatisch synchronisiert</div>
-          </div>
-        </div>
-        <div class="feature-card card-float-4">
-          <div class="card-connector connector-left"></div>
           <div class="feature-card-icon icon-green">
             <span>✓</span>
           </div>
           <div class="feature-card-content">
-            <div class="feature-card-title"><strong>Reward redeemed</strong></div>
-            <div class="feature-card-subtitle">Reward redeemed — tracked</div>
+            <div class="feature-card-title"><strong>Set logged</strong></div>
+            <div class="feature-card-subtitle">Bench Press — 80 kg × 8 reps</div>
+          </div>
+        </div>
+        <div class="feature-card card-float-2">
+          <div class="card-connector connector-left"></div>
+          <div class="feature-card-icon icon-yellow">
+            <span>🏆</span>
+          </div>
+          <div class="feature-card-content">
+            <div class="feature-card-title"><strong>New personal best!</strong></div>
+            <div class="feature-card-subtitle">Squat — 120 kg</div>
+          </div>
+        </div>
+        <div class="feature-card card-float-3">
+          <div class="card-connector connector-left"></div>
+          <div class="feature-card-icon icon-blue">
+            <span>📊</span>
+          </div>
+          <div class="feature-card-content">
+            <div class="feature-card-title">Charts unlocked</div>
+            <div class="feature-card-subtitle">3 entries reached — view your progress</div>
+          </div>
+        </div>
+        <div class="feature-card card-float-4">
+          <div class="card-connector connector-left"></div>
+          <div class="feature-card-icon icon-coral">
+            <span>🎉</span>
+          </div>
+          <div class="feature-card-content">
+            <div class="feature-card-title"><strong>25 workouts logged!</strong></div>
+            <div class="feature-card-subtitle">Milestone reached — keep going</div>
           </div>
         </div>
         <div class="feature-card card-float-5">
           <div class="card-connector connector-left"></div>
-          <div class="feature-card-icon icon-yellow">
-            <span>🧳 6</span>
+          <div class="feature-card-icon icon-orange">
+            <span>↗</span>
           </div>
           <div class="feature-card-content">
-            <div class="feature-card-title"><strong>Multiple cards</strong></div>
-            <div class="feature-card-subtitle">Organize cards by category</div>
+            <div class="feature-card-title"><strong>Volume this week</strong></div>
+            <div class="feature-card-subtitle">Total: 4,320 kg lifted</div>
           </div>
         </div>
       </div>
@@ -72,52 +72,52 @@
       <div class="feature-cards-right" v-if="!mobile">
         <div class="feature-card card-float-1">
           <div class="card-connector connector-right"></div>
-          <div class="feature-card-icon icon-brown">
-            <span>🚪</span>
+          <div class="feature-card-icon icon-blue">
+            <span>💪</span>
           </div>
           <div class="feature-card-content">
-            <div class="feature-card-title"><strong>Card shared</strong></div>
-            <div class="feature-card-subtitle">Secure sharing via QR or link</div>
+            <div class="feature-card-title"><strong>Ready to level up!</strong></div>
+            <div class="feature-card-subtitle">Deadlift — try 140 kg next session</div>
           </div>
         </div>
         <div class="feature-card card-float-2">
           <div class="card-connector connector-right"></div>
-          <div class="feature-card-icon icon-yellow-soft">
-            <span>☀️</span>
+          <div class="feature-card-icon icon-gray-light">
+            <span>🔒</span>
           </div>
           <div class="feature-card-content">
-            <div class="feature-card-title">Bright screen mode</div>
-            <div class="feature-card-subtitle">Maximize display brightness for scanning</div>
+            <div class="feature-card-title">No account needed</div>
+            <div class="feature-card-subtitle">All data stored locally on device</div>
           </div>
         </div>
         <div class="feature-card card-float-3">
           <div class="card-connector connector-right"></div>
-          <div class="feature-card-icon icon-orange">
-            <span>➚</span>
+          <div class="feature-card-icon icon-avatar">
+            <span>⚖️</span>
           </div>
           <div class="feature-card-content">
-            <div class="feature-card-title text-coral"><strong>Widgets & quick access</strong></div>
-            <div class="feature-card-subtitle">Quick access to your favorite cards</div>
+            <div class="feature-card-title text-coral"><strong>kg & lbs supported</strong></div>
+            <div class="feature-card-subtitle">Switch units anytime in Settings</div>
           </div>
         </div>
         <div class="feature-card card-float-4">
           <div class="card-connector connector-right"></div>
-          <div class="feature-card-icon icon-gray-light">
-            <span>↻</span>
+          <div class="feature-card-icon icon-yellow-soft">
+            <span>🌙</span>
           </div>
           <div class="feature-card-content">
-            <div class="feature-card-title">iCloud Sync</div>
-            <div class="feature-card-subtitle">Sync across your devices</div>
+            <div class="feature-card-title">Dark Mode</div>
+            <div class="feature-card-subtitle">Light, Dark or follows system</div>
           </div>
         </div>
         <div class="feature-card card-float-5">
           <div class="card-connector connector-right"></div>
-          <div class="feature-card-icon icon-yellow-soft">
-            <span>🧳</span>
+          <div class="feature-card-icon icon-green">
+            <span>DE</span>
           </div>
           <div class="feature-card-content">
-            <div class="feature-card-title"><strong>Available offline</strong></div>
-            <div class="feature-card-subtitle">Access without internet — stored locally</div>
+            <div class="feature-card-title"><strong>Deutsch & English</strong></div>
+            <div class="feature-card-subtitle">Fully localized for both languages</div>
           </div>
         </div>
       </div>
