@@ -16,6 +16,7 @@ final class AppStore: ObservableObject {
     @Published var themeMode: String = "system"
     @Published var weightUnit: String = "kg"
     @Published var showAddExercise: Bool = false
+    @Published var forceMorningGreeting: Bool = false
 
     private let languageKey     = "@language_override"
     private let homeSettingsKey = "homeViewSettings"
@@ -183,6 +184,15 @@ final class AppStore: ObservableObject {
         defaults.removeObject(forKey: themeKey)
         defaults.set("system", forKey: themeKey)
         if args.contains("-ui_test_seed_demo_data") { seedDemoDataForUITests() }
+        if args.contains("-ui_test_force_morning") { forceMorningGreeting = true }
+        if let langIdx = args.firstIndex(of: "-ui_test_language"), args.indices.contains(langIdx + 1) {
+            let lang = args[langIdx + 1]
+            if ["de", "en"].contains(lang) {
+                language = lang
+                languageOverride = lang
+                defaults.set(lang, forKey: languageKey)
+            }
+        }
     }
 
     private func seedDemoDataForUITests() {

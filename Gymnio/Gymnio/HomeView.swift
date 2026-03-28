@@ -13,6 +13,7 @@ struct HomeView: View {
     @State private var navPath = NavigationPath()
 
     private var greeting: String {
+        if store.forceMorningGreeting { return store.t("home.greeting.morning") }
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
         case 5..<12: return store.t("home.greeting.morning")

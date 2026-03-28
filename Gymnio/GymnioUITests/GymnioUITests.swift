@@ -32,7 +32,7 @@ final class GymnioUITests: XCTestCase {
     func testScreenshot02_ExercisesOverview() throws {
         launchAppWithDemoData()
         tapTab(["Übungen", "Exercises"])
-        XCTAssertTrue(app.staticTexts["Bankdruecken"].firstMatch.waitForExistence(timeout: 6))
+        XCTAssertTrue(app.staticTexts["Bankdrücken"].firstMatch.waitForExistence(timeout: 6))
         snapshot("02_ExercisesOverview")
     }
 
@@ -40,7 +40,7 @@ final class GymnioUITests: XCTestCase {
         launchAppWithDemoData()
         tapTab(["Übungen", "Exercises"])
 
-        let exercise = app.staticTexts["Bankdruecken"].firstMatch
+        let exercise = app.staticTexts["Bankdrücken"].firstMatch
         XCTAssertTrue(exercise.waitForExistence(timeout: 6))
         exercise.tap()
 
@@ -51,7 +51,7 @@ final class GymnioUITests: XCTestCase {
     func testScreenshot04_History() throws {
         launchAppWithDemoData()
         tapTab(["Verlauf", "History"])
-        XCTAssertTrue(app.staticTexts["Bankdruecken"].firstMatch.waitForExistence(timeout: 6))
+        XCTAssertTrue(app.staticTexts["Bankdrücken"].firstMatch.waitForExistence(timeout: 6))
         snapshot("04_History")
     }
 
@@ -68,6 +68,7 @@ final class GymnioUITests: XCTestCase {
         app.launchArguments += [
             "-ui_testing",
             "-ui_test_seed_demo_data",
+            "-ui_test_force_morning",
             "-ui_test_language",
             "de"
         ]
