@@ -25,14 +25,15 @@ final class GymnioUITests: XCTestCase {
 
     func testScreenshot01_HomeDashboard() throws {
         launchAppWithDemoData()
-        XCTAssertTrue(app.staticTexts["Guten Morgen!"].waitForExistence(timeout: 6))
+        let greeting = testLanguage == "de" ? "Guten Morgen!" : "Good Morning!"
+        XCTAssertTrue(app.staticTexts[greeting].waitForExistence(timeout: 6))
         snapshot("01_HomeDashboard")
     }
 
     func testScreenshot02_ExercisesOverview() throws {
         launchAppWithDemoData()
         tapTab(["Übungen", "Exercises"])
-        XCTAssertTrue(app.staticTexts["Bankdrücken"].firstMatch.waitForExistence(timeout: 6))
+        XCTAssertTrue(app.staticTexts[demoExercise].firstMatch.waitForExistence(timeout: 6))
         snapshot("02_ExercisesOverview")
     }
 
@@ -40,7 +41,7 @@ final class GymnioUITests: XCTestCase {
         launchAppWithDemoData()
         tapTab(["Übungen", "Exercises"])
 
-        let exercise = app.staticTexts["Bankdrücken"].firstMatch
+        let exercise = app.staticTexts[demoExercise].firstMatch
         XCTAssertTrue(exercise.waitForExistence(timeout: 6))
         exercise.tap()
 
@@ -51,7 +52,7 @@ final class GymnioUITests: XCTestCase {
     func testScreenshot04_History() throws {
         launchAppWithDemoData()
         tapTab(["Verlauf", "History"])
-        XCTAssertTrue(app.staticTexts["Bankdrücken"].firstMatch.waitForExistence(timeout: 6))
+        XCTAssertTrue(app.staticTexts[demoExercise].firstMatch.waitForExistence(timeout: 6))
         snapshot("04_History")
     }
 
@@ -64,13 +65,22 @@ final class GymnioUITests: XCTestCase {
 
     // MARK: - Helpers
 
+    private var testLanguage: String {
+        let preferred = Locale.preferredLanguages.first ?? "en"
+        return preferred.hasPrefix("de") ? "de" : "en"
+    }
+
+    private var demoExercise: String {
+        testLanguage == "de" ? "Bankdrücken" : "Bench Press"
+    }
+
     private func launchAppWithDemoData() {
         app.launchArguments += [
             "-ui_testing",
             "-ui_test_seed_demo_data",
             "-ui_test_force_morning",
             "-ui_test_language",
-            "de"
+            testLanguage
         ]
         app.launch()
         XCTAssertTrue(app.tabBars.firstMatch.waitForExistence(timeout: 10))

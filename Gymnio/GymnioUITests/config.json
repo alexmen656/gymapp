@@ -11,9 +11,9 @@
       "iPad Pro 13-inch (M4)"
     ]
   },
-  "01_HomeDashboard": "Startseite mit Statistiken, Progression und Charts auf Basis von Demo-Workouts",
-  "02_ExercisesOverview": "Uebersicht der Uebungen mit letzten Werten und Eintragsanzahl",
-  "03_ExerciseDetail": "Detailansicht einer Uebung mit Formular, Kennzahlen und Verlauf",
-  "04_History": "Chronologischer Verlauf aller Trainings-Eintraege",
-  "05_AddExerciseModal": "Modal zum Hinzufuegen einer neuen Uebung"
+  "01_HomeDashboard": "Home dashboard with stats, progression alerts and charts based on demo workouts",
+  "02_ExercisesOverview": "Exercise overview with latest values and entry count",
+  "03_ExerciseDetail": "Exercise detail with log form, key metrics and history chart",
+  "04_History": "Chronological log of all training entries",
+  "05_AddExerciseModal": "Modal for adding a new exercise"
 }

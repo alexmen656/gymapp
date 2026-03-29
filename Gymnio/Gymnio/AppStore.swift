@@ -183,25 +183,28 @@ final class AppStore: ObservableObject {
         defaults.removeObject(forKey: homeSettingsKey)
         defaults.removeObject(forKey: themeKey)
         defaults.set("system", forKey: themeKey)
-        if args.contains("-ui_test_seed_demo_data") { seedDemoDataForUITests() }
         if args.contains("-ui_test_force_morning") { forceMorningGreeting = true }
+        var uiTestLang = "de"
         if let langIdx = args.firstIndex(of: "-ui_test_language"), args.indices.contains(langIdx + 1) {
             let lang = args[langIdx + 1]
             if ["de", "en"].contains(lang) {
+                uiTestLang = lang
                 language = lang
                 languageOverride = lang
                 defaults.set(lang, forKey: languageKey)
             }
         }
+        if args.contains("-ui_test_seed_demo_data") { seedDemoDataForUITests(language: uiTestLang) }
     }
 
-    private func seedDemoDataForUITests() {
+    private func seedDemoDataForUITests(language: String = "de") {
         let baseDate = Date()
         let calendar = Calendar.current
+        let isDE = language == "de"
         let demo: [(exercise: String, weights: [Double], reps: [Int])] = [
-            ("Bankdrücken", [70, 75, 80, 80, 80, 80, 80], [8, 8, 6, 6, 6, 6, 6]),
-            ("Kniebeuge",   [95, 100, 102.5, 105, 107.5, 110], [10, 8, 8, 6, 6, 5]),
-            ("Kreuzheben",  [110, 115, 120, 125, 130], [6, 5, 5, 4, 3])
+            (isDE ? "Bankdrücken" : "Bench Press", [70, 75, 80, 80, 80, 80, 80], [8, 8, 6, 6, 6, 6, 6]),
+            (isDE ? "Kniebeuge"   : "Squat",       [95, 100, 102.5, 105, 107.5, 110], [10, 8, 8, 6, 6, 5]),
+            (isDE ? "Kreuzheben"  : "Deadlift",    [110, 115, 120, 125, 130], [6, 5, 5, 4, 3])
         ]
         for item in demo {
             storage.addExercise(item.exercise)
