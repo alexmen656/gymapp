@@ -25,7 +25,7 @@ final class GymnioUITests: XCTestCase {
 
     func testScreenshot01_HomeDashboard() throws {
         launchAppWithDemoData()
-        let greeting = testLanguage == "de" ? "Guten Morgen!" : "Good Morning!"
+        let greeting = testLanguage == "de" ? "Guten Morgen!" : "Good morning!"
         XCTAssertTrue(app.staticTexts[greeting].waitForExistence(timeout: 6))
         snapshot("01_HomeDashboard")
     }
