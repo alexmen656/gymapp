@@ -79,6 +79,7 @@ final class GymnioUITests: XCTestCase {
             "-ui_testing",
             "-ui_test_seed_demo_data",
             "-ui_test_force_morning",
+            "-ui_test_force_tab_bar",
             "-ui_test_language",
             testLanguage
         ]

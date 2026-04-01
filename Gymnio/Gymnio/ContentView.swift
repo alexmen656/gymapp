@@ -5,8 +5,13 @@ struct ContentView: View {
     @Environment(\.colorScheme) var scheme
     @State private var selectedTab: Int = 0
 
+    private var forceTabBar: Bool {
+        CommandLine.arguments.contains("-ui_test_force_tab_bar")
+    }
+
+    @ViewBuilder
     var body: some View {
-        ZStack {
+        let stack = ZStack {
             TabView(selection: $selectedTab) {
                 Tab(store.t("nav.home"), systemImage: "house", value: 0) {
                     HomeView()
@@ -45,5 +50,11 @@ struct ContentView: View {
         }
         .animation(.easeInOut(duration: 0.18), value: store.showAddExercise)
         .preferredColorScheme(store.colorScheme)
+
+        if forceTabBar {
+            stack.environment(\.horizontalSizeClass, .compact)
+        } else {
+            stack
+        }
     }
 }
