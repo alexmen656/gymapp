@@ -49,13 +49,15 @@ struct GlassCard<Content: View>: View {
     var body: some View {
         content()
             .padding(16)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .glassEffect(in: RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay(alignment: .leading) {
                 if leftAccent {
-                    Rectangle()
+                    Capsule()
                         .fill(Color.tint(scheme))
                         .frame(width: 4)
-                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                        .padding(.vertical, 8)
+                        .padding(.leading, 2)
                 }
             }
     }

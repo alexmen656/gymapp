@@ -202,24 +202,39 @@ struct ProgressionAlertCard: View {
     let alert: ProgressionAlert
     @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
+
+    private var bodyText: AttributedString {
+        let raw = String(format: store.t(store.weightUnit == "lbs" ? "home.progression.body.lbs" : "home.progression.body"),
+                         alert.exercise, store.displayWeight(alert.currentWeight), store.displayWeight(alert.suggestedWeight))
+        return (try? AttributedString(markdown: raw)) ?? AttributedString(raw)
+    }
+
     var body: some View {
-        GlassCard(leftAccent: true) {
+        GlassCard {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 12) {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 24))
-                        .foregroundColor(Color.tint(scheme))
+                        .foregroundColor(.green)
                     Text(store.t("home.progression.ready"))
                         .font(.system(size: 18, weight: .bold))
                         .foregroundColor(scheme == .dark ? Color(hex: "f0f0f0") : Color(hex: "1a1a1a"))
                 }
-                Text(String(format: store.t(store.weightUnit == "lbs" ? "home.progression.body.lbs" : "home.progression.body"),
-                            alert.exercise, store.displayWeight(alert.currentWeight), store.displayWeight(alert.suggestedWeight)))
+                Text(bodyText)
                     .font(.system(size: 14))
                     .secondaryText()
                     .lineSpacing(3)
             }
         }
+        .background(
+            LinearGradient(
+                colors: [Color(hex: "ff9500").opacity(scheme == .dark ? 0.22 : 0.14),
+                         Color(hex: "ff6b00").opacity(0.04)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        )
     }
 }
 
