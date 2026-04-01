@@ -185,7 +185,7 @@ struct ExerciseDetailView: View {
         }
     }
 
-    private func reload() { entries = store.entriesForExercise(exerciseName) }
+    private func reload() { entries = store.entriesForExercise(exerciseName).sorted { $0.date > $1.date } }
 
     private func addEntry() {
         guard let w = weightValue, let r = repsValue, w > 0, r > 0 else { return }
@@ -262,6 +262,12 @@ struct DetailChartCard: View {
     let unit: String
     let data: [ChartDataPoint]
     @Environment(\.colorScheme) var scheme
+    @State private var selectedIndex: Int? = nil
+
+    private var selectedPoint: ChartDataPoint? {
+        guard let sel = selectedIndex else { return nil }
+        return data.min(by: { abs($0.index - sel) < abs($1.index - sel) })
+    }
 
     var body: some View {
         GlassCard {
@@ -278,16 +284,34 @@ struct DetailChartCard: View {
                         AreaMark(x: .value("i", pt.index), y: .value("v", pt.value))
                             .interpolationMethod(.catmullRom)
                             .foregroundStyle(Color.tint(scheme).opacity(0.1))
+                        if let sel = selectedPoint {
+                            RuleMark(x: .value("i", sel.index))
+                                .foregroundStyle(Color.tint(scheme).opacity(0.5))
+                                .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4]))
+                            PointMark(x: .value("i", sel.index), y: .value("v", sel.value))
+                                .foregroundStyle(Color.tint(scheme))
+                                .symbolSize(50)
+                                .annotation(position: .top, spacing: 6,
+                                            overflowResolution: .init(x: .fit(to: .chart), y: .automatic)) {
+                                    Text(String(format: "%.1f \(unit)", sel.value))
+                                        .font(.system(size: 11, weight: .bold))
+                                        .padding(.horizontal, 7)
+                                        .padding(.vertical, 4)
+                                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 7))
+                                }
+                        }
                     }
+                    .chartXSelection(value: $selectedIndex)
                     .chartXAxis(.hidden)
                     .chartYAxis(.hidden)
                     .chartBackground { _ in Color.clear }
                     .frame(height: 120)
                 }
-                Text(unit)
+                Text(selectedPoint.map { pt in "\(String(format: "%.1f", pt.value)) \(unit) • \(pt.label)" } ?? unit)
                     .font(.system(size: 14))
                     .secondaryText()
                     .frame(maxWidth: .infinity, alignment: .center)
+                    .animation(.easeInOut(duration: 0.15), value: selectedIndex)
             }
         }
     }
