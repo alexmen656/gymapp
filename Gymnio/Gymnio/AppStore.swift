@@ -184,7 +184,7 @@ final class AppStore: ObservableObject {
         defaults.removeObject(forKey: themeKey)
         defaults.set("system", forKey: themeKey)
         if args.contains("-ui_test_force_morning") { forceMorningGreeting = true }
-        var uiTestLang = "de"
+        var uiTestLang = "en"
         if let langIdx = args.firstIndex(of: "-ui_test_language"), args.indices.contains(langIdx + 1) {
             let lang = args[langIdx + 1]
             if ["de", "en"].contains(lang) {
