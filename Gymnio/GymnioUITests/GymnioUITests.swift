@@ -66,8 +66,11 @@ final class GymnioUITests: XCTestCase {
     // MARK: - Helpers
 
     private var testLanguage: String {
-        let preferred = Locale.preferredLanguages.first ?? "en"
-        return preferred.hasPrefix("de") ? "de" : "en"
+
+        let lang = Snapshot.deviceLanguage.isEmpty
+            ? (Locale.preferredLanguages.first ?? "en")
+            : Snapshot.deviceLanguage
+        return lang.hasPrefix("de") ? "de" : "en"
     }
 
     private var demoExercise: String {
