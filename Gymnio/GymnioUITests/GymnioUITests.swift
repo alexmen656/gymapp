@@ -64,9 +64,7 @@ final class GymnioUITests: XCTestCase {
     }
 
     private var testLanguage: String {
-        let lang = ProcessInfo.processInfo.environment["FASTLANE_LANGUAGE"]
-            ?? (Locale.preferredLanguages.first ?? "en")
-        return lang.hasPrefix("de") ? "de" : "en"
+        Snapshot.deviceLanguage.hasPrefix("de") ? "de" : "en"
     }
 
     private var demoExercise: String { t("Bankdrücken", "Bench Press") }
