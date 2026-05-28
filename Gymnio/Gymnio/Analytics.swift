@@ -19,7 +19,8 @@ enum Analytics {
 
     // MARK: - Progression alerts
 
-    /// Detects when the last 5 entries for an exercise all have the same weight → suggest +2.5 kg
+    /// Detects when the last 5 entries for an exercise all have the same weight → suggest a step up.
+    /// The suggested increment is unit-dependent, so it is applied at display time, not here.
     static func progressionAlerts(groups: [ExerciseGroup]) -> [ProgressionAlert] {
         groups.compactMap { group in
             let sorted = group.entries.sorted { $0.date < $1.date }
@@ -27,11 +28,7 @@ enum Analytics {
             let last5 = sorted.suffix(5)
             let weight = last5.first!.weight
             guard last5.allSatisfy({ $0.weight == weight }) else { return nil }
-            return ProgressionAlert(
-                exercise: group.exercise,
-                currentWeight: weight,
-                suggestedWeight: weight + 2.5
-            )
+            return ProgressionAlert(exercise: group.exercise, currentWeight: weight)
         }
     }
 

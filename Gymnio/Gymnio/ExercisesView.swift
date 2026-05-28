@@ -4,8 +4,6 @@ struct ExercisesView: View {
     @EnvironmentObject var store: AppStore
     @Environment(\.colorScheme) var scheme
     @State private var groups: [ExerciseGroup] = []
-    @State private var deleteTarget: String?
-    @State private var showDeleteAlert = false
 
     var body: some View {
         ZStack {
@@ -51,15 +49,6 @@ struct ExercisesView: View {
         .navigationBarHidden(true)
         .onAppear(perform: reload)
         .onChange(of: store.exercises) { _, _ in reload() }
-        .alert(store.t("exercises.delete.title"), isPresented: $showDeleteAlert) {
-            Button(store.t("common.delete"), role: .destructive) {
-                if let n = deleteTarget { store.deleteExercise(n) }
-                reload()
-            }
-            Button(store.t("common.cancel"), role: .cancel) {}
-        } message: {
-            Text(String(format: store.t("exercises.delete.message"), deleteTarget ?? ""))
-        }
     }
 
     private func reload() {

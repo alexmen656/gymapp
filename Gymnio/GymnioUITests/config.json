@@ -4,12 +4,7 @@
     "bgColor2": "#1a1a1a",
     "textColor": "#ffffff",
     "scheme": "Gymnio",
-    "devices": [
-      "iPhone 16 Pro Max",
-      "iPhone 16 Pro",
-      "iPhone SE (3rd generation)",
-      "iPad Pro 13-inch (M4)"
-    ],
+    "devices": ["iPhone 16 Pro Max", "iPad Pro 13-inch (M4)"],
     "languages": ["en-US", "de-DE"]
   },
   "01_HomeDashboard": "Home dashboard with stats, progression alerts and charts based on demo workouts",

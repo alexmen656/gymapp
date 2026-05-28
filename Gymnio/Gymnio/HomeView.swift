@@ -68,8 +68,8 @@ struct HomeView: View {
                                     HomeStatCard(value: "\(stats.totalWorkouts)",
                                                  label: store.t("home.stats.workouts"),
                                                  color: Color.tint(scheme))
-                                    HomeStatCard(value: "\(Int(stats.totalVolumeKg / 1000))k",
-                                                 label: store.t("home.stats.kg"),
+                                    HomeStatCard(value: "\(Int(store.displayWeight(stats.totalVolumeKg) / 1000))k",
+                                                 label: String(format: store.t("home.stats.kg"), store.unitLabel),
                                                  color: .statRed)
                                     HomeStatCard(value: "\(stats.uniqueExercises)",
                                                  label: store.t("home.stats.exercises"),
@@ -204,8 +204,12 @@ struct ProgressionAlertCard: View {
     @Environment(\.colorScheme) var scheme
 
     private var bodyText: AttributedString {
-        let raw = String(format: store.t(store.weightUnit == "lbs" ? "home.progression.body.lbs" : "home.progression.body"),
-                         alert.exercise, store.displayWeight(alert.currentWeight), store.displayWeight(alert.suggestedWeight))
+        let isLbs = store.weightUnit == "lbs"
+        let current = store.displayWeight(alert.currentWeight)
+        // Suggest a clean step in the user's unit: +2.5 kg or +5 lbs.
+        let suggested = current + (isLbs ? 5.0 : 2.5)
+        let raw = String(format: store.t(isLbs ? "home.progression.body.lbs" : "home.progression.body"),
+                         alert.exercise, current, suggested)
         return (try? AttributedString(markdown: raw)) ?? AttributedString(raw)
     }
 
@@ -319,7 +323,7 @@ struct HomeChartCard: View {
 
                 Text(selectedPoint.map { pt in
                     String(format: "%.1f \(store.unitLabel) • \(pt.label)", store.displayWeight(pt.value))
-                } ?? store.t("home.charts.weight"))
+                } ?? "\(store.t("detail.chart.weight")) (\(store.unitLabel))")
                     .font(.system(size: 14))
                     .secondaryText()
                     .frame(maxWidth: .infinity, alignment: .center)

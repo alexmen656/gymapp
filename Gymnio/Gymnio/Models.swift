@@ -50,8 +50,8 @@ struct WorkoutStats {
 struct ProgressionAlert: Identifiable {
     var id: String { exercise }
     var exercise: String
+    /// Stored in kg. The suggested increment is unit-dependent and applied at display time.
     var currentWeight: Double
-    var suggestedWeight: Double
 }
 
 // MARK: - ChartDataPoint

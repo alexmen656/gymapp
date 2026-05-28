@@ -90,14 +90,18 @@ struct ExerciseDetailView: View {
                     }
 
                     if entries.count >= 3 {
+                        // entries is sorted newest-first for the list below; charts need
+                        // chronological order (oldest → newest) so the X-axis runs forward.
+                        let chronological = entries.sorted { $0.date < $1.date }
+                        // Chart data is stored in kg — convert weight/volume to the user's unit.
                         let charts: [(String, String, [ChartDataPoint])] = [
                             (store.t("detail.chart.weight"), store.unitLabel,
-                             Analytics.weightChartData(entries: entries)),
+                             Analytics.weightChartData(entries: chronological).map(convertWeight)),
                             (store.t("detail.chart.reps"), store.t("detail.stats.count"),
-                             Analytics.repsChartData(entries: entries)),
+                             Analytics.repsChartData(entries: chronological)),
                             (store.t("detail.chart.volume"),
                              "\(store.unitLabel) × \(store.t("common.reps"))",
-                             Analytics.volumeChartData(entries: entries))
+                             Analytics.volumeChartData(entries: chronological).map(convertWeight))
                         ]
 
                         VStack(spacing: 6) {
@@ -186,6 +190,10 @@ struct ExerciseDetailView: View {
     }
 
     private func reload() { entries = store.entriesForExercise(exerciseName).sorted { $0.date > $1.date } }
+
+    private func convertWeight(_ pt: ChartDataPoint) -> ChartDataPoint {
+        ChartDataPoint(index: pt.index, value: store.displayWeight(pt.value), label: pt.label)
+    }
 
     private func addEntry() {
         guard let w = weightValue, let r = repsValue, w > 0, r > 0 else { return }
